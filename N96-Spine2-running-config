@@ -1,0 +1,305 @@
+
+!Command: show running-config
+!Running configuration last done at: Tue Jul 26 11:51:12 2022
+!Time: Tue Jul 26 13:27:53 2022
+
+version 9.3(10) Bios:version  
+hostname N96-Spine2
+vdc N96-Spine2 id 1
+  limit-resource vlan minimum 16 maximum 4094
+  limit-resource vrf minimum 2 maximum 4096
+  limit-resource port-channel minimum 0 maximum 511
+  limit-resource u4route-mem minimum 248 maximum 248
+  limit-resource u6route-mem minimum 96 maximum 96
+  limit-resource m4route-mem minimum 58 maximum 58
+  limit-resource m6route-mem minimum 8 maximum 8
+
+nv overlay evpn
+feature ospf
+feature bgp
+feature interface-vlan
+feature vn-segment-vlan-based
+feature lacp
+feature nv overlay
+
+no password strength-check
+username admin password 5 $5$BJCCLI$Z.8tPSi5kK67SYEswRLhoFQgdaeDMzkVfw.L.apHlAD  role network-admin
+username sshview password 5 $5$EDBLKF$3daCCWGZNE95NrWWkk0cL4jcoBpThDBx9gsatd4t/49  role network-operator
+username sshview passphrase  lifetime 99999 warntime 14 gracetime 3
+ip domain-lookup
+copp profile strict
+snmp-server user admin network-admin auth md5 482E4207973EAABB7EBBA5E40B28BF74ADAF priv 323D6370AE5DAEEF27F9BCBC1F3E9833B8D9 localizedV2key
+snmp-server user sshview network-operator auth md5 5227E80A05B679317F4E1086868FFE38E165 priv 5304DC7E79F748327E1B7D8D530C65AD936B localizedV2key
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+
+ip route 0.0.0.0/0 192.168.5.1
+vlan 1
+
+vrf context management
+
+interface Vlan1
+
+interface nve1
+
+interface Ethernet1/1
+  description Prepojenie z N96 na router N91
+  no switchport
+  mtu 9216
+  no ip redirects
+  ip address 10.1.6.6/24
+  ipv6 address 2001:db8:1:6::6/64
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  no shutdown
+
+interface Ethernet1/2
+  description Prepojenie z N96 na router N92
+  no switchport
+  mtu 9216
+  no ip redirects
+  ip address 10.2.6.6/24
+  ipv6 address 2001:db8:2:6::6/64
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  no shutdown
+
+interface Ethernet1/3
+  description Prepojenie z N96 na router N93
+  no switchport
+  mtu 9216
+  no ip redirects
+  ip address 10.3.6.6/24
+  ipv6 address 2001:db8:3:5::5/64
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  no shutdown
+
+interface Ethernet1/4
+  description Prepojenie z N96 na router N94
+  no switchport
+  mtu 9216
+  no ip redirects
+  ip address 10.4.6.6/24
+  ipv6 address 2001:db8:4:6::6/64
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  no shutdown
+
+interface Ethernet1/5
+  no switchport
+  no shutdown
+
+interface Ethernet1/6
+  no switchport
+  no shutdown
+
+interface Ethernet1/7
+  no switchport
+  no shutdown
+
+interface Ethernet1/8
+  no switchport
+  no shutdown
+
+interface Ethernet1/9
+  no switchport
+  no shutdown
+
+interface Ethernet1/10
+  no switchport
+  no shutdown
+
+interface Ethernet1/11
+  no switchport
+  no shutdown
+
+interface Ethernet1/12
+  no switchport
+  no shutdown
+
+interface Ethernet1/13
+  no switchport
+  no shutdown
+
+interface Ethernet1/14
+  no switchport
+  no shutdown
+
+interface Ethernet1/15
+  no switchport
+  no shutdown
+
+interface Ethernet1/16
+  no switchport
+  no shutdown
+
+interface Ethernet1/17
+  no switchport
+  no shutdown
+
+interface Ethernet1/18
+  no switchport
+  no shutdown
+
+interface Ethernet1/19
+  no switchport
+  no shutdown
+
+interface Ethernet1/20
+  no switchport
+  ip address 192.168.5.206/24
+  no shutdown
+
+interface Ethernet1/21
+  no switchport
+  no shutdown
+
+interface Ethernet1/22
+  no switchport
+  no shutdown
+
+interface Ethernet1/23
+  no switchport
+  no shutdown
+
+interface Ethernet1/24
+  no switchport
+  no shutdown
+
+interface Ethernet1/25
+
+interface Ethernet1/26
+
+interface Ethernet1/27
+
+interface Ethernet1/28
+
+interface Ethernet1/29
+
+interface Ethernet1/30
+
+interface Ethernet1/31
+
+interface Ethernet1/32
+
+interface Ethernet1/33
+
+interface Ethernet1/34
+
+interface Ethernet1/35
+
+interface Ethernet1/36
+
+interface Ethernet1/37
+
+interface Ethernet1/38
+
+interface Ethernet1/39
+
+interface Ethernet1/40
+
+interface Ethernet1/41
+
+interface Ethernet1/42
+
+interface Ethernet1/43
+
+interface Ethernet1/44
+
+interface Ethernet1/45
+
+interface Ethernet1/46
+
+interface Ethernet1/47
+
+interface Ethernet1/48
+
+interface Ethernet1/49
+
+interface Ethernet1/50
+
+interface Ethernet1/51
+
+interface Ethernet1/52
+
+interface Ethernet1/53
+
+interface Ethernet1/54
+
+interface Ethernet1/55
+
+interface Ethernet1/56
+
+interface Ethernet1/57
+
+interface Ethernet1/58
+
+interface Ethernet1/59
+
+interface Ethernet1/60
+
+interface Ethernet1/61
+
+interface Ethernet1/62
+
+interface Ethernet1/63
+
+interface Ethernet1/64
+
+interface mgmt0
+  description Manazment interface VRF: "management"
+  no cdp enable
+  vrf member management
+  ip address 192.168.5.96/24
+
+interface loopback1023
+  description Zakladny interface pre Router-ID
+  ip address 192.0.2.96/32
+  ipv6 address 2001:db8:1023::96/128
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+icam monitor scale
+
+cli alias name wr copy running-config startup-config
+line console
+  exec-timeout 0
+line vty
+boot nxos bootflash:/nxos.9.3.10.bin sup-1
+router ospf as65001
+  router-id 192.0.2.96
+  log-adjacency-changes
+  auto-cost reference-bandwidth 4000 Gbps
+router bgp 65001
+  router-id 192.0.2.96
+  log-neighbor-changes
+  address-family ipv4 unicast
+  address-family l2vpn evpn
+    retain route-target all
+  template peer VTEP-peers
+    remote-as 65001
+    password 3 07886e35fa43fb6d7ebaf3d037e25344
+    update-source loopback1023
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+      route-reflector-client
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+      route-reflector-client
+  neighbor 192.0.2.91
+    inherit peer VTEP-peers
+  neighbor 192.0.2.92
+    inherit peer VTEP-peers
+  neighbor 192.0.2.93
+    inherit peer VTEP-peers
+  neighbor 192.0.2.94
+    inherit peer VTEP-peers
+
+logging console 5
+
+
