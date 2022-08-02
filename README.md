@@ -23,6 +23,7 @@ Inet-R1 - CSR1000-IOS-XEv: `csr1000v-universalk9.16.12.03-serial.qcow2`
 
 - PROBLEM: N9300V nabehne s neaktivnymi Ifaces, aj ked su zapnute v start-conf
   - stacil `shutdown` / `no shutdown`, sposobuje hlavne vypadok OSPF a teda *Underlay*
+  - pravdepodobne zalezitost `GNS3+Qemu+KVM`, nic vazne
 
 - problem, na strane zakaznika flapuje port-channel ked je "routed" (vIOS-L3-Cat)
   - pravdepodobne zalezitost `GNS3+Qemu+KVM`, nic vazne, ale otravuju logy na konzole :)
@@ -33,7 +34,7 @@ Inet-R1 - CSR1000-IOS-XEv: `csr1000v-universalk9.16.12.03-serial.qcow2`
 
 - problem, trebalo vycistit ARP zaznam na zakaznickom switchy (vIOS-L3)
 
-- problem s HA, ked vypnem jednu stranu VLAN101 na vPC parente, napr. `N91-Leaf1`
+- problem s HA, ked vypnem jednu stranu VLAN101 na vPC Peer-e, napr. `N91-Leaf1`
   - nestandarny stav, aj tak treba vypinat celu fyz. cestu v pripade maint.
 
 - conf. backup s: `copy running-config scp://vlkv@192.168.4.244/ vrf default`
