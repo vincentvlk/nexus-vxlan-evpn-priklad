@@ -32,7 +32,7 @@ Inet-R1 - CSR1000-IOS-XEv: `csr1000v-universalk9.16.12.03-serial.qcow2`
   - este treba otestovat, pretoze problem sa v niektorych pripadoch neprejavil
   - pravdepodobne zalezitost `GNS3+Qemu+KVM`
 
-- problem, trebalo vycistit ARP zaznam na zakaznickom switchy (vIOS-L3)
+- problem, trebalo vycistit ARP zaznam na zakaznickom switchy (vIOS-L3-Cat)
 
 - problem s HA, ked vypnem jednu stranu VLAN101 na vPC Peer-e, napr. `N91-Leaf1`
   - nestandarny stav, aj tak treba vypinat celu fyz. cestu v pripade maint.
@@ -95,3 +95,4 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
 ---
 
 ### Konfiguracia VXLAN-EVPN Underlay
+
