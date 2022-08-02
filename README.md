@@ -91,7 +91,7 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
      - bolo potrebne vypnut AnycastGW na uplinkovych VLAN104+204 pre Tenant-X
      - Leaf1+2 (nema Inet GW) VS. Leaf3+4 (ma Inet GW)
 
-   - zariadenia A:SW4 a B:SW4 maju rovnake IP ale s VRF+NAT sa dostanu na Inet
+   - zariadenia A:SW4 a B:SW4 maju rovnake IP ale s VRF+NAT sa dostanu v poriadku na Inet
 
 ---
 
