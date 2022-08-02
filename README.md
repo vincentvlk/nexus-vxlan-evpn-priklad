@@ -17,8 +17,8 @@ Inet-R1 - CSR1000-IOS-XE: `csr1000v-universalk9.16.12.03-serial.qcow2`
 
 - vPC + VXLAN + EVPN - je nutne aby VNI config bol konzistentny (podla ocakavania)
 
-- PROBLEM: N9300V nabehne bez funkcneho nve1, chyba v configu, v start-conf je
-  - zatial reload, je to menej konfigurovania, ako odstranit VXLAN features
+- PROBLEM: N9300V nabehne bez funkcneho nve1, chyba polozka v conf. mode, v start-conf ale je
+  - zatial `reload`, je to menej konfigurovania, ako odstranit `VXLAN features`
 
 - PROBLEM: N9300V nabehne s neaktivnymi Ifaces, aj ked su zapnute v start-conf
   - stacil `shutdown` / `no shutdown`, sposobuje hlavne vypadok OSPF a teda *Underlay*
