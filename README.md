@@ -33,23 +33,27 @@ Inet-R1 - CSR1000-IOS-XE: `csr1000v-universalk9.16.12.03-serial.qcow2`
 - problem, trebalo vycistit ARP zaznam na zakaznickom switchy (vIOS-L3)
 
 - problem s HA, ked vypnem jednu stranu VLAN101 na vPC parente, napr. `N91-Leaf1`
-  - nestandarny stav, aj tak treba vypinat celu cestu
+  - nestandarny stav, aj tak treba vypinat celu fyz. cestu v pripade maint.
 
 - conf. backup s: `copy running-config scp://vlkv@192.168.4.244/ vrf default`
 
-- Xconnect a QinVNI je pri vPC obmedzene, treba pouzit prikazy:
+- `Xconnect` a `QinVNI` je pri vPC obmedzene, treba pouzit prikazy:
+
   `system dot1q-tunnel transit [vlan vlan-range]` spolu s:
   `system nve infra-vlans <vlan-range>`
 
-  - pouzity Nexus9300v (NX-OSv 9.3.10) tieto 2 prikazy nema, nenasiel som zatial
-
-- problem, nejde IPv4 BFD s OSPFv2, prikazy su, ale nezdvyhne sa session
-
+Poznamka z dokumentacie:
+```
 For proper operation during L3 uplink failure scenarios on vPC VTEPs,
 configure a backup SVI and enter the
 "system nve infra-vlans <backup-svi-vlan" command.
 On Cisco Nexus 9000-EX platform switches,
 the backup SVI VLAN needs to be the native VLAN on the peer-link.
+```
+  - pouzity Nexus9300v (NX-OSv 9.3.10) tieto 2 prikazy nema, nenasiel som zatial
+
+- problem, nejde IPv4 BFD s OSPFv2, prikazy su, ale nezdvihne sa session
+
 
 - pozorovanie, VTEP automaticky presmeruva IP traffic na svju VLAN-gw aj ked
   ma CE zariadenie nastavenu inu L3 gw, ktora je L2 dostupna, ma aj ARP zaznam
