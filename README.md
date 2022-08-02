@@ -16,7 +16,7 @@ Inet-R1 - CSR1000-IOS-XEv: `csr1000v-universalk9.16.12.03-serial.qcow2`
 ---
 ### Postrehy z konfiguracie a testovania:
 
-- vPC + VXLAN + EVPN - je nutne aby VNI config bol konzistentny (podla ocakavania)
+- vPC + VXLAN + EVPN - je nutne aby, VNI config bol konzistentny medzi Peer-mi (podla ocakavania)
 
 - PROBLEM: N9300V nabehne bez funkcneho `nve1`, chyba polozka v conf. mode, v start-conf ale je
   - zatial `reload`, je to menej konfigurovania, ako odstranit `VXLAN features`
