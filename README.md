@@ -12,6 +12,7 @@ VXLAN Fabric - Cisco Nexus 9300v: `nexus9300v.9.3.10.qcow2`
 Tenant Switche - L3-Catalyst-IOSv: `vios_l2-adventerprisek9-m.ssa.high_iron_20200929.qcow2`
 
 Inet-R1 - CSR1000-IOS-XE: `csr1000v-universalk9.16.12.03-serial.qcow2`
+
 ---
 ### Postrehy z konfiguracie a testovania:
 
@@ -64,6 +65,7 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
 
 - pozorovanie, fyz. porty, ktore su definovane ako Xconnect-dot1q, technologia
   vPC nepovazuje za "Orphan" porty, vid.: `show vpc orphan-ports`
+
 ---
 ### Testovane scenare:
 
