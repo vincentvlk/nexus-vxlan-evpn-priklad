@@ -17,26 +17,30 @@ Inet-R1 - CSR1000-IOS-XE: `csr1000v-universalk9.16.12.03-serial.qcow2`
 
 - vPC + VXLAN + EVPN - je nutne aby VNI config bol konzistentny (podla ocakavania)
 
-- PROBLEM: N9300V nabehne bez funkcneho nve1, chyba polozka v conf. mode, v start-conf ale je
+- PROBLEM: N9300V nabehne bez funkcneho `nve1`, chyba polozka v conf. mode, v start-conf ale je
   - zatial `reload`, je to menej konfigurovania, ako odstranit `VXLAN features`
 
 - PROBLEM: N9300V nabehne s neaktivnymi Ifaces, aj ked su zapnute v start-conf
   - stacil `shutdown` / `no shutdown`, sposobuje hlavne vypadok OSPF a teda *Underlay*
 
 - problem, na strane zakaznika flapuje port-channel ked je "routed" (vIOS-L3-Cat)
-  - pravdepodobne zalezitost GNS3+Qemu+KVM, nic vazne
+  - pravdepodobne zalezitost `GNS3+Qemu+KVM`, nic vazne, ale otravuju logy na konzole :)
 
 - problem, s BPDU guardom, aj ked je na druhej strane BPDUfilter
+  - este treba otestovat, pretoze problem sa v niektorych pripadoch neprejavil
+  - pravdepodobne zalezitost `GNS3+Qemu+KVM`
 
-- problem, trebalo vycistit ARP zaznam na zakaznickom switchy (vIOS-L2)
+- problem, trebalo vycistit ARP zaznam na zakaznickom switchy (vIOS-L3)
 
-- problem s HA, ked vypnem jednu stranu VLAN101 na VPC parente, napr. N91
+- problem s HA, ked vypnem jednu stranu VLAN101 na vPC parente, napr. `N91-Leaf1`
+  - nestandarny stav, aj tak treba vypinat celu cestu
 
-- conf. backup s: copy running-config scp://vlkv@192.168.4.244/ vrf default
+- conf. backup s: `copy running-config scp://vlkv@192.168.4.244/ vrf default`
 
 - Xconnect a QinVNI je pri vPC obmedzene, treba pouzit prikazy:
-  "system dot1q-tunnel transit [vlan vlan-range]" spolu s:
-  "system nve infra-vlans <vlan-range>"
+  `system dot1q-tunnel transit [vlan vlan-range]` spolu s:
+  `system nve infra-vlans <vlan-range>`
+
   - pouzity Nexus9300v (NX-OSv 9.3.10) tieto 2 prikazy nema, nenasiel som zatial
 
 - problem, nejde IPv4 BFD s OSPFv2, prikazy su, ale nezdvyhne sa session
