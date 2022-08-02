@@ -12,7 +12,7 @@ VXLAN Fabric - Cisco Nexus 9300v: `nexus9300v.9.3.10.qcow2`
 Tenant Switche - L3-Catalyst-IOSv: `vios_l2-adventerprisek9-m.ssa.high_iron_20200929.qcow2`
 
 Inet-R1 - CSR1000-IOS-XE: `csr1000v-universalk9.16.12.03-serial.qcow2`
-
+---
 ### Postrehy z konfiguracie a testovania:
 
 - vPC + VXLAN + EVPN - je nutne aby VNI config bol konzistentny (podla ocakavania)
@@ -49,6 +49,7 @@ Poznamka z dokumentacie:
 For proper operation during L3 uplink failure scenarios on vPC VTEPs,
 configure a backup SVI and enter the
 "system nve infra-vlans <backup-svi-vlan" command.
+
 On Cisco Nexus 9000-EX platform switches,
 the backup SVI VLAN needs to be the native VLAN on the peer-link.
 ```
@@ -63,5 +64,24 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
 
 - pozorovanie, fyz. porty, ktore su definovane ako Xconnect-dot1q, technologia
   vPC nepovazuje za "Orphan" porty, vid.: `show vpc orphan-ports`
+---
+### Testovane scenare:
 
+1. Obycajna L2 konektivita, medzi 2 bodmi bez QinVNI (A:SW1 + A:SW3)
 
+2. Unicast routing medzi L2 segmentami v ramci zakaznikovej VRF (A:SW1+2+3+4)
+
+3. Transparentne prepojenie P-to-P cez VXLAN-Xconnect (B:SW1 + B:SW3)
+   - pozriet obmedzenia ohladom HW/SW a vPC (NX-OS 9.X vs. NX-OS 10.X)
+
+4. QinVNI prepojenie medzi 2 bodmi cez VXLAN dot1q tunnel (B:SW2 + B:SW4)
+   - pozriet obmedzenia ohladom HW/SW a vPC (NX-OS 9.X vs. NX-OS 10.X)
+
+5. Externa kon. do Inetu z VRF "TenantA" / "TenantB" (OSPFv2 + Inet-R1 + B:SW4)
+   - do BGP sa da propagovat v ramci VRF default routa s "network 0.0.0.0/0"
+   - na Inet-R1 potrebny VRF aware NAT config
+   - problem ked je roztiahnuta VXLAN, a border-gw do INetu je len na 1 Pod-e
+     - bolo potrebne vypnut AnycastGW na uplinkovych VLAN104+204 pre Tenant-X
+     - Leaf1+2 (nema Inet GW) VS. Leaf3+4 (ma Inet GW)
+
+   - zariadenia A:SW4 a B:SW4 maju rovnake IP ale s VRF+NAT sa dostanu na Inet
