@@ -2,11 +2,10 @@
 ![GNS3 - testovacia VXLAN-EVPN topologia](https://github.com/vincentvlk/nexus-vxlan-evpn-priklad/blob/main/gh-gns3-vxlan-evpn-topologia.png)
 
 ## Pomocne poznamky na mini-projekt "nexus-vxlan-evpn-priklad"
----
 
-Pouzite GNS3 a VM image:
+*Pouzite GNS3 a VM image:*
 
-GNS3: Ver-2.2.32 (Win10Pro)
+GNS3: `Ver-2.2.32 (Win10Pro)`
 
 Nexus 9300v: nexus9300v.9.3.10.qcow2 (md5: d8dd5a827c996282823acc172e805744)
 
