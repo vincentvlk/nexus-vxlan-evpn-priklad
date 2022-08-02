@@ -39,7 +39,9 @@ Inet-R1 - CSR1000-IOS-XE: `csr1000v-universalk9.16.12.03-serial.qcow2`
 
 - `Xconnect` a `QinVNI` je pri vPC obmedzene, treba pouzit prikazy:
 
-  `system dot1q-tunnel transit [vlan vlan-range]` spolu s:
+  `system dot1q-tunnel transit [vlan vlan-range]` 
+   
+  spolu s:
   `system nve infra-vlans <vlan-range>`
 
 Poznamka z dokumentacie:
@@ -53,11 +55,13 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
   - pouzity Nexus9300v (NX-OSv 9.3.10) tieto 2 prikazy nema, nenasiel som zatial
 
 - problem, nejde IPv4 BFD s OSPFv2, prikazy su, ale nezdvihne sa session
+  - pravdepodobne zalezitost `GNS3+Qemu+KVM`
 
-
-- pozorovanie, VTEP automaticky presmeruva IP traffic na svju VLAN-gw aj ked
+- pozorovanie, VTEP automaticky presmeruva IP traffic na svoju VLAN-gw aj ked
   ma CE zariadenie nastavenu inu L3 gw, ktora je L2 dostupna, ma aj ARP zaznam
   - pozriet ci sa da vypnut/zmenit?
 
-- pozorovanie, fyz. porty ktore su definovane ako Xconnect-dot1q, technologia
-  vPC nepovazuje za "Orphan" porty, vid.: "show vpc orphan-ports"
+- pozorovanie, fyz. porty, ktore su definovane ako Xconnect-dot1q, technologia
+  vPC nepovazuje za "Orphan" porty, vid.: `show vpc orphan-ports`
+
+
