@@ -45,6 +45,8 @@ Inet-R1 - CSR1000-IOS-XE: `csr1000v-universalk9.16.12.03-serial.qcow2`
   spolu s:
   `system nve infra-vlans <vlan-range>`
 
+  - treba si uvedomit, ze tieto 2 funkcie si *silne zavisle* od VTEP-HW (ASICov)
+
 Poznamka z dokumentacie:
 ```
 For proper operation during L3 uplink failure scenarios on vPC VTEPs,
@@ -53,8 +55,9 @@ configure a backup SVI and enter the
 
 On Cisco Nexus 9000-EX platform switches,
 the backup SVI VLAN needs to be the native VLAN on the peer-link.
+
+ - pouzity Nexus9300v (NX-OSv 9.3.10) tieto 2 prikazy nema, nenasiel som zatial
 ```
-  - pouzity Nexus9300v (NX-OSv 9.3.10) tieto 2 prikazy nema, nenasiel som zatial
 
 - problem, nejde IPv4 BFD s OSPFv2, prikazy su, ale nezdvihne sa session
   - pravdepodobne zalezitost `GNS3+Qemu+KVM`
