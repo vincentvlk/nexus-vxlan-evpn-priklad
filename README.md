@@ -67,7 +67,7 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
   ma CE zariadenie nastavenu inu L3 gw, ktora je L2 dostupna, ma aj ARP zaznam
   - pozriet ci sa da vypnut/zmenit?
 
-- pozorovanie, fyz. porty, ktore su definovane ako Xconnect-dot1q, technologia
+- pozorovanie, fyz. porty, ktore su definovane ako `Xconnect-dot1q-tunn`, technologia
   vPC nepovazuje za "Orphan" porty, vid.: `show vpc orphan-ports`
 
 ---
@@ -94,3 +94,4 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
 
 ---
 
+### Konfiguracia VXLAN-EVPN Underlay
