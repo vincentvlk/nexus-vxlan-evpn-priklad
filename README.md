@@ -68,7 +68,7 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
   - pozriet ci sa da vypnut/zmenit?
 
 - pozorovanie, fyz. porty, ktore su definovane ako `Xconnect-dot1q-tunn`, technologia
-  vPC nepovazuje za "Orphan" porty, vid.: `show vpc orphan-ports`
+  vPC nepovazuje za `Orphan` porty, vid.: `show vpc orphan-ports`
 
 ---
 ### Testovane scenare:
