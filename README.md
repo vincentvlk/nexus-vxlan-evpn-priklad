@@ -120,7 +120,11 @@ Konfiguracia routingu je standardna, vyuzivaju sa Loopback rozhrania, ktore su
 dolezite pre funckiu VXLAN fabricu, pretoze sa mapuju na VXLAN VTEP rozhranie `nve1`.
 
 - VXLAN Underlay konfiguracia pre `N91-Leaf1`:
+
+Priprava:
 ```
+hostname N91-Leaf1
+!
 nv overlay evpn
 feature ospf
 feature bgp
@@ -129,5 +133,66 @@ feature vn-segment-vlan-based
 feature lacp
 feature vpc
 feature nv overlay
+!
+```
+
+Konfiguracia Pod vPC:
+```
+vpc domain 912
+  peer-switch
+  role priority 20
+  peer-keepalive destination 172.16.12.2 source 172.16.12.1
+  peer-gateway
+  layer3 peer-router
+!
+interface port-channel89
+  description Leaf1-vpc-peer-link-Leaf2
+  switchport mode trunk
+  spanning-tree port type network
+  vpc peer-link
+!
+interface Ethernet1/8
+  switchport mode trunk
+  spanning-tree port type network
+  channel-group 89 mode active
+!
+interface Ethernet1/9
+  switchport mode trunk
+  spanning-tree port type network
+  channel-group 89 mode active
+!
+```
+
+Konfiguracia Underlay routingu uplinkov na Spine-layer:
+```
+!
+router ospf as65001
+  router-id 192.0.2.91
+  log-adjacency-changes
+  auto-cost reference-bandwidth 4000 Gbps
+!
+interface Ethernet1/5
+  description Underlay prepojenie z N91-Leaf1 na N95-Spine1
+  no switchport
+  mtu 9216
+  no ip redirects
+  ip address 10.1.5.1/24
+  ipv6 address 2001:db8:1:5::1/64
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  no shutdown
+!
+interface Ethernet1/6
+  description Underlay prepojenie z N91-Leaf1 na N96-Spine2
+  no switchport
+  mtu 9216
+  no ip redirects
+  ip address 10.1.6.1/24
+  ipv6 address 2001:db8:1:6::1/64
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  no shutdown
+!
+
 ``` 
 
