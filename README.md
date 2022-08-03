@@ -97,7 +97,7 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
 
 ### Konfiguracia VXLAN-EVPN Underlay
 
-Tento testovaci design pocita s VXLAN Tenant separaciou (pomocou VRF). Je vsak pouzitelny
+Tento testovaci dizajn pocita s VXLAN Tenant separaciou (pomocou VRF). Je vsak pouzitelny
 aj na zakladne L2 transporty medzi portami/lokalitami v ramci Default VRF.
 Ako je (snad) vidiet na diagrame, na VXLAN fabric je pouzitych 6 Nexus9300v VM instancii.
 Z toho 2 su pouzite ako Spine box-y, ktore sluzia len ako VXLAN EVPN Route-reflectory a L3 routery.
@@ -105,9 +105,12 @@ Zvysne 4 box-y su pouzite ako Leaf VTEP zariadenia, ktore vykonavanju VXLAN Tunn
 a L2/L3 bridging/routing v ramci VXLAN Tenantov (teda v ramci L3 VRF/VNI).
 
 Z diagramu je vidiet, ze kazdy DC-Pod (ulicka, sala, poschodie, ...) je tvoreny parom
-Leaf Switchov, teda mame 2 Pod-y, konkretne (N91-Leaf1 + N92-Leaf2) a (N93-Leaf3 + N94-Leaf4).
+Leaf Switchov, teda mame 2 Pod-y, konkretne (`N91-Leaf1` + `N92-Leaf2`) a (`N93-Leaf3` + `N94-Leaf4`).
 Kazdy Pod je este v ramci Ethernet MLAG redundancie nakonfigurovany ako vPC domena.
-Leaf switche maju symetricku L3-routed (Underlay) konektivitu na 2 Spine switche (N95-Spine1 + N96-Spine2)
+Leaf switche maju symetricku L3-routed (Underlay) konektivitu na 2 Spine switche (N95-Spine1 + N96-Spine2).
+Snahou dizajnu je zabezpecit nezavislu a redundantnu konektivitu, tak aby
+v pripade vypadku uzlov napr. (Leaf1, Spine1 a Leaf3) alebo napr. (Leaf2, Spine2 a Leaf4)
+bola stale zachovana konektivita pre zakanzikov.
 
 Mal som povodny zamer, ze ako underlay pouzijem IPv6 + OSPFv3, tento koncept
 ma vsak stale (Jul2022) obmedzene moznoti a funkcie :-/
@@ -116,7 +119,6 @@ nedokaze propagovat IPv4 prefixy, alebo som to zatial nenasiel/nepochopil.
 Konfiguracia routingu je standardna, vyuzivaju sa Loopback rozhrania, ktore su
 dolezite pre funckiu VXLAN fabricu, pretoze sa mapuju na VXLAN VTEP rozhranie `nve1`.
 
-   
 
 
 
