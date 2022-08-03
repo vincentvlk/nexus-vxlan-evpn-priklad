@@ -698,6 +698,7 @@ interface loopback1023
   ip address 192.0.2.12/32 secondary    ! Sluzi ako ID pre spolocny vPC+VTEP
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
+!
 ```
 
 (N91-Leaf1) Konfiguracia VXLAN EVPN Overlay routingu s BGP:
@@ -733,6 +734,7 @@ router bgp 65001
     address-family l2vpn evpn
       send-community
       send-community extended
+!
 ```
 
 #### VXLAN Overlay konfiguracia pre `N92-Leaf2`:
@@ -746,6 +748,7 @@ interface loopback1023
   ip address 192.0.2.12/32 secondary    ! Sluzi ako ID pre spolocny vPC+VTEP
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
+!
 ```
 
 (N92-Leaf2) Konfiguracia VXLAN EVPN Overlay routingu s BGP:
@@ -781,6 +784,7 @@ router bgp 65001
     address-family l2vpn evpn
       send-community
       send-community extended
+!
 ```
 
 #### VXLAN Overlay konfiguracia pre `N93-Leaf3`:
@@ -794,6 +798,7 @@ interface loopback1023
   ip address 192.0.2.34/32 secondary    ! Sluzi ako ID pre spolocny vPC+VTEP
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
+!
 ```
 
 (N93-Leaf3) Konfiguracia VXLAN EVPN Overlay routingu s BGP:
@@ -829,6 +834,7 @@ router bgp 65001
     address-family l2vpn evpn
       send-community
       send-community extended
+!
 ```
 
 #### VXLAN Overlay konfiguracia pre `N94-Leaf4`:
@@ -842,6 +848,7 @@ interface loopback1023
   ip address 192.0.2.34/32 secondary    ! Sluzi ako ID pre spolocny vPC+VTEP
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
+!
 ```
 
 (N94-Leaf4) Konfiguracia VXLAN EVPN Overlay routingu s BGP:
@@ -877,5 +884,140 @@ router bgp 65001
     address-family l2vpn evpn
       send-community
       send-community extended
+!
 ```
 
+#### VXLAN Overlay konfiguracia pre `N95-Spine1`:
+---
+
+(N95-Spine1) Konfiguracia `Loopback1023` rozhrania
+```
+interface loopback1023
+  description main-RouterID-VTEP
+  ip address 192.0.2.95/32
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+!
+```
+
+(N95-Spine1) Konfiguracia VXLAN EVPN Overlay routingu s BGP:
+```
+router bgp 65001
+  router-id 192.0.2.95
+  log-neighbor-changes
+  address-family ipv4 unicast
+    maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
+  address-family l2vpn evpn
+    maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
+    retain route-target all
+!
+  template peer VTEP-peers
+    remote-as 65001
+    password 3 07886e35fa43fb6d7ebaf3d037e25344
+    update-source loopback1023
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+      route-reflector-client
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+      route-reflector-client
+  neighbor 192.0.2.91
+    inherit peer VTEP-peers
+  neighbor 192.0.2.92
+    inherit peer VTEP-peers
+  neighbor 192.0.2.93
+    inherit peer VTEP-peers
+  neighbor 192.0.2.94
+    inherit peer VTEP-peers
+!
+```
+
+#### VXLAN Overlay konfiguracia pre `N96-Spie2`:
+---
+
+(N96-Spine2) Konfiguracia `Loopback1023` rozhrania
+```
+interface loopback1023
+  description main-RouterID-VTEP
+  ip address 192.0.2.96/32
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+!
+```
+
+(N96-Spine2) Konfiguracia VXLAN EVPN Overlay routingu s BGP:
+```
+router bgp 65001
+  router-id 192.0.2.96
+  log-neighbor-changes
+  address-family ipv4 unicast
+    maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
+  address-family l2vpn evpn
+    maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
+    retain route-target all
+!
+  template peer VTEP-peers
+    remote-as 65001
+    password 3 07886e35fa43fb6d7ebaf3d037e25344
+    update-source loopback1023
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+      route-reflector-client
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+      route-reflector-client
+  neighbor 192.0.2.91
+    inherit peer VTEP-peers
+  neighbor 192.0.2.92
+    inherit peer VTEP-peers
+  neighbor 192.0.2.93
+    inherit peer VTEP-peers
+  neighbor 192.0.2.94
+    inherit peer VTEP-peers
+!
+```
+
+---
+### Konfiguracia VXLAN-EVPN sluzieb na strane poskytovatela:
+
+
+#### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantA` na `N91-Leaf1`:
+---
+
+(N91-Leaf1) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
+```
+!
+vlan 101
+  name TenantA-seg101-L2
+  vn-segment 3100101
+!
+vlan 102
+  name TenantA-seg102-L2
+  vn-segment 3100102
+!
+vlan 103
+  name TenantA-seg103-L2
+  vn-segment 3100103
+!
+vlan 3100
+  name L3-vni-for-TenantA
+  vn-segment 3100
+!
+vrf context TenantA
+  rd auto
+  vni 3100
+  address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+!
+interface Vlan3100
+  description L3-vni-for-TenantA
+  vrf member TenantA
+  ip forward
+  no shutdown
+!
+```
