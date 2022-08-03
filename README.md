@@ -706,9 +706,9 @@ router bgp 65001
   router-id 192.0.2.91
   log-neighbor-changes
   address-family ipv4 unicast
-    maximum-paths 4
+    maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
   address-family l2vpn evpn
-    maximum-paths 4
+    maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
 !
   neighbor 192.0.2.95
     remote-as 65001
@@ -754,9 +754,9 @@ router bgp 65001
   router-id 192.0.2.92
   log-neighbor-changes
   address-family ipv4 unicast
-    maximum-paths 4
+    maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
   address-family l2vpn evpn
-    maximum-paths 4
+    maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
 !
   neighbor 192.0.2.95
     remote-as 65001
@@ -802,9 +802,9 @@ router bgp 65001
   router-id 192.0.2.93
   log-neighbor-changes
   address-family ipv4 unicast
-    maximum-paths 4
+    maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
   address-family l2vpn evpn
-    maximum-paths 4
+    maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
 !
   neighbor 192.0.2.95
     remote-as 65001
@@ -850,9 +850,9 @@ router bgp 65001
   router-id 192.0.2.94
   log-neighbor-changes
   address-family ipv4 unicast
-    maximum-paths 4
+    maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
   address-family l2vpn evpn
-    maximum-paths 4
+    maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
 !
   neighbor 192.0.2.95
     remote-as 65001
@@ -878,5 +878,4 @@ router bgp 65001
       send-community
       send-community extended
 ```
-
 
