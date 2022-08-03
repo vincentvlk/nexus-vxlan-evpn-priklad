@@ -1092,3 +1092,6 @@ interface nve1
     ingress-replication protocol bgp
 !
 ```
+
+POKRACOVAT: doplnit BFD konfig na features pre Leaf swtiche
+            pokracovat s konfigom VXLAN VTEP
