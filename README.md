@@ -192,7 +192,5 @@ interface Ethernet1/6
   ip router ospf as65001 area 0.0.0.0
   no shutdown
 !
-
 ``` 
-
 #### VXLAN Underlay konfiguracia pre `N92-Leaf2`:
