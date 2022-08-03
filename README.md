@@ -120,6 +120,7 @@ Konfiguracia routingu je standardna, vyuzivaju sa Loopback rozhrania, ktore su
 dolezite pre funckiu VXLAN fabricu, pretoze sa mapuju na VXLAN VTEP rozhranie `nve1`.
 
 #### VXLAN Underlay konfiguracia pre `N91-Leaf1`:
+---
 
 (N91-Leaf1) Priprava:
 ```
@@ -167,7 +168,7 @@ interface Ethernet1/9
 !
 ```
 
-(N91-Leaf1) Konfiguracia Underlay routingu uplinkov na Spine-layer:
+(N91-Leaf1) Konfiguracia Underlay routingu uplinkov voci Spine-layer:
 ```
 router ospf as65001
   router-id 192.0.2.91
@@ -198,6 +199,7 @@ interface Ethernet1/6
 !
 ``` 
 #### VXLAN Underlay konfiguracia pre `N92-Leaf2`:
+---
 
 (N92-Leaf2) Priprava:
 ```
@@ -215,6 +217,7 @@ feature vpc
 feature nv overlay
 !
 ```
+
 (N92-Leaf2) Konfiguracia Pod vPC:
 ```
 vpc domain 912
@@ -243,7 +246,8 @@ interface Ethernet1/9
   channel-group 89 mode active
 !
 ```
-(N92-Leaf2) Konfiguracia Underlay routingu uplinkov na Spine-layer:
+
+(N92-Leaf2) Konfiguracia Underlay routingu uplinkov voci Spine-layer:
 ```
 !
 router ospf as65001
@@ -273,6 +277,166 @@ interface Ethernet1/6
   ip router ospf as65001 area 0.0.0.0
   no shutdown
 ```
+
 #### VXLAN Underlay konfiguracia pre `N93-Leaf3`:
+---
 
 (N93-Leaf3) Priprava:
+```
+boot nxos bootflash:/nxos.9.3.10.bin sup-1
+!
+hostname N93-Leaf3
+!
+nv overlay evpn
+feature ospf
+feature bgp
+feature interface-vlan
+feature vn-segment-vlan-based
+feature lacp
+feature vpc
+feature nv overlay
+!
+```
+
+(N93-Leaf3) Konfiguracia Pod vPC:
+```
+vpc domain 934
+  peer-switch
+  role priority 30
+  peer-keepalive destination 172.16.34.4 source 172.16.34.3
+  peer-gateway
+  layer3 peer-router
+!
+interface port-channel89
+  description Leaf3-vpc-peer-link-Leaf4
+  switchport mode trunk
+  spanning-tree port type network
+  vpc peer-link
+!
+interface Ethernet1/8
+  description Leaf3-vpc-peer-link-Leaf4
+  switchport mode trunk
+  spanning-tree port type network
+  channel-group 89 mode active
+!
+interface Ethernet1/9
+  description Leaf3-vpc-peer-link-Leaf4
+  switchport mode trunk
+  spanning-tree port type network
+  channel-group 89 mode active
+!
+```
+
+(N93-Leaf3) Konfiguracia Underlay routingu uplinkov voci Spine-layer:
+```
+!
+router ospf as65001
+  router-id 192.0.2.93
+  log-adjacency-changes
+  auto-cost reference-bandwidth 4000 Gbps
+!
+interface Ethernet1/5
+  description Prepojenie z N93-Leaf3 na router N95-Spine1
+  no switchport
+  mtu 9216
+  no ip redirects
+  ip address 10.3.5.3/24
+  ipv6 address 2001:db8:3:5::3/64
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  no shutdown
+!
+interface Ethernet1/6
+  description Prepojenie z N93-Leaf3 na router N96-Spine2
+  no switchport
+  mtu 9216
+  no ip redirects
+  ip address 10.3.6.3/24
+  ipv6 address 2001:db8:3:6::3/64
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  no shutdown
+!
+```
+
+#### VXLAN Underlay konfiguracia pre `N94-Leaf4`:
+---
+
+(N94-Leaf4) Priprava:
+```
+boot nxos bootflash:/nxos.9.3.10.bin sup-1
+!
+hostname N94-Leaf4
+!
+nv overlay evpn
+feature ospf
+feature bgp
+feature interface-vlan
+feature vn-segment-vlan-based
+feature lacp
+feature vpc
+feature nv overlay
+!
+```
+
+(N94-Leaf4) Konfiguracia Pod vPC:
+```
+vpc domain 934
+  peer-switch
+  role priority 20
+  peer-keepalive destination 172.16.34.3 source 172.16.34.4
+  peer-gateway
+  layer3 peer-router
+!
+interface port-channel89
+  description Leaf4-vpc-peer-link-Leaf3
+  switchport mode trunk
+  spanning-tree port type network
+  vpc peer-link
+!
+interface Ethernet1/8
+  description Leaf4-vpc-peer-link-Leaf3
+  switchport mode trunk
+  spanning-tree port type network
+  channel-group 89 mode active
+!
+interface Ethernet1/9
+  description Leaf4-vpc-peer-link-Leaf3
+  switchport mode trunk
+  spanning-tree port type network
+  channel-group 89 mode active
+!
+```
+
+(N94-Leaf4) Konfiguracia Underlay routingu uplinkov voci Spine-layer:
+```
+!
+router ospf as65001
+  router-id 192.0.2.94
+  log-adjacency-changes
+  auto-cost reference-bandwidth 4000 Gbps
+!
+interface Ethernet1/5
+  description Prepojenie z N94-Leaf4 na router N95-Spine1
+  no switchport
+  mtu 9216
+  no ip redirects
+  ip address 10.4.5.4/24
+  ipv6 address 2001:db8:4:5::4/64
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  no shutdown
+!
+interface Ethernet1/6
+  description Prepojenie z N94-Leaf4 na router N96-Spine2
+  no switchport
+  mtu 9216
+  no ip redirects
+  ip address 10.4.6.4/24
+  ipv6 address 2001:db8:4:6::4/64
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  no shutdown
+!
+```
+
