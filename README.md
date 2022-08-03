@@ -121,4 +121,3 @@ dolezite pre funckiu VXLAN fabricu, pretoze sa mapuju na VXLAN VTEP rozhranie `n
 
 
 
-
