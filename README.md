@@ -99,7 +99,7 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
 1. Zakladna L2 konektivita (bez QinVNI), medzi 2 bodmi bez QinVNI (A:SW1 + A:SW3)
    - funkcne na N9300V, aj multipoint
  
-2. Unicast routing medzi L2 segmentami v ramci zakaznikovej VRF (A:SW1+2+3+4)
+2. Unicast L3 routing medzi L2 segmentami v ramci zakaznikovej VRF (A:SW1+2+3+4)
    - funkcne na N9300V, aj multipoint
 
 3. Transparentne prepojenie P-to-P cez VXLAN-Xconnect (B:SW1 + B:SW3)
@@ -111,7 +111,7 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
      - malo by podporovat na REAL zeleze aj point-to-Multipoint, treba preskumat
    - pozriet obmedzenia ohladom HW/SW a vPC (NX-OS 9.X vs. NX-OS 10.X)
 
-5. Externa kon. do Inetu z VRF "TenantA" / "TenantB" (OSPFv2 + Inet-R1 + B:SW4)
+5. Externa konektivita do Inetu z VRF `TenantA` / `TenantB` (OSPFv2 + Inet-R1 + B:SW4)
    - viacero moznosti na hand-off L3 konektivity do Internetu, typicky s VRF+BGP
    - funkcne na N9300V v kombinacii CSR1000v s IOS-XE, aj multipoint
    - do BGP sa da propagovat v ramci VRF default routa s "network 0.0.0.0/0"
