@@ -75,6 +75,7 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 DIAG:
+# show startup-config | inc feature|overlay
 # show interface nve1
 # show ip ospf neighbors
 # show bgp l2vpn evpn summary
@@ -84,6 +85,9 @@ DIAG:
 # show nve peers detail
 # show nve vni 3100101 detail
 # show bgp vrf TenantA l2vpn evpn 192.168.1.1
+# show l2route mac all
+# show nve ethernet-segment
+# show bgp l2vpn evpn route-type 4
 !
 # show ip route ospf-as65001 vrf TenantB
 # show bgp vrf tenantb ipv4 unicast

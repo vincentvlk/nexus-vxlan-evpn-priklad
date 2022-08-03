@@ -143,9 +143,6 @@ nv overlay evpn
 feature ospf
 feature bgp
 feature interface-vlan
-feature vn-segment-vlan-based
-feature lacp
-feature vpc
 feature nv overlay
 !
 ```
@@ -182,6 +179,7 @@ interface Ethernet1/9
 (N91-Leaf1) Konfiguracia Underlay routingu uplinkov voci Spine-layer:
 ```
 router ospf as65001
+  bfd
   router-id 192.0.2.91
   log-adjacency-changes
   auto-cost reference-bandwidth 4000 Gbps
@@ -192,7 +190,6 @@ interface Ethernet1/5
   mtu 9216
   no ip redirects
   ip address 10.1.5.1/24
-  ipv6 address 2001:db8:1:5::1/64
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
   no shutdown
@@ -203,7 +200,6 @@ interface Ethernet1/6
   mtu 9216
   no ip redirects
   ip address 10.1.6.1/24
-  ipv6 address 2001:db8:1:6::1/64
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
   no shutdown
@@ -262,6 +258,7 @@ interface Ethernet1/9
 ```
 !
 router ospf as65001
+  bfd
   router-id 192.0.2.92
   log-adjacency-changes
   auto-cost reference-bandwidth 4000 Gbps
@@ -272,7 +269,6 @@ interface Ethernet1/5
   mtu 9216
   no ip redirects
   ip address 10.2.5.2/24
-  ipv6 address 2001:db8:2:5::2/64
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
   no shutdown
@@ -283,7 +279,6 @@ interface Ethernet1/6
   mtu 9216
   no ip redirects
   ip address 10.2.6.2/24
-  ipv6 address 2001:db8:2:6::2/64
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
   no shutdown
@@ -342,6 +337,7 @@ interface Ethernet1/9
 ```
 !
 router ospf as65001
+  bfd
   router-id 192.0.2.93
   log-adjacency-changes
   auto-cost reference-bandwidth 4000 Gbps
@@ -352,7 +348,6 @@ interface Ethernet1/5
   mtu 9216
   no ip redirects
   ip address 10.3.5.3/24
-  ipv6 address 2001:db8:3:5::3/64
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
   no shutdown
@@ -363,7 +358,6 @@ interface Ethernet1/6
   mtu 9216
   no ip redirects
   ip address 10.3.6.3/24
-  ipv6 address 2001:db8:3:6::3/64
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
   no shutdown
@@ -423,6 +417,7 @@ interface Ethernet1/9
 ```
 !
 router ospf as65001
+  bfd
   router-id 192.0.2.94
   log-adjacency-changes
   auto-cost reference-bandwidth 4000 Gbps
@@ -433,7 +428,6 @@ interface Ethernet1/5
   mtu 9216
   no ip redirects
   ip address 10.4.5.4/24
-  ipv6 address 2001:db8:4:5::4/64
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
   no shutdown
@@ -444,10 +438,156 @@ interface Ethernet1/6
   mtu 9216
   no ip redirects
   ip address 10.4.6.4/24
-  ipv6 address 2001:db8:4:6::4/64
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
   no shutdown
 !
 ```
+#### VXLAN Underlay konfiguracia pre `N95-Spine1`:
+---
 
+(N95-Spine1) Priprava:
+```
+boot nxos bootflash:/nxos.9.3.10.bin sup-1
+!
+hostname N95-Spine1
+!
+nv overlay evpn
+feature ospf
+feature bgp
+feature nv overlay
+!
+```
+
+(N95-Spine1) Konfiguracia Underlay routingu uplinkov voci Leaf-layer:
+```
+!
+router ospf as65001
+  bfd
+  router-id 192.0.2.95
+  log-adjacency-changes
+  auto-cost reference-bandwidth 4000 Gbps
+!
+interface Ethernet1/1
+  description Prepojenie z N95-Spine1 na switch N91-Leaf1  
+  no switchport
+  mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
+  no ip redirects
+  ip address 10.1.5.5/24
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
+  no shutdown
+!
+interface Ethernet1/2
+  description Prepojenie z N95-Spine1 na switch N91-Leaf2
+  no switchport
+  mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
+  no ip redirects
+  ip address 10.2.5.5/24
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
+  no shutdown
+!
+interface Ethernet1/3
+  description Prepojenie z N95-Spine1 na switch N91-Leaf3
+  no switchport
+  mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
+  no ip redirects
+  ip address 10.3.5.5/24
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
+  no shutdown
+!
+interface Ethernet1/4
+  description Prepojenie z N95-Spine1 na switch N91-Leaf4
+  no switchport
+  mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
+  no ip redirects
+  ip address 10.4.5.5/24
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
+  no shutdown
+!
+```
+
+#### VXLAN Underlay konfiguracia pre `N96-Spine2`:
+---
+
+(N96-Spine2) Priprava:
+```
+boot nxos bootflash:/nxos.9.3.10.bin sup-1
+!
+hostname N96-Spine2
+!
+nv overlay evpn
+feature ospf
+feature bgp
+feature nv overlay
+!
+```
+
+(N96-Spine2) Konfiguracia Underlay routingu uplinkov voci Leaf-layer:
+```
+!
+router ospf as65001
+  bfd
+  router-id 192.0.2.96
+  log-adjacency-changes
+  auto-cost reference-bandwidth 4000 Gbps
+!
+interface Ethernet1/1
+  description Prepojenie z N96-Spine2 na switch N91-Leaf1
+  no switchport
+  mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
+  no ip redirects
+  ip address 10.1.6.6/24
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
+  no shutdown
+!
+interface Ethernet1/2
+  description Prepojenie z N96-Spine2 na switch N91-Leaf2
+  no switchport
+  mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
+  no ip redirects
+  ip address 10.2.6.6/24
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
+  no shutdown
+!
+interface Ethernet1/3
+  description Prepojenie z N96-Spine2 na switch N91-Leaf3
+  no switchport
+  mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
+  no ip redirects
+  ip address 10.3.6.6/24
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
+  no shutdown
+!
+interface Ethernet1/4
+  description Prepojenie z N96-Spine2 na switch N91-Leaf4
+  no switchport
+  mtu 9216
+  no ip redirects
+  ip address 10.4.6.6/24
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
+  no shutdown
+!
+```
