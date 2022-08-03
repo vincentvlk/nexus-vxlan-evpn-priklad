@@ -96,7 +96,7 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
 ---
 ### Testovane scenare:
 
-1. Zakladna L2 konektivita (bez QinVNI), medzi 2 bodmi bez QinVNI (A:SW1 + A:SW3)
+!1.! Zakladna L2 konektivita (bez QinVNI), medzi 2 bodmi bez QinVNI (A:SW1 + A:SW3)
    - funkcne na N9300V, aj multipoint
  
 2. Unicast routing medzi L2 segmentami v ramci zakaznikovej VRF (A:SW1+2+3+4)
