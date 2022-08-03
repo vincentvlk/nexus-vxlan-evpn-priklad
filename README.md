@@ -11,6 +11,8 @@
          * [VXLAN Underlay konfiguracia pre N92-Leaf2:](#vxlan-underlay-konfiguracia-pre-n92-leaf2)
          * [VXLAN Underlay konfiguracia pre N93-Leaf3:](#vxlan-underlay-konfiguracia-pre-n93-leaf3)
          * [VXLAN Underlay konfiguracia pre N94-Leaf4:](#vxlan-underlay-konfiguracia-pre-n94-leaf4)
+         * [VXLAN Underlay konfiguracia pre N95-Spine1:](#vxlan-underlay-konfiguracia-pre-n95-spine1)
+         * [VXLAN Underlay konfiguracia pre N96-Spine2:](#vxlan-underlay-konfiguracia-pre-n96-spine2)
 
 ## Pomocne poznamky na mini-projekt "nexus-vxlan-evpn-priklad"
 
