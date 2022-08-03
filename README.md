@@ -113,11 +113,21 @@ v pripade vypadku uzlov napr. (Leaf1, Spine1 a Leaf3) alebo napr. (Leaf2, Spine2
 bola stale zachovana konektivita pre zakanzikov.
 
 Mal som povodny zamer, ze ako underlay pouzijem IPv6 + OSPFv3, tento koncept
-ma vsak stale (Jul2022) obmedzene moznoti a funkcie :-/
+ma vsak stale (Jul2022) obmedzene moznoti a funkcie.
 Pre Underlay bol pouzity IGP protokol OSPFv2. Protokol OSPFv3 na NX-OS (na rozdiel od IOSu) 
 nedokaze propagovat IPv4 prefixy, alebo som to zatial nenasiel/nepochopil.
 Konfiguracia routingu je standardna, vyuzivaju sa Loopback rozhrania, ktore su
 dolezite pre funckiu VXLAN fabricu, pretoze sa mapuju na VXLAN VTEP rozhranie `nve1`.
 
-
+- VXLAN Underlay konfiguracia pre `N91-Leaf1`:
+```
+nv overlay evpn
+feature ospf
+feature bgp
+feature interface-vlan
+feature vn-segment-vlan-based
+feature lacp
+feature vpc
+feature nv overlay
+``` 
 
