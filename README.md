@@ -123,6 +123,8 @@ dolezite pre funckiu VXLAN fabricu, pretoze sa mapuju na VXLAN VTEP rozhranie `n
 
 (N91-Leaf1) Priprava:
 ```
+boot nxos bootflash:/nxos.9.3.10.bin sup-1
+!
 hostname N91-Leaf1
 !
 nv overlay evpn
@@ -140,7 +142,7 @@ feature nv overlay
 ```
 vpc domain 912
   peer-switch
-  role priority 20
+  role priority 30
   peer-keepalive destination 172.16.12.2 source 172.16.12.1
   peer-gateway
   layer3 peer-router
@@ -152,11 +154,13 @@ interface port-channel89
   vpc peer-link
 !
 interface Ethernet1/8
+  description Leaf1-vpc-peer-link-Leaf2
   switchport mode trunk
   spanning-tree port type network
   channel-group 89 mode active
 !
 interface Ethernet1/9
+  description Leaf1-vpc-peer-link-Leaf2
   switchport mode trunk
   spanning-tree port type network
   channel-group 89 mode active
@@ -194,3 +198,81 @@ interface Ethernet1/6
 !
 ``` 
 #### VXLAN Underlay konfiguracia pre `N92-Leaf2`:
+
+(N92-Leaf2) Priprava:
+```
+boot nxos bootflash:/nxos.9.3.10.bin sup-1
+!
+hostname N92-Leaf2
+!
+nv overlay evpn
+feature ospf
+feature bgp
+feature interface-vlan
+feature vn-segment-vlan-based
+feature lacp
+feature vpc
+feature nv overlay
+!
+```
+(N92-Leaf2) Konfiguracia Pod vPC:
+```
+vpc domain 912
+  peer-switch
+  role priority 20
+  peer-keepalive destination 172.16.12.1 source 172.16.12.2
+  peer-gateway
+  layer3 peer-router
+!
+interface port-channel89
+  description Leaf2-vpc-peer-link-Leaf1
+  switchport mode trunk
+  spanning-tree port type network
+  vpc peer-link
+!
+interface Ethernet1/8
+  description Leaf2-vpc-peer-link-Leaf1
+  switchport mode trunk
+  spanning-tree port type network
+  channel-group 89 mode active
+!
+interface Ethernet1/9
+  description Leaf2-vpc-peer-link-Leaf1
+  switchport mode trunk
+  spanning-tree port type network
+  channel-group 89 mode active
+!
+```
+(N92-Leaf2) Konfiguracia Underlay routingu uplinkov na Spine-layer:
+```
+!
+router ospf as65001
+  router-id 192.0.2.92
+  log-adjacency-changes
+  auto-cost reference-bandwidth 4000 Gbps
+!
+interface Ethernet1/5
+  description Prepojenie z N92 na router N95
+  no switchport
+  mtu 9216
+  no ip redirects
+  ip address 10.2.5.2/24
+  ipv6 address 2001:db8:2:5::2/64
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  no shutdown
+!
+interface Ethernet1/6
+  description Prepojenie z N92 na router N96
+  no switchport
+  mtu 9216
+  no ip redirects
+  ip address 10.2.6.2/24
+  ipv6 address 2001:db8:2:6::2/64
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  no shutdown
+```
+#### VXLAN Underlay konfiguracia pre `N93-Leaf3`:
+
+(N93-Leaf3) Priprava:
