@@ -345,21 +345,36 @@ vpc domain 934
   peer-gateway
   layer3 peer-router
 !
+vlan 934
+  name vPC-peer-link-L3-backup
+!
+interface Vlan934
+  description vPC-peer-link-L3-backup
+  no shutdown
+  no ip redirects
+  ip address 10.9.9.33/29
+  no ipv6 redirects
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+!
 interface port-channel89
   description Leaf3-vpc-peer-link-Leaf4
   switchport mode trunk
+  switchport trunk native vlan 934
   spanning-tree port type network
   vpc peer-link
 !
 interface Ethernet1/8
   description Leaf3-vpc-peer-link-Leaf4
   switchport mode trunk
+  switchport trunk native vlan 934
   spanning-tree port type network
   channel-group 89 mode active
 !
 interface Ethernet1/9
   description Leaf3-vpc-peer-link-Leaf4
   switchport mode trunk
+  switchport trunk native vlan 934
   spanning-tree port type network
   channel-group 89 mode active
 !
@@ -425,21 +440,36 @@ vpc domain 934
   peer-gateway
   layer3 peer-router
 !
+vlan 934
+  name vPC-peer-link-L3-backup
+!
+interface Vlan934
+  description vPC-peer-link-L3-backup
+  no shutdown
+  no ip redirects
+  ip address 10.9.9.34/29
+  no ipv6 redirects
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+!
 interface port-channel89
   description Leaf4-vpc-peer-link-Leaf3
   switchport mode trunk
+  switchport trunk native vlan 934
   spanning-tree port type network
   vpc peer-link
 !
 interface Ethernet1/8
   description Leaf4-vpc-peer-link-Leaf3
   switchport mode trunk
+  switchport trunk native vlan 934
   spanning-tree port type network
   channel-group 89 mode active
 !
 interface Ethernet1/9
   description Leaf4-vpc-peer-link-Leaf3
   switchport mode trunk
+  switchport trunk native vlan 934
   spanning-tree port type network
   channel-group 89 mode active
 !
