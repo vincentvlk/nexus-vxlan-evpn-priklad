@@ -149,51 +149,6 @@ feature nv overlay
 !
 ```
 
-(N91-Leaf1) Konfiguracia Pod vPC:
-```
-vpc domain 912
-  peer-switch
-  role priority 30
-  peer-keepalive destination 172.16.12.2 source 172.16.12.1
-  peer-gateway
-  layer3 peer-router
-  ip arp synchronize
-!
-vlan 912
-  name vPC-peer-link-L3-backup
-!
-interface Vlan912
-  description vPC-peer-link-L3-backup
-  no shutdown
-  no ip redirects
-  ip address 10.9.9.11/29
-  no ipv6 redirects
-  ip ospf network point-to-point
-  ip router ospf as65001 area 0.0.0.0
-!
-interface port-channel89
-  description Leaf1-vpc-peer-link-Leaf2
-  switchport mode trunk
-  switchport trunk native vlan 912
-  spanning-tree port type network
-  vpc peer-link
-!
-interface Ethernet1/8
-  description Leaf1-vpc-peer-link-Leaf2
-  switchport mode trunk
-  switchport trunk native vlan 912
-  spanning-tree port type network
-  channel-group 89 mode active
-!
-interface Ethernet1/9
-  description Leaf1-vpc-peer-link-Leaf2
-  switchport mode trunk
-  switchport trunk native vlan 912
-  spanning-tree port type network
-  channel-group 89 mode active
-!
-```
-
 (N91-Leaf1) Konfiguracia Underlay routingu uplinkov voci Spine-layer:
 ```
 router ospf as65001
@@ -227,6 +182,53 @@ interface Ethernet1/6
   no shutdown
 !
 ``` 
+
+(N91-Leaf1) Konfiguracia Pod vPC:
+```
+vpc domain 912
+  peer-switch
+  role priority 30
+  peer-keepalive destination 172.16.12.2 source 172.16.12.1
+  peer-gateway
+  layer3 peer-router
+  ip arp synchronize
+!
+vlan 912
+  name vPC-peer-link-L3-backup
+!
+interface Vlan912
+  description vPC-peer-link-L3-backup
+  no shutdown
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
+  no ip redirects
+  ip address 10.9.9.11/29
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
+!
+interface port-channel89
+  description Leaf1-vpc-peer-link-Leaf2
+  switchport mode trunk
+  switchport trunk native vlan 912
+  spanning-tree port type network
+  vpc peer-link
+!
+interface Ethernet1/8
+  description Leaf1-vpc-peer-link-Leaf2
+  switchport mode trunk
+  switchport trunk native vlan 912
+  spanning-tree port type network
+  channel-group 89 mode active
+!
+interface Ethernet1/9
+  description Leaf1-vpc-peer-link-Leaf2
+  switchport mode trunk
+  switchport trunk native vlan 912
+  spanning-tree port type network
+  channel-group 89 mode active
+!
+```
+
 #### VXLAN Underlay konfiguracia pre `N92-Leaf2`:
 ---
 
@@ -247,6 +249,40 @@ feature nv overlay
 !
 ```
 
+(N92-Leaf2) Konfiguracia Underlay routingu uplinkov voci Spine-layer:
+```
+!
+router ospf as65001
+  bfd
+  router-id 192.0.2.92
+  log-adjacency-changes
+  auto-cost reference-bandwidth 4000 Gbps
+!
+interface Ethernet1/5
+  description Prepojenie z N92-Leaf2 na N95-Spine1
+  no switchport
+  mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
+  no ip redirects
+  ip address 10.2.5.2/24
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
+  no shutdown
+!
+interface Ethernet1/6
+  description Prepojenie z N92-Leaf2 na N96-Spine2
+  no switchport
+  mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
+  no ip redirects
+  ip address 10.2.6.2/24
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
+  no shutdown
+```
+
 (N92-Leaf2) Konfiguracia Pod vPC:
 ```
 vpc domain 912
@@ -263,11 +299,12 @@ vlan 912
 interface Vlan912
   description vPC-peer-link-L3-backup
   no shutdown
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
   no ip redirects
   ip address 10.9.9.12/29
-  no ipv6 redirects
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
 !
 interface port-channel89
   description Leaf2-vpc-peer-link-Leaf1
@@ -290,40 +327,6 @@ interface Ethernet1/9
   spanning-tree port type network
   channel-group 89 mode active
 !
-```
-
-(N92-Leaf2) Konfiguracia Underlay routingu uplinkov voci Spine-layer:
-```
-!
-router ospf as65001
-  bfd
-  router-id 192.0.2.92
-  log-adjacency-changes
-  auto-cost reference-bandwidth 4000 Gbps
-!
-interface Ethernet1/5
-  description Prepojenie z N92 na router N95
-  no switchport
-  mtu 9216
-  bfd ipv4 interval 500 min_rx 500 multiplier 3
-  no ip redirects
-  ip address 10.2.5.2/24
-  ip ospf network point-to-point
-  ip router ospf as65001 area 0.0.0.0
-  ip ospf bfd
-  no shutdown
-!
-interface Ethernet1/6
-  description Prepojenie z N92 na router N96
-  no switchport
-  mtu 9216
-  bfd ipv4 interval 500 min_rx 500 multiplier 3
-  no ip redirects
-  ip address 10.2.6.2/24
-  ip ospf network point-to-point
-  ip router ospf as65001 area 0.0.0.0
-  ip ospf bfd
-  no shutdown
 ```
 
 #### VXLAN Underlay konfiguracia pre `N93-Leaf3`:
@@ -346,6 +349,41 @@ feature nv overlay
 !
 ```
 
+(N93-Leaf3) Konfiguracia Underlay routingu uplinkov voci Spine-layer:
+```
+!
+router ospf as65001
+  bfd
+  router-id 192.0.2.93
+  log-adjacency-changes
+  auto-cost reference-bandwidth 4000 Gbps
+!
+interface Ethernet1/5
+  description Prepojenie z N93-Leaf3 na N95-Spine1
+  no switchport
+  mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
+  no ip redirects
+  ip address 10.3.5.3/24
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
+  no shutdown
+!
+interface Ethernet1/6
+  description Prepojenie z N93-Leaf3 na N96-Spine2
+  no switchport
+  mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
+  no ip redirects
+  ip address 10.3.6.3/24
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
+  no shutdown
+!
+```
+
 (N93-Leaf3) Konfiguracia Pod vPC:
 ```
 vpc domain 934
@@ -362,11 +400,12 @@ vlan 934
 interface Vlan934
   description vPC-peer-link-L3-backup
   no shutdown
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
   no ip redirects
   ip address 10.9.9.33/29
-  no ipv6 redirects
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
 !
 interface port-channel89
   description Leaf3-vpc-peer-link-Leaf4
@@ -388,41 +427,6 @@ interface Ethernet1/9
   switchport trunk native vlan 934
   spanning-tree port type network
   channel-group 89 mode active
-!
-```
-
-(N93-Leaf3) Konfiguracia Underlay routingu uplinkov voci Spine-layer:
-```
-!
-router ospf as65001
-  bfd
-  router-id 192.0.2.93
-  log-adjacency-changes
-  auto-cost reference-bandwidth 4000 Gbps
-!
-interface Ethernet1/5
-  description Prepojenie z N93-Leaf3 na router N95-Spine1
-  no switchport
-  mtu 9216
-  bfd ipv4 interval 500 min_rx 500 multiplier 3
-  no ip redirects
-  ip address 10.3.5.3/24
-  ip ospf network point-to-point
-  ip router ospf as65001 area 0.0.0.0
-  ip ospf bfd
-  no shutdown
-!
-interface Ethernet1/6
-  description Prepojenie z N93-Leaf3 na router N96-Spine2
-  no switchport
-  mtu 9216
-  bfd ipv4 interval 500 min_rx 500 multiplier 3
-  no ip redirects
-  ip address 10.3.6.3/24
-  ip ospf network point-to-point
-  ip router ospf as65001 area 0.0.0.0
-  ip ospf bfd
-  no shutdown
 !
 ```
 
@@ -446,6 +450,41 @@ feature nv overlay
 !
 ```
 
+(N94-Leaf4) Konfiguracia Underlay routingu uplinkov voci Spine-layer:
+```
+!
+router ospf as65001
+  bfd
+  router-id 192.0.2.94
+  log-adjacency-changes
+  auto-cost reference-bandwidth 4000 Gbps
+!
+interface Ethernet1/5
+  description Prepojenie z N94-Leaf4 na N95-Spine1
+  no switchport
+  mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
+  no ip redirects
+  ip address 10.4.5.4/24
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
+  no shutdown
+!
+interface Ethernet1/6
+  description Prepojenie z N94-Leaf4 na N96-Spine2
+  no switchport
+  mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
+  no ip redirects
+  ip address 10.4.6.4/24
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
+  no shutdown
+!
+```
+
 (N94-Leaf4) Konfiguracia Pod vPC:
 ```
 vpc domain 934
@@ -462,11 +501,12 @@ vlan 934
 interface Vlan934
   description vPC-peer-link-L3-backup
   no shutdown
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
   no ip redirects
   ip address 10.9.9.34/29
-  no ipv6 redirects
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
 !
 interface port-channel89
   description Leaf4-vpc-peer-link-Leaf3
@@ -491,40 +531,6 @@ interface Ethernet1/9
 !
 ```
 
-(N94-Leaf4) Konfiguracia Underlay routingu uplinkov voci Spine-layer:
-```
-!
-router ospf as65001
-  bfd
-  router-id 192.0.2.94
-  log-adjacency-changes
-  auto-cost reference-bandwidth 4000 Gbps
-!
-interface Ethernet1/5
-  description Prepojenie z N94-Leaf4 na router N95-Spine1
-  no switchport
-  mtu 9216
-  bfd ipv4 interval 500 min_rx 500 multiplier 3
-  no ip redirects
-  ip address 10.4.5.4/24
-  ip ospf network point-to-point
-  ip router ospf as65001 area 0.0.0.0
-  ip ospf bfd
-  no shutdown
-!
-interface Ethernet1/6
-  description Prepojenie z N94-Leaf4 na router N96-Spine2
-  no switchport
-  mtu 9216
-  bfd ipv4 interval 500 min_rx 500 multiplier 3
-  no ip redirects
-  ip address 10.4.6.4/24
-  ip ospf network point-to-point
-  ip router ospf as65001 area 0.0.0.0
-  ip ospf bfd
-  no shutdown
-!
-```
 #### VXLAN Underlay konfiguracia pre `N95-Spine1`:
 ---
 
@@ -551,7 +557,7 @@ router ospf as65001
   auto-cost reference-bandwidth 4000 Gbps
 !
 interface Ethernet1/1
-  description Prepojenie z N95-Spine1 na switch N91-Leaf1  
+  description Prepojenie z N95-Spine1 na N91-Leaf1  
   no switchport
   mtu 9216
   bfd ipv4 interval 500 min_rx 500 multiplier 3
@@ -563,7 +569,7 @@ interface Ethernet1/1
   no shutdown
 !
 interface Ethernet1/2
-  description Prepojenie z N95-Spine1 na switch N91-Leaf2
+  description Prepojenie z N95-Spine1 na N92-Leaf2
   no switchport
   mtu 9216
   bfd ipv4 interval 500 min_rx 500 multiplier 3
@@ -575,7 +581,7 @@ interface Ethernet1/2
   no shutdown
 !
 interface Ethernet1/3
-  description Prepojenie z N95-Spine1 na switch N91-Leaf3
+  description Prepojenie z N95-Spine1 na N93-Leaf3
   no switchport
   mtu 9216
   bfd ipv4 interval 500 min_rx 500 multiplier 3
@@ -587,7 +593,7 @@ interface Ethernet1/3
   no shutdown
 !
 interface Ethernet1/4
-  description Prepojenie z N95-Spine1 na switch N91-Leaf4
+  description Prepojenie z N95-Spine1 na N94-Leaf4
   no switchport
   mtu 9216
   bfd ipv4 interval 500 min_rx 500 multiplier 3
@@ -626,7 +632,7 @@ router ospf as65001
   auto-cost reference-bandwidth 4000 Gbps
 !
 interface Ethernet1/1
-  description Prepojenie z N96-Spine2 na switch N91-Leaf1
+  description Prepojenie z N96-Spine2 na N91-Leaf1
   no switchport
   mtu 9216
   bfd ipv4 interval 500 min_rx 500 multiplier 3
@@ -638,7 +644,7 @@ interface Ethernet1/1
   no shutdown
 !
 interface Ethernet1/2
-  description Prepojenie z N96-Spine2 na switch N91-Leaf2
+  description Prepojenie z N96-Spine2 na N92-Leaf2
   no switchport
   mtu 9216
   bfd ipv4 interval 500 min_rx 500 multiplier 3
@@ -650,7 +656,7 @@ interface Ethernet1/2
   no shutdown
 !
 interface Ethernet1/3
-  description Prepojenie z N96-Spine2 na switch N91-Leaf3
+  description Prepojenie z N96-Spine2 na switch N93-Leaf3
   no switchport
   mtu 9216
   bfd ipv4 interval 500 min_rx 500 multiplier 3
@@ -662,7 +668,7 @@ interface Ethernet1/3
   no shutdown
 !
 interface Ethernet1/4
-  description Prepojenie z N96-Spine2 na switch N91-Leaf4
+  description Prepojenie z N96-Spine2 na N94-Leaf4
   no switchport
   mtu 9216
   bfd ipv4 interval 500 min_rx 500 multiplier 3
