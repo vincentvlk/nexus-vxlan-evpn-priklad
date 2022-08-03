@@ -1074,12 +1074,14 @@ interface nve1
   no shutdown
   description N91-VTEP-nve1
   host-reachability protocol bgp
-  source-interface loopback1023         ! Pouziju sa IPv4 adresy na routing a tunelovanie 
+  source-interface loopback1023         ! Pouziju sa IPv4 adresy na routing a tunelovanie
+!
   member vni 3100 associate-vrf
   member vni 3100101
     ingress-replication protocol bgp
   member vni 3100102
     ingress-replication protocol bgp
   member vni 3100103
+    ingress-replication protocol bgp
 !
 
