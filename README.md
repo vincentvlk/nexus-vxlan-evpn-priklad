@@ -119,9 +119,9 @@ nedokaze propagovat IPv4 prefixy, alebo som to zatial nenasiel/nepochopil.
 Konfiguracia routingu je standardna, vyuzivaju sa Loopback rozhrania, ktore su
 dolezite pre funckiu VXLAN fabricu, pretoze sa mapuju na VXLAN VTEP rozhranie `nve1`.
 
-- VXLAN Underlay konfiguracia pre `N91-Leaf1`:
+#### VXLAN Underlay konfiguracia pre `N91-Leaf1`:
 
-Priprava:
+(N91-Leaf1) Priprava:
 ```
 hostname N91-Leaf1
 !
@@ -136,7 +136,7 @@ feature nv overlay
 !
 ```
 
-Konfiguracia Pod vPC:
+(N91-Leaf1) Konfiguracia Pod vPC:
 ```
 vpc domain 912
   peer-switch
@@ -163,9 +163,8 @@ interface Ethernet1/9
 !
 ```
 
-Konfiguracia Underlay routingu uplinkov na Spine-layer:
+(N91-Leaf1) Konfiguracia Underlay routingu uplinkov na Spine-layer:
 ```
-!
 router ospf as65001
   router-id 192.0.2.91
   log-adjacency-changes
@@ -196,3 +195,4 @@ interface Ethernet1/6
 
 ``` 
 
+#### VXLAN Underlay konfiguracia pre `N92-Leaf2`:
