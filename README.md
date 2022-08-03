@@ -681,5 +681,202 @@ interface Ethernet1/4
 !
 ```
 ---
-### Konfiguracia VXLAN-EVPN Underlay:
+### Konfiguracia VXLAN-EVPN Overlay:
+
+Na vymenu informacii medzi VTEP-mi sa pouziva protokol BGPv4 s rozsirenim AF-BGP-EVPN.
+Kazdy Leaf switch ma teda 2 x iBGP peering na Spine1 a Spine2 box-y. Tieto Spine zariadenia
+sluzia ako BGP Rouer-Reflector-y, aby nebolo nutne konfigurovat full-mesh iBGP peeringy.
+
+#### VXLAN Overlay konfiguracia pre `N91-Leaf1`:
+---
+
+(N91-Leaf1) Konfiguracia `Loopback1023` rozhrania
+```
+interface loopback1023
+  description main-RouterID-VTEP
+  ip address 192.0.2.91/32              ! Sluzi aj ako ID pre VTEP 
+  ip address 192.0.2.12/32 secondary    ! Sluzi ako ID pre spolocny vPC+VTEP
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+```
+
+(N91-Leaf1) Konfiguracia VXLAN EVPN Overlay routingu s BGP:
+```
+router bgp 65001
+  router-id 192.0.2.91
+  log-neighbor-changes
+  address-family ipv4 unicast
+    maximum-paths 4
+  address-family l2vpn evpn
+    maximum-paths 4
+!
+  neighbor 192.0.2.95
+    remote-as 65001
+    description N95-Spine1
+    password 3 07886e35fa43fb6d7ebaf3d037e25344
+    update-source loopback1023
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+!
+  neighbor 192.0.2.96
+    remote-as 65001
+    description N96-Spine2
+    password 3 07886e35fa43fb6d7ebaf3d037e25344
+    update-source loopback1023
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+```
+
+#### VXLAN Overlay konfiguracia pre `N92-Leaf2`:
+---
+
+(N92-Leaf2) Konfiguracia `Loopback1023` rozhrania
+```
+interface loopback1023
+  description main-RouterID-VTEP
+  ip address 192.0.2.92/32              ! Sluzi aj ako ID pre VTEP
+  ip address 192.0.2.12/32 secondary    ! Sluzi ako ID pre spolocny vPC+VTEP
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+```
+
+(N92-Leaf2) Konfiguracia VXLAN EVPN Overlay routingu s BGP:
+```
+router bgp 65001
+  router-id 192.0.2.92
+  log-neighbor-changes
+  address-family ipv4 unicast
+    maximum-paths 4
+  address-family l2vpn evpn
+    maximum-paths 4
+!
+  neighbor 192.0.2.95
+    remote-as 65001
+    description N95-Spine1
+    password 3 07886e35fa43fb6d7ebaf3d037e25344
+    update-source loopback1023
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+!
+  neighbor 192.0.2.96
+    remote-as 65001
+    description N96-Spine2
+    password 3 07886e35fa43fb6d7ebaf3d037e25344
+    update-source loopback1023
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+```
+
+#### VXLAN Overlay konfiguracia pre `N93-Leaf3`:
+---
+
+(N93-Leaf3) Konfiguracia `Loopback1023` rozhrania
+```
+interface loopback1023
+  description main-RouterID-VTEP
+  ip address 192.0.2.93/32              ! Sluzi aj ako ID pre VTEP
+  ip address 192.0.2.34/32 secondary    ! Sluzi ako ID pre spolocny vPC+VTEP
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+```
+
+(N93-Leaf3) Konfiguracia VXLAN EVPN Overlay routingu s BGP:
+```
+router bgp 65001
+  router-id 192.0.2.93
+  log-neighbor-changes
+  address-family ipv4 unicast
+    maximum-paths 4
+  address-family l2vpn evpn
+    maximum-paths 4
+!
+  neighbor 192.0.2.95
+    remote-as 65001
+    description N95-Spine1
+    password 3 07886e35fa43fb6d7ebaf3d037e25344
+    update-source loopback1023
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+!
+  neighbor 192.0.2.96
+    remote-as 65001
+    description N96-Spine2
+    password 3 07886e35fa43fb6d7ebaf3d037e25344
+    update-source loopback1023
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+```
+
+#### VXLAN Overlay konfiguracia pre `N94-Leaf4`:
+---
+
+(N94-Leaf4) Konfiguracia `Loopback1023` rozhrania
+```
+interface loopback1023
+  description main-RouterID-VTEP
+  ip address 192.0.2.94/32              ! Sluzi aj ako ID pre VTEP
+  ip address 192.0.2.34/32 secondary    ! Sluzi ako ID pre spolocny vPC+VTEP
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+```
+
+(N94-Leaf4) Konfiguracia VXLAN EVPN Overlay routingu s BGP:
+```
+router bgp 65001
+  router-id 192.0.2.94
+  log-neighbor-changes
+  address-family ipv4 unicast
+    maximum-paths 4
+  address-family l2vpn evpn
+    maximum-paths 4
+!
+  neighbor 192.0.2.95
+    remote-as 65001
+    description N95-Spine1
+    password 3 07886e35fa43fb6d7ebaf3d037e25344
+    update-source loopback1023
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+!
+  neighbor 192.0.2.96
+    remote-as 65001
+    description N96-Spine2
+    password 3 07886e35fa43fb6d7ebaf3d037e25344
+    update-source loopback1023
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+```
+
 
