@@ -943,11 +943,12 @@ router bgp 65001
 !
 ```
 
-#### VXLAN Overlay konfiguracia pre `N96-Spie2`:
+#### VXLAN Overlay konfiguracia pre `N96-Spine2`:
 ---
 
 (N96-Spine2) Konfiguracia `Loopback1023` rozhrania
 ```
+!
 interface loopback1023
   description main-RouterID-VTEP
   ip address 192.0.2.96/32
@@ -958,6 +959,7 @@ interface loopback1023
 
 (N96-Spine2) Konfiguracia VXLAN EVPN Overlay routingu s BGP:
 ```
+!
 router bgp 65001
   router-id 192.0.2.96
   log-neighbor-changes
@@ -993,9 +995,9 @@ router bgp 65001
 ---
 ### Konfiguracia VXLAN-EVPN sluzieb na strane poskytovatela:
 
-
-#### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantA` na `N91-Leaf1`:
 ---
+#### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantA` na `N91-Leaf1`:
+
 
 (N91-Leaf1) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
 ```
@@ -1030,3 +1032,54 @@ interface Vlan3100
   no shutdown
 !
 ```
+
+(N91-Leaf1) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway)
+```
+!
+fabric forwarding anycast-gateway-mac 2022.2022.2022    ! Zhodne pre vsetky VTEP-y
+!
+interface Vlan101
+  description TenantA-seg101-any-gw
+  no shutdown
+  vrf member TenantA
+  no ip redirects
+  ip address 192.168.1.254/24
+  no ipv6 redirects
+  fabric forwarding mode anycast-gateway
+!
+interface Vlan102
+  description TenantA-seg102-any-gw
+  no shutdown
+  vrf member TenantA
+  no ip redirects
+  ip address 192.168.2.254/24
+  no ipv6 redirects
+  fabric forwarding mode anycast-gateway
+!
+interface Vlan103
+  description TenantA-seg103-any-gw
+  no shutdown
+  vrf member TenantA
+  no ip redirects
+  ip address 192.168.3.254/24
+  no ipv6 redirects
+  fabric forwarding mode anycast-gateway
+!
+```
+
+(N91-Leaf1) Konfiguracia VTEP rozhrania `nve1`
+```
+!
+interface nve1
+  no shutdown
+  description N91-VTEP-nve1
+  host-reachability protocol bgp
+  source-interface loopback1023         ! Pouziju sa IPv4 adresy na routing a tunelovanie 
+  member vni 3100 associate-vrf
+  member vni 3100101
+    ingress-replication protocol bgp
+  member vni 3100102
+    ingress-replication protocol bgp
+  member vni 3100103
+!
+
