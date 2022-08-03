@@ -157,6 +157,7 @@ vpc domain 912
   peer-keepalive destination 172.16.12.2 source 172.16.12.1
   peer-gateway
   layer3 peer-router
+  ip arp synchronize
 !
 vlan 912
   name vPC-peer-link-L3-backup
@@ -205,20 +206,24 @@ interface Ethernet1/5
   description Underlay prepojenie z N91-Leaf1 na N95-Spine1
   no switchport
   mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
   no ip redirects
   ip address 10.1.5.1/24
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
   no shutdown
 !
 interface Ethernet1/6
   description Underlay prepojenie z N91-Leaf1 na N96-Spine2
   no switchport
   mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
   no ip redirects
   ip address 10.1.6.1/24
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
   no shutdown
 !
 ``` 
@@ -250,6 +255,7 @@ vpc domain 912
   peer-keepalive destination 172.16.12.1 source 172.16.12.2
   peer-gateway
   layer3 peer-router
+  ip arp synchronize
 !
 vlan 912
   name vPC-peer-link-L3-backup
@@ -299,20 +305,24 @@ interface Ethernet1/5
   description Prepojenie z N92 na router N95
   no switchport
   mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
   no ip redirects
   ip address 10.2.5.2/24
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
   no shutdown
 !
 interface Ethernet1/6
   description Prepojenie z N92 na router N96
   no switchport
   mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
   no ip redirects
   ip address 10.2.6.2/24
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
   no shutdown
 ```
 
@@ -344,6 +354,7 @@ vpc domain 934
   peer-keepalive destination 172.16.34.4 source 172.16.34.3
   peer-gateway
   layer3 peer-router
+  ip arp synchronize
 !
 vlan 934
   name vPC-peer-link-L3-backup
@@ -393,20 +404,24 @@ interface Ethernet1/5
   description Prepojenie z N93-Leaf3 na router N95-Spine1
   no switchport
   mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
   no ip redirects
   ip address 10.3.5.3/24
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
   no shutdown
 !
 interface Ethernet1/6
   description Prepojenie z N93-Leaf3 na router N96-Spine2
   no switchport
   mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
   no ip redirects
   ip address 10.3.6.3/24
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
   no shutdown
 !
 ```
@@ -439,6 +454,7 @@ vpc domain 934
   peer-keepalive destination 172.16.34.3 source 172.16.34.4
   peer-gateway
   layer3 peer-router
+  ip arp synchronize
 !
 vlan 934
   name vPC-peer-link-L3-backup
@@ -488,20 +504,24 @@ interface Ethernet1/5
   description Prepojenie z N94-Leaf4 na router N95-Spine1
   no switchport
   mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
   no ip redirects
   ip address 10.4.5.4/24
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
   no shutdown
 !
 interface Ethernet1/6
   description Prepojenie z N94-Leaf4 na router N96-Spine2
   no switchport
   mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
   no ip redirects
   ip address 10.4.6.4/24
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
   no shutdown
 !
 ```
@@ -645,6 +665,7 @@ interface Ethernet1/4
   description Prepojenie z N96-Spine2 na switch N91-Leaf4
   no switchport
   mtu 9216
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
   no ip redirects
   ip address 10.4.6.6/24
   ip ospf network point-to-point
