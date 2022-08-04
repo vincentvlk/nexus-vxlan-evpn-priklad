@@ -28,7 +28,6 @@
          * [VXLAN-EVPN konfiguracia sluzieb pre zakaznika TenantA na N95-Spine1:](#vxlan-evpn-konfiguracia-sluzieb-pre-zakaznika-tenanta-na-n95-spine1)
          * [VXLAN-EVPN konfiguracia sluzieb pre zakaznika TenantA na N96-Spine2:](#vxlan-evpn-konfiguracia-sluzieb-pre-zakaznika-tenanta-na-n96-spine2)
 
-
          * [VXLAN-EVPN konfiguracia sluzieb pre zakaznika TenantB na N91-Leaf1:](#vxlan-evpn-konfiguracia-sluzieb-pre-zakaznika-tenantb-na-n91-leaf1)
          * [VXLAN-EVPN konfiguracia sluzieb pre zakaznika TenantB na N92-Leaf2:](#vxlan-evpn-konfiguracia-sluzieb-pre-zakaznika-tenantb-na-n92-leaf2)
          * [VXLAN-EVPN konfiguracia sluzieb pre zakaznika TenantB na N93-Leaf3:](#vxlan-evpn-konfiguracia-sluzieb-pre-zakaznika-tenantb-na-n93-leaf3)
