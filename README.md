@@ -734,7 +734,7 @@ sluzia ako BGP Rouer-Reflector-y, aby nebolo nutne konfigurovat full-mesh iBGP p
 #### VXLAN Overlay konfiguracia pre `N91-Leaf1`:
 ---
 
-(N91-Leaf1) Konfiguracia `Loopback1023` rozhrania
+(N91-Leaf1) Konfiguracia `Loopback1023` rozhrania:
 ```
 interface loopback1023
   description main-RouterID-VTEP
@@ -784,7 +784,7 @@ router bgp 65001
 #### VXLAN Overlay konfiguracia pre `N92-Leaf2`:
 ---
 
-(N92-Leaf2) Konfiguracia `Loopback1023` rozhrania
+(N92-Leaf2) Konfiguracia `Loopback1023` rozhrania:
 ```
 interface loopback1023
   description main-RouterID-VTEP
@@ -834,7 +834,7 @@ router bgp 65001
 #### VXLAN Overlay konfiguracia pre `N93-Leaf3`:
 ---
 
-(N93-Leaf3) Konfiguracia `Loopback1023` rozhrania
+(N93-Leaf3) Konfiguracia `Loopback1023` rozhrania:
 ```
 interface loopback1023
   description main-RouterID-VTEP
@@ -884,7 +884,7 @@ router bgp 65001
 #### VXLAN Overlay konfiguracia pre `N94-Leaf4`:
 ---
 
-(N94-Leaf4) Konfiguracia `Loopback1023` rozhrania
+(N94-Leaf4) Konfiguracia `Loopback1023` rozhrania:
 ```
 interface loopback1023
   description main-RouterID-VTEP
@@ -934,7 +934,7 @@ router bgp 65001
 #### VXLAN Overlay konfiguracia pre `N95-Spine1`:
 ---
 
-(N95-Spine1) Konfiguracia `Loopback1023` rozhrania
+(N95-Spine1) Konfiguracia `Loopback1023` rozhrania:
 ```
 interface loopback1023
   description main-RouterID-VTEP
@@ -981,7 +981,7 @@ router bgp 65001
 #### VXLAN Overlay konfiguracia pre `N96-Spine2`:
 ---
 
-(N96-Spine2) Konfiguracia `Loopback1023` rozhrania
+(N96-Spine2) Konfiguracia `Loopback1023` rozhrania:
 ```
 !
 interface loopback1023
@@ -1068,7 +1068,7 @@ interface Vlan3100
 !
 ```
 
-(N91-Leaf1) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway)
+(N91-Leaf1) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway):
 ```
 !
 fabric forwarding anycast-gateway-mac 2022.2022.2022  ! Zhodna MAC pre vsetky VTEP-y a Tenant-ov
@@ -1080,7 +1080,7 @@ interface Vlan101
   no ip redirects
   ip address 192.168.1.254/24
   no ipv6 redirects
-  fabric forwarding mode anycast-gateway
+  fabric forwarding mode anycast-gateway    ! Zapina Dynamic Anycast Gateway
 !
 interface Vlan102
   description TenantA-seg102-any-gw
@@ -1102,7 +1102,7 @@ interface Vlan103
 !
 ```
 
-(N91-Leaf1) Konfiguracia VTEP rozhrania `nve1` a EVPN databazy
+(N91-Leaf1) Konfiguracia VTEP rozhrania `nve1` a EVPN databazy:
 ```
 !
 interface nve1
@@ -1262,7 +1262,7 @@ interface Vlan3200
 !
 ```
 
-(N91-Leaf1) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway)
+(N91-Leaf1) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway):
 ```
 ! *Doplnujeme konfiguraciu o dalsieho zakaznika "TenantB"*
 !
@@ -1273,7 +1273,7 @@ interface Vlan201
   no ip redirects
   ip address 192.168.1.254/24
   no ipv6 redirects
-  fabric forwarding mode anycast-gateway
+  fabric forwarding mode anycast-gateway    ! Zapina Dynamic Anycast Gateway
 !
 interface Vlan202
   description TenantB-seg202-any-gw
@@ -1295,7 +1295,7 @@ interface Vlan203
 !
 ```
 
-(N91-Leaf1) Konfiguracia VTEP rozhrania `nve1` a EVPN databazy 
+(N91-Leaf1) Konfiguracia VTEP rozhrania `nve1` a EVPN databazy:
 ```
 ! *Doplnujeme konfiguraciu o dalsieho zakaznika "TenantB"*
 !
@@ -1931,7 +1931,7 @@ interface Ethernet1/22
   channel-group 22 mode active
 ```
 
-(N93-Leaf3 + N92-Leaf4) Experimentalna konfiguracia sluzby VXLAN dot1q tunnel voci zakaznikovi:
+(N93-Leaf3 + N94-Leaf4) Experimentalna konfiguracia sluzby VXLAN dot1q tunnel voci zakaznikovi:
 ```
 !
 ! system dot1q-tunnel transit 201       ! Neoverena konfiguracia
