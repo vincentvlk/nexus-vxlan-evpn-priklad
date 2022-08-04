@@ -126,6 +126,7 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
    - NEfunkcne na N9300V, VM toto nepodporuje v kombinacii s vPC na NX-OSv ver. 9.3(10)
      - malo by podporovat na REAL zeleze aj point-to-Multipoint, treba preskumat
    - pozriet obmedzenia ohladom HW/SW a vPC (NX-OS 9.X vs. NX-OS 10.X)
+   - OTESTOVAT variantu, kedy je provider port na inom zariadeni ako VTEP-e a treba QinVNI transport
    - otazka, aka je podpora QinVNI s pripojenim zakaznika do FEX-ov
    - otazka, ci sa da nasadit BW rate-limit / shaping, zatial neviem
 
@@ -1714,6 +1715,9 @@ end
 (N91-Leaf1) Experimentalna konfiguracia sluzby VXLAN-Xconnect voci zakaznikovy:
 ```
 !
+! system dot1q-tunnel transit 10        ! Neoverena konfiguracia
+! system nve infra-vlans 912            ! Neoverena konfiguracia
+!
 vlan 10
   name vxlan-Xconn-test
   vn-segment 1010
@@ -1722,6 +1726,12 @@ vlan 10
 interface nve1
   member vni 1010
     ingress-replication protocol bgp
+!
+evpn
+  vni 1010 l2
+    rd auto
+    route-target import auto
+    route-target export auto
 !
 interface Ethernet1/21
   description downlink-to-Tenant-B-SW1
@@ -1732,16 +1742,13 @@ interface Ethernet1/21
   mtu 9216
   storm-control action trap
 !
-evpn
-  vni 1010 l2
-    rd auto
-    route-target import auto
-    route-target export auto
-!
 ```
 
-(N93-Leaf3) Experimentalna konfiguracia sluzby VXLAN-Xconnect voci zakaznikovy:
+(N93-Leaf3) Experimentalna konfiguracia sluzby VXLAN-Xconnect voci zakaznikovi:
 ```
+!
+! system dot1q-tunnel transit 10        ! Neoverena konfiguracia
+! system nve infra-vlans 934            ! Neoverena konfiguracia
 !
 vlan 10
   name vxlan-Xconn-test
@@ -1752,6 +1759,12 @@ interface nve1
   member vni 1010
     ingress-replication protocol bgp
 !
+evpn
+  vni 1010 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+!
 interface Ethernet1/23
   description downlink-to-Tenant-B-SW3
   switchport mode dot1q-tunnel
@@ -1760,12 +1773,6 @@ interface Ethernet1/23
   spanning-tree bpdufilter enable
   mtu 9216
   storm-control action trap
-!
-evpn
-  vni 1010 l2
-    rd auto
-    route-target import auto
-    route-target export auto
 !
 ```
 
@@ -1872,3 +1879,94 @@ interface Vlan303
 !
 ```
 
+---
+4. Transparentne QinVNI prepojenie medzi 2 bodmi cez VXLAN dot1q tunnel:
+```
+   - zakaznik vyuziva zariadania "Tenant-B-SW2" a "Tenant-B-SW4"
+   - NEfunkcne na N9300V, VM toto tunelovanie nepodporuje v kombinacii s vPC na NX-OSv ver. 9.3(10)
+     - malo by podporovat na REAL zeleze aj point-to-Multipoint, treba preskumat
+   - pozriet obmedzenia ohladom HW/SW a vPC (NX-OS 9.X vs. NX-OS 10.X)
+
+   - OTESTOVAT variantu, kedy je provider port na inom zariadeni ako VTEP-e a treba QinVNI transport
+   - otazka, aka je podpora QinVNI s pripojenim zakaznika do FEX-ov
+   - otazka, da sa nasadit BW rate-limit / shaping na "provider" porte, zatial neviem
+```
+
+(N91-Leaf1 + N92-Leaf2) Experimentalna konfiguracia sluzby VXLAN dot1q tunnel voci zakaznikovi:
+```
+!
+! system dot1q-tunnel transit 201       ! Neoverena konfiguracia
+! system nve infra-vlans 912            ! Neoverena konfiguracia
+!
+vlan 201
+  name TenantB-seg201-L2
+  vn-segment 3200201
+!
+interface nve1
+  member vni 3200201
+    ingress-replication protocol bgp
+!
+evpn
+  vni 3200201 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+!
+interface port-channel22
+  switchport mode dot1q-tunnel
+  switchport access vlan 201
+  spanning-tree port type edge
+  spanning-tree bpdufilter enable
+  mtu 9216
+  storm-control action trap
+  vpc 22
+!
+interface Ethernet1/22
+  switchport mode dot1q-tunnel
+  switchport access vlan 201
+  spanning-tree port type edge
+  spanning-tree bpdufilter enable
+  mtu 9216
+  storm-control action trap
+  channel-group 22 mode active
+```
+
+(N93-Leaf3 + N92-Leaf4) Experimentalna konfiguracia sluzby VXLAN dot1q tunnel voci zakaznikovi:
+```
+!
+! system dot1q-tunnel transit 201       ! Neoverena konfiguracia
+! system nve infra-vlans 934            ! Neoverena konfiguracia
+!
+vlan 201
+  name TenantB-seg201-L2
+  vn-segment 3200201
+!
+interface nve1
+  member vni 3200201
+    ingress-replication protocol bgp
+!
+evpn
+  vni 3200201 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+!
+interface port-channel24
+  switchport mode dot1q-tunnel
+  switchport access vlan 201
+  spanning-tree port type edge
+  spanning-tree bpdufilter enable
+  mtu 9216
+  storm-control action trap
+  vpc 24
+!
+interface Ethernet1/24
+  switchport mode dot1q-tunnel
+  switchport access vlan 201
+  spanning-tree port type edge
+  spanning-tree bpdufilter enable
+  mtu 9216
+  storm-control action trap
+  channel-group 24 mode active
+!
+```
