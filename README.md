@@ -1672,6 +1672,7 @@ end
 
 (N91-Leaf1 + N92-Leaf2 + N93-Leaf3 + N94-Leaf4) Konfiguracia routingu u zakaznika:
 ```
+!
 ! Routing pre zariadenie Tenant-A-SW1
 !
 ip route 0.0.0.0 0.0.0.0 192.168.1.254 name default-route-to-AS65001
@@ -1693,3 +1694,4 @@ ip route 0.0.0.0 0.0.0.0 192.168.3.254 name default-route-to-AS65001
 end
 !
 ```
+
