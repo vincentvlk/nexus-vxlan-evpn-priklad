@@ -1140,7 +1140,6 @@ interface nve1
 ---
 #### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantA` na `N94-Leaf4`:
 
-
 (N94-Leaf4) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
 ```
 *Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
@@ -1156,6 +1155,38 @@ interface nve1
 *Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
 ```
 
+#### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantA` na `N95-Spine1`:
 
-POKRACOVAT: doplnit BFD konfig na features pre Leaf swtiche
-            pokracovat s konfigom VXLAN VTEP
+(N95-Spine1) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
+```
+*Na tomto zariadeni nie je potrebna dalsia konfiguracia*
+```
+
+(N95-Spine1) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway)
+```
+*Na tomto zariadeni nie je potrebna dalsia konfiguracia*
+```
+
+(N95-Spine1) Konfiguracia VTEP rozhrania `nve1`
+```
+*Na tomto zariadeni nie je potrebna dalsia konfiguracia*
+```
+
+#### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantA` na `N96-Spine2`:
+
+(N96-Spine2) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
+```
+*Na tomto zariadeni nie je potrebna dalsia konfiguracia*
+```
+
+(N96-Spine2) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway)
+```
+*Na tomto zariadeni nie je potrebna dalsia konfiguracia*
+```
+
+(N96-Spine2) Konfiguracia VTEP rozhrania `nve1`
+```
+*Na tomto zariadeni nie je potrebna dalsia konfiguracia*
+```
+
+
