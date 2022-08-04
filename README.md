@@ -33,6 +33,9 @@
          * [VXLAN-EVPN konfiguracia sluzieb pre zakaznika *TenantB* na N94-Leaf4:](#vxlan-evpn-konfiguracia-sluzieb-pre-zakaznika-tenantb-na-n94-leaf4)
          * [VXLAN-EVPN konfiguracia sluzieb pre zakaznika *TenantB* na N95-Spine1:](#vxlan-evpn-konfiguracia-sluzieb-pre-zakaznika-tenantb-na-n95-spine1)
          * [VXLAN-EVPN konfiguracia sluzieb pre zakaznika *TenantB* na N96-Spine2:](#vxlan-evpn-konfiguracia-sluzieb-pre-zakaznika-tenantb-na-n96-spine2)
+         * [Konfiguracia jednotlivych testovacich scenarov (poskytovatel aj zakaznik):](#konfiguracia-jednotlivych-testovacich-scenarov-poskytovatel-aj-zakaznik)
+         * [1. Zakladna L2 konektivita (bez QinVNI), medzi 2 bodmi:](#1-zakladna-l2-konektivita-bez-qinvni-medzi-2-bodmi)
+         * [2. Unicast L3 routing medzi L2 segmentami v ramci zakaznikovej VRF:](#2-unicast-l3-routing-medzi-l2-segmentami-v-ramci-zakaznikovej-vrf)
 
 ## Pomocne poznamky na mini-projekt "nexus-vxlan-evpn-priklad"
 
@@ -1407,13 +1410,14 @@ evpn
 ---
 ### Konfiguracia jednotlivych testovacich scenarov (poskytovatel aj zakaznik):
 
-#### 1. Zakladna L2 konektivita (bez QinVNI), medzi 2 bodmi 
+#### 1. Zakladna L2 konektivita (bez QinVNI), medzi 2 bodmi: 
 ```
   - zakaznik vyuziva zariadenia "Tenant-A-SW1" a "Tenant-A-SW3"
   - je mozne prepojit aj viac bodov / endpoint-ov
+  - funckne pri testovani na N9300v
 ```
 
-(N91-Leaf1 + N92-Leaf2) Konfiguracia vPC voci zakaznikovi
+(N91-Leaf1 + N92-Leaf2) Konfiguracia vPC voci zakaznikovi:
 
 ```
 !
@@ -1436,10 +1440,10 @@ interface Ethernet1/11
   storm-control broadcast level 1.00
   storm-control action trap
   channel-group 11 mode active
+!
 ```
 
-(N93-Leaf3 + N94-Leaf4) Konfiguracia vPC voci zakaznikovi
-
+(N93-Leaf3 + N94-Leaf4) Konfiguracia vPC voci zakaznikovi:
 ```
 !
 interface port-channel13
@@ -1461,4 +1465,101 @@ interface Ethernet1/13
   storm-control broadcast level 1.00
   storm-control action trap
   channel-group 13 mode active
+!
 ```
+
+(Tenant-A-SW1) Konfiguracia L2-switched uplink-u voci poskytovatelovy:
+```
+!
+interface Port-channel11
+ description downlink-to-provider-AS65001
+ switchport access vlan 101         ! VLAN ID moze byt u zakaznika odlisne
+ spanning-tree portfast edge
+ spanning-tree bpdufilter enable
+!
+interface GigabitEthernet3/1
+ description downlink-to-provider-AS65001
+ switchport access vlan 101
+ negotiation auto
+ channel-protocol lacp
+ channel-group 11 mode active
+ spanning-tree portfast edge
+ spanning-tree bpdufilter enable
+!
+interface GigabitEthernet3/2
+ description downlink-to-provider-AS65001
+ switchport access vlan 101
+ negotiation auto
+ channel-protocol lacp
+ channel-group 11 mode active
+ spanning-tree portfast edge
+ spanning-tree bpdufilter enable
+!
+```
+
+(Tenant-A-SW3) Konfiguracia L3-routed uplink-u voci poskytovatelovy:
+```
+!
+interface Port-channel13
+ description downlink-to-provider-AS65001
+ no switchport
+ ip address 192.168.1.3 255.255.255.0
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+!
+interface GigabitEthernet3/1
+ description downlink-to-provider-AS65001
+ no switchport
+ no ip address
+ negotiation auto
+ channel-protocol lacp
+ channel-group 13 mode active
+!
+interface GigabitEthernet3/2
+ description downlink-to-provider-AS65001
+ no switchport
+ no ip address
+ negotiation auto
+ channel-protocol lacp
+ channel-group 13 mode active
+!
+```
+
+#### 2. Unicast L3 routing medzi L2 segmentami v ramci zakaznikovej VRF:
+```
+  - zakaznik vyuziva zariadenia "Tenant-A-SW1", "Tenant-A-SW2", "Tenant-A-SW3" a "Tenant-A-SW4"
+  - funckne pri testovani na N9300v
+```
+
+(N91-Leaf1 + N92-Leaf2 + N93-Leaf3 + N94-Leaf4) Konfiguracia vPC voci zakaznikovi:
+```
+! *Doplnime konfiguraciu pre koncove zariadenie "Tenant-A-SW2"*   
+!
+interface port-channel12
+  description downlink-to-Tenant-A-SW2-vPC12
+  switchport access vlan 102
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no logging event port link-status
+  storm-control broadcast level 1.00
+  storm-control action trap
+  vpc 12
+!
+interface Ethernet1/12
+  description downlink-to-Tenant-A-SW2-vPC12
+  switchport access vlan 102
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no logging event port link-status
+  storm-control broadcast level 1.00
+  storm-control action trap
+  channel-group 12 mode active
+!
+```
+
+(N93-Leaf3 + N94-Leaf4) Konfiguracia vPC voci zakaznikovi:
+```
+! *Doplnime konfiguraciu pre koncove zariadenie "Tenant-A-SW4"*
+!
+
