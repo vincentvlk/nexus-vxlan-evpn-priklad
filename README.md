@@ -1292,7 +1292,7 @@ interface Vlan203
 ! *Doplnujeme konfiguraciu o dalsieho zakaznika "TenantB"*
 !
 interface nve1
-member vni 3200 associate-vrf
+  member vni 3200 associate-vrf
   member vni 3200201
     ingress-replication protocol bgp
   member vni 3200202
@@ -1402,4 +1402,12 @@ evpn
 (N96-Spine2) Konfiguracia VTEP rozhrania `nve1`
 ```
 *Na tomto zariadeni nie je potrebna dalsia konfiguracia*
+```
+
+---
+### Konfiguracia jednotlivych testovacich scenarov (poskytovatel aj zakaznik):
+
+```
+1. Zakladna L2 konektivita (bez QinVNI), medzi 2 bodmi (zakaznik = A:SW1 + A:SW3)
+   - je mozne prepojit aj viac bodov / endpoint-ov
 ```
