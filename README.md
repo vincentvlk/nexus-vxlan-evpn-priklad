@@ -119,11 +119,13 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
 3. Transparentne prepojenie P-to-P cez VXLAN-Xconnect (B:SW1 + B:SW3)
    - NEfunkcne na N9300V, VM toto nepodporuje v kombinacii s vPC na NX-OSv ver. 9.3(10)
    - pozriet obmedzenia ohladom HW/SW a vPC (NX-OS 9.X vs. NX-OS 10.X)
+   - otazka, ci sa da nasadit BW rate-limit / shaping, zatial neviem
 
 4. Transparentne QinVNI prepojenie medzi 2 bodmi cez VXLAN dot1q tunnel (B:SW2 + B:SW4)
    - NEfunkcne na N9300V, VM toto nepodporuje v kombinacii s vPC na NX-OSv ver. 9.3(10)
      - malo by podporovat na REAL zeleze aj point-to-Multipoint, treba preskumat
    - pozriet obmedzenia ohladom HW/SW a vPC (NX-OS 9.X vs. NX-OS 10.X)
+   - otazka, ci sa da nasadit BW rate-limit / shaping, zatial neviem
 
 5. Externa konektivita do Inetu z VRF `TenantA` / `TenantB` (OSPFv2 + Inet-R1 + B:SW4)
    - viacero moznosti na hand-off L3 konektivity do Internetu, typicky s VRF+BGP
@@ -1696,12 +1698,151 @@ end
 !
 ```
 
-#### 3. Transparentne prepojenie P-to-P cez VXLAN-Xconnect 
+#### 3. Transparentne prepojenie P-to-P cez VXLAN-Xconnect:
 ```
    - zakaznik vyuziva zariadania "Tenant-B-SW1" a "Tenant-B-SW3"
    - NEfunkcne na N9300V, VM toto nepodporuje v kombinacii s vPC na NX-OSv ver. 9.3(10)
-   - cybaju prikazy: "system dot1q-tunnel transit [vlan vlan-range]"
-                   spolu s: "system nve infra-vlans <backup-svi-vlan>"
+   - cybaju system. prikazy: "system dot1q-tunnel transit [vlan vlan-range]"
+                    spolu s: "system nve infra-vlans <backup-svi-vlan>"
 
    - pozriet obmedzenia ohladom HW/SW a vPC (NX-OS 9.X vs. NX-OS 10.X)
 ```
+
+(N91-Leaf1) Experimentalna konfiguracia sluzby VXLAN-Xconnect voci zakaznikovy:
+```
+!
+vlan 10
+  name vxlan-Xconn-test
+  vn-segment 1010
+  xconnect
+!
+interface nve1
+  member vni 1010
+    ingress-replication protocol bgp
+!
+interface Ethernet1/21
+  description downlink-to-Tenant-B-SW1
+  switchport mode dot1q-tunnel
+  switchport access vlan 10
+  spanning-tree port type edge
+  spanning-tree bpdufilter enable
+  mtu 9216
+  storm-control action trap
+!
+evpn
+  vni 1010 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+!
+```
+
+(N93-Leaf3) Experimentalna konfiguracia sluzby VXLAN-Xconnect voci zakaznikovy:
+```
+!
+vlan 10
+  name vxlan-Xconn-test
+  vn-segment 1010
+  xconnect
+!
+interface nve1
+  member vni 1010
+    ingress-replication protocol bgp
+!
+interface Ethernet1/23
+  description downlink-to-Tenant-B-SW3
+  switchport mode dot1q-tunnel
+  switchport access vlan 10
+  spanning-tree port type edge
+  spanning-tree bpdufilter enable
+  mtu 9216
+  storm-control action trap
+!
+evpn
+  vni 1010 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+!
+```
+
+(Tenant-B-SW1) Experimentalna konfiguracia sluzby VXLAN-Xconnect voci pokytovatelovi:
+
+```
+!
+vlan 301
+ name VXLAN-Xconn-test-1
+!
+vlan 302
+ name VXLAN-Xconn-test-2
+!
+vlan 303
+ name VXLAN-Xconn-test-3
+!
+interface GigabitEthernet3/1
+  description QinQ-uplink-to-AS65001
+  switchport trunk encapsulation dot1q
+  switchport trunk native vlan 201
+  switchport mode trunk
+  mtu 9216
+  negotiation auto
+  spanning-tree portfast edge trunk
+  spanning-tree bpdufilter enable
+!
+```
+
+(Tenant-B-SW1) Experimentalna konfiguracia sluzby VXLAN-Xconnect voci pokytovatelovi:
+
+```
+!
+!
+vlan 201
+ name native-uplink-to-AS65001
+!
+vlan 301
+ name VXLAN-Xconn-test-1
+!
+vlan 302
+ name VXLAN-Xconn-test-2
+!
+vlan 303
+ name VXLAN-Xconn-test-3
+!
+interface GigabitEthernet3/1
+  description QinQ-uplink-to-AS65001
+  switchport trunk encapsulation dot1q
+  switchport trunk native vlan 201
+  switchport mode trunk
+  mtu 9216
+  negotiation auto
+  spanning-tree portfast edge trunk
+  spanning-tree bpdufilter enable
+!
+interface Vlan301
+  ip address 172.16.1.1 255.255.255.0
+  no ip redirects
+  no ip unreachables
+  no ip proxy-arp
+  no shutdown
+!
+interface Vlan302
+  ip address 172.16.2.1 255.255.255.0
+  no ip redirects
+  no ip unreachables
+  no ip proxy-arp
+  no shutdown
+!
+interface Vlan303
+  ip address 172.16.3.1 255.255.255.0
+  no ip redirects
+  no ip unreachables
+  no ip proxy-arp
+  no shutdown
+!
+```
+
+(Tenant-B-SW3) Experimentalna konfiguracia sluzby VXLAN-Xconnect voci pokytovatelovi:
+```
+ * Konfiguracia je zhodna so zariadenim "Tenant-B-SW1" *
+```
+
