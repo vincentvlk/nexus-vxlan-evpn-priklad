@@ -1047,16 +1047,17 @@ vrf context TenantA
 !
 interface Vlan3100
   description L3-vni-for-TenantA
-  vrf member TenantA
-  ip forward
   no shutdown
+  vrf member TenantA
+  no ip redirects                   ! Povoluje L3 routing v ramci Tenant VRF
+  ip forward
 !
 ```
 
 (N91-Leaf1) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway)
 ```
 !
-fabric forwarding anycast-gateway-mac 2022.2022.2022    ! Zhodne pre vsetky VTEP-y
+fabric forwarding anycast-gateway-mac 2022.2022.2022  ! Zhodna MAC pre vsetky VTEP-y a Tenant-ov
 !
 interface Vlan101
   description TenantA-seg101-any-gw
@@ -1087,7 +1088,7 @@ interface Vlan103
 !
 ```
 
-(N91-Leaf1) Konfiguracia VTEP rozhrania `nve1`
+(N91-Leaf1) Konfiguracia VTEP rozhrania `nve1` a EVPN databazy
 ```
 !
 interface nve1
@@ -1103,6 +1104,20 @@ interface nve1
     ingress-replication protocol bgp
   member vni 3100103
     ingress-replication protocol bgp
+!
+evpn
+  vni 3100101 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+  vni 3100102 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+  vni 3100103 l2
+    rd auto
+    route-target import auto
+    route-target export auto
 !
 ```
 
@@ -1194,4 +1209,191 @@ interface nve1
 *Na tomto zariadeni nie je potrebna dalsia konfiguracia*
 ```
 
+---
+#### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantB` na `N91-Leaf1`:
 
+(N91-Leaf1) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
+```
+! *Doplnujeme konfiguraciu o dalsieho zakaznika "TenantB"*
+!
+vlan 201
+  name TenantB-seg201-L2
+  vn-segment 3200201
+!
+vlan 202
+  name TenantB-seg202-L2
+  vn-segment 3200202
+!
+vlan 203
+  name TenantB-seg203-L2
+  vn-segment 3200203
+!
+vlan 3200
+  name L3-vni-for-TenantB
+  vn-segment 3200
+!
+vrf context TenantB
+  vni 3200
+  rd auto
+  address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+!
+interface Vlan3200
+  description L3-vni-for-TenantB
+  no shutdown
+  vrf member TenantB
+  no ip redirects
+  ip forward                        ! Povoluje L3 routing v ramci Tenant VRF
+!
+```
+
+(N91-Leaf1) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway)
+```
+! *Doplnujeme konfiguraciu o dalsieho zakaznika "TenantB"*
+!
+interface Vlan201
+  description TenantB-seg201-any-gw
+  no shutdown
+  vrf member TenantB
+  no ip redirects
+  ip address 192.168.1.254/24
+  no ipv6 redirects
+  fabric forwarding mode anycast-gateway
+!
+interface Vlan202
+  description TenantB-seg202-any-gw
+  no shutdown
+  vrf member TenantB
+  no ip redirects
+  ip address 192.168.2.254/24
+  no ipv6 redirects
+  fabric forwarding mode anycast-gateway
+!
+interface Vlan203
+  description TenantB-seg203-any-gw
+  no shutdown
+  vrf member TenantB
+  no ip redirects
+  ip address 192.168.3.254/24
+  no ipv6 redirects
+  fabric forwarding mode anycast-gateway
+!
+```
+
+(N91-Leaf1) Konfiguracia VTEP rozhrania `nve1` a EVPN databazy 
+```
+! *Doplnujeme konfiguraciu o dalsieho zakaznika "TenantB"*
+!
+interface nve1
+member vni 3200 associate-vrf
+  member vni 3200201
+    ingress-replication protocol bgp
+  member vni 3200202
+    ingress-replication protocol bgp
+  member vni 3200203
+    ingress-replication protocol bgp
+!
+evpn
+  vni 3200201 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+  vni 3200202 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+  vni 3200203 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+!
+```
+
+---
+#### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantB` na `N92-Leaf2`:
+
+(N92-Leaf2) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+```
+
+(N92-Leaf2) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway)
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+```
+
+(N92-Leaf2) Konfiguracia VTEP rozhrania `nve1`
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+```
+
+---
+#### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantB` na `N93-Leaf3`:
+
+(N93-Leaf3) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+```
+
+(N93-Leaf3) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway)
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+```
+
+(N93-Leaf3) Konfiguracia VTEP rozhrania `nve1`
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+```
+
+---
+#### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantB` na `N94-Leaf4`:
+
+(N94-Leaf4) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+```
+
+(N94-Leaf4) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway)
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+```
+
+(N94-Leaf4) Konfiguracia VTEP rozhrania `nve1`
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+```
+
+#### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantB` na `N95-Spine1`:
+
+(N95-Spine1) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
+```
+*Na tomto zariadeni nie je potrebna dalsia konfiguracia*
+```
+
+(N95-Spine1) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway)
+```
+*Na tomto zariadeni nie je potrebna dalsia konfiguracia*
+```
+
+(N95-Spine1) Konfiguracia VTEP rozhrania `nve1`
+```
+*Na tomto zariadeni nie je potrebna dalsia konfiguracia*
+```
+
+#### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantB` na `N96-Spine2`:
+
+(N96-Spine2) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
+```
+*Na tomto zariadeni nie je potrebna dalsia konfiguracia*
+```
+
+(N96-Spine2) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway)
+```
+*Na tomto zariadeni nie je potrebna dalsia konfiguracia*
+```
+
+(N96-Spine2) Konfiguracia VTEP rozhrania `nve1`
+```
+*Na tomto zariadeni nie je potrebna dalsia konfiguracia*
+```
