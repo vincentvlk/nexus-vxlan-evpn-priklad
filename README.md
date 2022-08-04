@@ -1880,7 +1880,7 @@ interface Vlan303
 ```
 
 ---
-4. Transparentne QinVNI prepojenie medzi 2 bodmi cez VXLAN dot1q tunnel:
+#### 4. Transparentne QinVNI prepojenie medzi 2 bodmi cez VXLAN dot1q tunnel:
 ```
    - zakaznik vyuziva zariadania "Tenant-B-SW2" a "Tenant-B-SW4"
    - NEfunkcne na N9300V, VM toto tunelovanie nepodporuje v kombinacii s vPC na NX-OSv ver. 9.3(10)
