@@ -33,7 +33,7 @@
          * [VXLAN-EVPN konfiguracia sluzieb pre zakaznika *TenantB* na N94-Leaf4:](#vxlan-evpn-konfiguracia-sluzieb-pre-zakaznika-tenantb-na-n94-leaf4)
          * [VXLAN-EVPN konfiguracia sluzieb pre zakaznika *TenantB* na N95-Spine1:](#vxlan-evpn-konfiguracia-sluzieb-pre-zakaznika-tenantb-na-n95-spine1)
          * [VXLAN-EVPN konfiguracia sluzieb pre zakaznika *TenantB* na N96-Spine2:](#vxlan-evpn-konfiguracia-sluzieb-pre-zakaznika-tenantb-na-n96-spine2)
-         * [Konfiguracia jednotlivych testovacich scenarov (poskytovatel aj zakaznik):](#konfiguracia-jednotlivych-testovacich-scenarov-poskytovatel-aj-zakaznik)
+      * [Konfiguracia jednotlivych testovacich scenarov (poskytovatel aj zakaznik):](#konfiguracia-jednotlivych-testovacich-scenarov-poskytovatel-aj-zakaznik)
          * [1. Zakladna L2 konektivita (bez QinVNI), medzi 2 bodmi:](#1-zakladna-l2-konektivita-bez-qinvni-medzi-2-bodmi)
          * [2. Unicast L3 routing medzi L2 segmentami v ramci zakaznikovej VRF:](#2-unicast-l3-routing-medzi-l2-segmentami-v-ramci-zakaznikovej-vrf)
 
