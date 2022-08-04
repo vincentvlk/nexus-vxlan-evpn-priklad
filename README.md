@@ -1014,7 +1014,6 @@ router bgp 65001
 ---
 #### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantA` na `N91-Leaf1`:
 
-
 (N91-Leaf1) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
 ```
 !
@@ -1105,21 +1104,58 @@ interface nve1
 ---
 #### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantA` na `N92-Leaf2`:
 
-
 (N92-Leaf2) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
 ```
-*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf*
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
 ```
 
 (N92-Leaf2) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway)
 ```
-*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf*
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
 ```
 
 (N92-Leaf2) Konfiguracia VTEP rozhrania `nve1`
 ```
-*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf*
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
 ```
+
+---
+#### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantA` na `N93-Leaf3`:
+
+(N93-Leaf3) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+```
+
+(N93-Leaf3) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway)
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+```
+
+(N93-Leaf3) Konfiguracia VTEP rozhrania `nve1`
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+```
+
+---
+#### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantA` na `N94-Leaf4`:
+
+
+(N94-Leaf4) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+```
+
+(N94-Leaf4) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway)
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+```
+
+(N94-Leaf4) Konfiguracia VTEP rozhrania `nve1`
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+```
+
 
 POKRACOVAT: doplnit BFD konfig na features pre Leaf swtiche
             pokracovat s konfigom VXLAN VTEP
