@@ -62,6 +62,7 @@ Inet-R1 - CSR1000-IOS-XEv: `csr1000v-universalk9.16.12.03-serial.qcow2`
 
 - PROBLEM: N9300V nabehne s neaktivnymi Ifaces, aj ked su zapnute v start-conf
   - stacil `shutdown` / `no shutdown`, sposobuje hlavne vypadok OSPF a teda *Underlay*
+  - plati aj pre L3-SVI na N9300v, problemy s OSPFv2 voci IOS-XE
   - pravdepodobne zalezitost `GNS3+Qemu+KVM`, nic vazne
 
 - problem, na strane zakaznika flapuje port-channel ked je v mode `routed` (vIOS-L3-Cat)
@@ -1997,10 +1998,13 @@ interface Ethernet1/24
 ```
 !
 ! Poznamky: - VRF Instancie zakanzikov "TenantA" / "TenantB" boli doplnene o
-!             uplinky do Ineternetu cez L3-SVI s oznacenim Vlan104 / Vlan204 
+!             uplinky do Ineternetu cez L3-SVI s oznacenim Vlan104 / Vlan204
+!
 !           - Podla diagramu je kvoli prehladnosti "Inet-R1" fyz. pripojeny len
-!             na "N93-Leaf3", ale "Inet-R1" ma Bcast OSPF neighbor-ship aj s "N94-Leaf4".
-!             V praxi by bol standardne zapojeny ako dual-homed cez Point-to-Point.
+!             na "N93-Leaf3", ale "Inet-R1" ma Bcast OSPF neighbor-ship aj s "N94-Leaf4"
+!             - v praxi by bol standardne zapojeny ako dual-homed cez Point-to-Point
+!
+!           - Kvoli jednoduchosti je na VRF-Lite Inet routing pouzity protokol OSPFv2
 !
 interface Loopback1023
  description loop-for-Router-ID
@@ -2286,7 +2290,7 @@ router bgp 65001
 ! Poznamky: - Dve koncove zariadenie maju rovnaku IP adresu, ale patria roznym zakaznikom
 !           - Vdaka konceptu NAT + VRF a BGP EVPN je mozna konektivita pre oboch zakaznikov
 !           - V realnom DC/SP nasadeni sa vsak pocita s dosiahnutelnostou "z vonku", preto
-!             su potrebne v4/v6 verejne adredsy.
+!             su potrebne v4/v6 verejne adresy.
 !
 ! Tenant-A-SW4 routing config:
 !
@@ -2315,6 +2319,77 @@ ip route 0.0.0.0 0.0.0.0 192.168.3.254 name default-to-provider-AS65001
 ! Konfiguracia dalsich zariadeni zakaznikov je analogicka s "Tenant-A-SW4" / "Tenant-B-SW4"
 !
 ```
+---
+### Pouzivane skratky v dokumente:
+```
+AF      - Address Family (BGP)
+ARP     - Address Resolution Protocol
+AS      - Autonomous System (BGP)
+BFD     - Bidirectional Forwarding Detection
+BPDU    - Bridge Protocol Data Unit
+BPGv4   - Border Gateway Protocol version 4
+CSR1000 - Cloud Services Router series 1000 (Cisco)
+EVPN    - Ethernet Virtual Private Network (VXLAN)
+GNS3    - Graphical Network Simulator version 3
+GW      - Gateway (Router)
+HW      - Hardware
+IOS     - Internetwork Operating System (Cisco)
+L2      - Layer 2
+L3      - Layer 3
+LACP    - Link Aggregation Control Protocol
+MD5     - Message Digest level 5
+MTU     - Maximum Transmission Unit
+N91     - Nexus 9300v c. 1 (Diagram) 
+NAT     - Network Address Translation
+NV      - Network Virtualization (VXLAN)
+NVE     - Network Virtualization Edge / Endpoint (VXLAN)
+NX-OS   - Nexus-Operating Sysytem (Cisco)
+OSPFv2  - Open Shortest Path First version 2
+OSPFv3  - Open Shortest Path First version 3
+QinQ    - 802.1Q tag tunneled in 802.1Q tag
+QinVNI  - 802.1Q tag tunneled in VNI (VXLAN)
+R1      - Router c. 1 (Diagram)
+RD      - Route Distinguisher (VRF)
+RT      - Route target (VRF)
+SVI     - Switch VLAN / Virtual Interface
+SW      - Software
+SW1     - Switch c. 1 (Diagram)
+VLAN    - Virtual Local Area Network
+VNI     - Virtual Network Identifier (VXLAN)
+VPC     - Virtual Port-Channel (Cisco)
+VPN     - Virtual Private Network
+VRF     - VPN / Virtual Routing & Forwarding
+VTEP    - Virtual Tunnel End Point (VXLAN)
+VXLAN   - Virtual eXtensible LAN
+```
 
+---
+### Pouzivane diagnosticke prikazy:
+```
+# show startup-config | include feature|overlay
+# show feature | include enabled
+# show boot
+# show interface nve1
+# show running-config interface nve1
+# show ip ospf neighbors
+# show ip ospf neighbors vrf TenantA
+# show bgp l2vpn evpn summary
+# show running-config nv overlay
+# show running-config | section evpn
+# show running-config vrf TenantA
+# show bgp l2vpn evpn vrf TenantA
+# show mac address-table vlan 101
+# show nve peers detail
+# show nve vni 3100101 detail
+# show bgp vrf TenantA l2vpn evpn 192.168.1.1       ! Vo vypise je vidiet VNI Stack "Received label 3100101 3100"
+# show l2route mac all
+# show nve ethernet-segment
+# show bgp l2vpn evpn route-type 4
+# show bgp l2vpn evpn route-type 5
+# show ip route vrf TenantA
+# show ip route ospf-as65001 vrf TenantB
+# show bgp vrf TenantB ipv4 unicast
+# show vpc
+# show vpc 11
 
-
+```
