@@ -1409,6 +1409,56 @@ evpn
 
 #### 1. Zakladna L2 konektivita (bez QinVNI), medzi 2 bodmi 
 ```
-  - zakaznik vyuziva zariadenia Tenant-A-SW1 a Tenant-A-SW3
+  - zakaznik vyuziva zariadenia "Tenant-A-SW1" a "Tenant-A-SW3"
   - je mozne prepojit aj viac bodov / endpoint-ov
+```
+
+(N91-Leaf1 + N92-Leaf2) Konfiguracia vPC voci zakaznikovi
+
+```
+!
+interface port-channel11
+  description downlink-to-Tenant-A-SW1-vPC11
+  switchport access vlan 101
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  mtu 9216
+  storm-control broadcast level 1.00
+  storm-control action trap
+  vpc 11
+!
+interface Ethernet1/11
+  description downlink-to-Tenant-A-SW1-vPC11
+  switchport access vlan 101
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  mtu 9216
+  storm-control broadcast level 1.00
+  storm-control action trap
+  channel-group 11 mode active
+```
+
+(N93-Leaf3 + N94-Leaf4) Konfiguracia vPC voci zakaznikovi
+
+```
+!
+interface port-channel13
+  description downlink-to-Tenant-A-SW3-vPC13
+  switchport access vlan 101
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  mtu 9216
+  storm-control broadcast level 1.00
+  storm-control action trap
+  vpc 13
+!
+interface Ethernet1/13
+  description downlink-to-Tenant-A-SW3-vPC13
+  switchport access vlan 101
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  mtu 9216
+  storm-control broadcast level 1.00
+  storm-control action trap
+  channel-group 13 mode active
 ```
