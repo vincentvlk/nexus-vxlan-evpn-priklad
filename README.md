@@ -38,7 +38,7 @@
          * [2. Unicast L3 routing medzi L2 segmentami v ramci zakaznikovej VRF:](#2-unicast-l3-routing-medzi-l2-segmentami-v-ramci-zakaznikovej-vrf)
          * [3. Transparentne prepojenie P-to-P cez VXLAN-Xconnect:](#3-transparentne-prepojenie-p-to-p-cez-vxlan-xconnect)
          * [4. Transparentne QinVNI prepojenie medzi 2 bodmi cez VXLAN dot1q tunnel:](#4-transparentne-qinvni-prepojenie-medzi-2-bodmi-cez-vxlan-dot1q-tunnel)
-         * [5. Externa konektivita do Inetu z VRF TenantA / TenantB (OSPFv2 + Inet-R1 + B:SW4)](#5-externa-konektivita-do-inetu-z-vrf-tenanta--tenantb-ospfv2--inet-r1--bsw4)
+         * [5. Externa konektivita do Inetu z VRF TenantA / TenantB:](#5-externa-konektivita-do-inetu-z-vrf-tenanta--tenantb)
 
 ## Pomocne poznamky na mini-projekt "nexus-vxlan-evpn-priklad"
 
@@ -1975,7 +1975,7 @@ interface Ethernet1/24
 ```
 
 ---
-#### 5. Externa konektivita do Inetu z VRF `TenantA` / `TenantB` (OSPFv2 + Inet-R1 + B:SW4)
+#### 5. Externa konektivita do Inetu z VRF `TenantA` / `TenantB`:
 ```
    - zakaznik "TenantA" vyuziva zariadenia "Tenant-A-SW1", "Tenant-A-SW2", "Tenant-A-SW3" a "Tenant-A-SW4"
    - zakaznik "TenantB" vyuziva zariadanie "Tenant-B-SW4"
