@@ -1587,7 +1587,7 @@ interface Ethernet1/12
 ! *Doplnime konfiguraciu pre koncove zariadenie "Tenant-A-SW4"*
 !
 interface port-channel14
-  description downlink-to-Tenant-A-SW2-vPC12
+  description downlink-to-Tenant-A-SW4-vPC14
   switchport access vlan 103
   spanning-tree port type edge
   spanning-tree bpduguard enable
@@ -1597,7 +1597,7 @@ interface port-channel14
   vpc 14
 !
 interface Ethernet1/14
-  description downlink-to-Tenant-A-SW2-vPC12
+  description downlink-to-Tenant-A-SW4-vPC14
   switchport access vlan 103
   spanning-tree port type edge
   spanning-tree bpduguard enable
@@ -1887,7 +1887,7 @@ interface Vlan303
      - malo by podporovat na REAL zeleze aj point-to-Multipoint, treba preskumat
    - pozriet obmedzenia ohladom HW/SW a vPC (NX-OS 9.X vs. NX-OS 10.X)
 
-   - OTESTOVAT variantu, kedy je provider port na inom zariadeni ako VTEP-e a treba QinVNI transport
+   - OTESTOVAT variantu, kedy je provider port na inom zariadeni ako VTEP a treba QinVNI transport
    - otazka, aka je podpora QinVNI s pripojenim zakaznika do FEX-ov
    - otazka, da sa nasadit BW rate-limit / shaping na "provider" porte, zatial neviem
 ```
@@ -1970,3 +1970,348 @@ interface Ethernet1/24
   channel-group 24 mode active
 !
 ```
+
+---
+#### 5. Externa konektivita do Inetu z VRF `TenantA` / `TenantB` (OSPFv2 + Inet-R1 + B:SW4)
+```
+   - zakaznik "TenantA" vyuziva zariadenia "Tenant-A-SW1", "Tenant-A-SW2", "Tenant-A-SW3" a "Tenant-A-SW4"
+   - zakaznik "TenantB" vyuziva zariadanie "Tenant-B-SW4"
+
+   - viacero moznosti na hand-off L3 konektivity do Internetu, typicky s VRF-lite + BGP
+   - funkcne na N9300V v kombinacii CSR1000v s IOS-XE, aj multipoint / multi-tenant
+
+   - do BGP sa da propagovat v ramci VRF default routa s "network 0.0.0.0/0"
+   - na Inet-R1 potrebny VRF aware NAT config
+   - problem ked je roztiahnuta VXLAN, a border-gw do INetu je len na 1 Pod-e
+     - bolo potrebne vypnut "Dynamic AnycastGW" na L3 uplinkovych Vlan104 + Vlan204 pre Tenant-A/B
+     - Leaf1+2 (nema Inet GW) VS. Leaf3+4 (ma Inet GW), L3 konetivita sa probaguje cez BGP
+
+   - zariadenia A:SW4 a B:SW4 maju rovnake IP ale s VRF+NAT sa dostanu v poriadku na Inet
+   - priama adresacia zakaznikov vo VRF je mozna ale, problematicka, idealne pouzit unikatne IP adresy
+```
+
+(Inet-R1) Konfiguracia externeho routera pre pristup na Internet:
+```
+!
+! Poznamky: - VRF Instancie zakanzikov "TenantA" / "TenantB" boli doplnene o
+!             uplinky do Ineternetu cez L3-SVI s oznacenim Vlan104 / Vlan204 
+!           - Podla diagramu je kvoli prehladnosti "Inet-R1" fyz. pripojeny len
+!             na "N93-Leaf3", ale "Inet-R1" ma Bcast OSPF neighbor-ship aj s "N94-Leaf4".
+!             V praxi by bol standardne zapojeny ako dual-homed cez Point-to-Point.
+!
+interface Loopback1023
+ description loop-for-Router-ID
+ ip address 192.0.2.100 255.255.255.0
+!
+vrf definition TenantA
+ rd 192.0.2.100:3
+ !
+ address-family ipv4
+ exit-address-family
+!
+vrf definition TenantB
+ rd 192.0.2.100:4
+ !
+ address-family ipv4
+ exit-address-family
+!
+router ospf 65001 vrf TenantA
+ router-id 192.0.2.100
+ auto-cost reference-bandwidth 4000000
+ default-information originate always metric 1000 metric-type 1
+!
+router ospf 65002 vrf TenantB
+ router-id 192.0.2.100
+ auto-cost reference-bandwidth 4000000
+ default-information originate always metric 1000 metric-type 1
+!
+interface GigabitEthernet4
+ description uplink-to-internet-AS-XYZ
+ no cdp enable
+ ip address 192.168.5.100 255.255.255.0
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ ip nat outside
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet1
+ description downlink-to-VXLAN-fabric-AS65001
+ no ip address
+ no ip redirects
+ negotiation auto
+ no ipv6 redirects
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet1.104
+ description TenantA-seg104-inet-gw
+ encapsulation dot1Q 104
+ vrf forwarding TenantA
+ ip address 192.168.14.100 255.255.255.0
+ no ip redirects
+ ip nat inside
+ ip ospf network broadcast
+ ip ospf 65001 area 0
+ no ipv6 redirects
+!
+interface GigabitEthernet1.204
+ description TenantB-seg204-inet-gw
+ encapsulation dot1Q 204
+ vrf forwarding TenantB
+ ip address 192.168.24.100 255.255.255.0
+ no ip redirects
+ ip nat inside
+ ip ospf network broadcast
+ ip ospf 65002 area 0
+ no ipv6 redirects
+!
+ip route 0.0.0.0 0.0.0.0 192.168.5.1 name default-internet-access
+ip route vrf TenantA 0.0.0.0 0.0.0.0 GigabitEthernet4 192.168.5.1 global name inet-access-for-TenantA
+ip route vrf TenantB 0.0.0.0 0.0.0.0 GigabitEthernet4 192.168.5.1 global name inet-access-for-TenantB
+!
+ip access-list standard acl-nat-TenantA
+ 10 permit 192.168.14.0 0.0.0.255
+ 20 permit 192.168.1.0 0.0.0.255
+ 30 permit 192.168.2.0 0.0.0.255
+ 40 permit 192.168.3.0 0.0.0.255
+!
+ip access-list standard acl-nat-TenantB
+ 10 permit 192.168.24.0 0.0.0.255
+ 20 permit 192.168.1.0 0.0.0.255
+ 30 permit 192.168.2.0 0.0.0.255
+ 40 permit 192.168.3.0 0.0.0.255
+!
+ip nat inside source list acl-nat-TenantA interface GigabitEthernet4 vrf TenantA overload
+ip nat inside source list acl-nat-TenantB interface GigabitEthernet4 vrf TenantB overload
+!
+```
+
+(N91-Leaf1) Konfiguracia pristupu na Internet voci zakaznikovi:
+```
+!
+vlan 104
+  name TenantA-seg104-L2
+  vn-segment 3100104
+!
+vlan 204
+  name TenantB-seg204-L2
+  vn-segment 3200204
+!
+interface nve1
+  member vni 3100104
+    ingress-replication protocol bgp
+!
+  member vni 3200204
+    ingress-replication protocol bgp
+!
+evpn
+  vni 3100104 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+!
+  vni 3200204 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+!
+```
+
+(N92-Leaf2) Konfiguracia pristupu na Internet voci zakaznikovi:
+```
+* Konfiguracia je zhodna so zariadenim "N91-Leaf1" *
+```
+
+(N93-Leaf3) Konfiguracia pristupu na Internet voci zakaznikovi:
+```
+!
+vlan 104
+  name TenantA-seg104-L2
+  vn-segment 3100104
+!
+vlan 204
+  name TenantB-seg204-L2
+  vn-segment 3200204
+!
+interface nve1
+  member vni 3100104
+    ingress-replication protocol bgp
+!
+  member vni 3200204
+    ingress-replication protocol bgp
+!
+evpn
+  vni 3100104 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+!
+  vni 3200204 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+!
+interface Ethernet1/1
+  description uplink-to-Inet-R1-GW
+  switchport mode trunk
+  switchport trunk allowed vlan 104,204
+  spanning-tree port type edge trunk
+  spanning-tree bpduguard enable
+!
+interface Vlan104
+  description TenantA-seg104-inet-uplink
+  no shutdown
+  vrf member TenantA
+  no ip redirects
+  ip address 192.168.14.253/24
+  no ipv6 redirects
+  ip ospf network broadcast
+  ip router ospf as65001 area 0.0.0.0
+!
+interface Vlan204
+  description TenantB-seg204-inet-uplink
+  no shutdown
+  vrf member TenantB
+  no ip redirects
+  ip address 192.168.24.253/24
+  no ipv6 redirects
+  ip ospf network broadcast
+  ip router ospf as65001 area 0.0.0.0
+!
+router ospf as65001
+  vrf TenantA
+    router-id 192.0.2.93
+    log-adjacency-changes
+    auto-cost reference-bandwidth 4000 Gbps
+  vrf TenantB
+    router-id 192.0.2.93
+    log-adjacency-changes
+    auto-cost reference-bandwidth 4000 Gbps
+!
+router bgp 65001
+  vrf TenantA
+    address-family ipv4 unicast
+      network 0.0.0.0/0
+  vrf TenantB
+    address-family ipv4 unicast
+      network 0.0.0.0/0
+!
+```
+
+(N94-Leaf4) Konfiguracia pristupu na Internet voci zakaznikovi:
+```
+!
+vlan 104
+  name TenantA-seg104-L2
+  vn-segment 3100104
+!
+vlan 204
+  name TenantB-seg204-L2
+  vn-segment 3200204
+!
+interface nve1
+  member vni 3100104
+    ingress-replication protocol bgp
+!
+  member vni 3200204
+    ingress-replication protocol bgp
+!
+evpn
+  vni 3100104 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+!
+  vni 3200204 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+!
+interface Ethernet1/1
+  description uplink-to-Inet-R1-GW
+  switchport mode trunk
+  switchport trunk allowed vlan 104,204
+  spanning-tree port type edge trunk
+  spanning-tree bpduguard enable
+!
+interface Vlan104
+  description TenantA-seg104-inet-uplink
+  no shutdown
+  vrf member TenantA
+  no ip redirects
+  ip address 192.168.14.254/24
+  no ipv6 redirects
+  ip ospf network broadcast
+  ip router ospf as65001 area 0.0.0.0
+!
+interface Vlan204
+  description TenantB-seg204-inet-uplink
+  no shutdown
+  vrf member TenantB
+  no ip redirects
+  ip address 192.168.24.254/24
+  no ipv6 redirects
+  ip ospf network broadcast
+  ip router ospf as65001 area 0.0.0.0
+!
+router ospf as65001
+  vrf TenantA
+    router-id 192.0.2.94
+    log-adjacency-changes
+    auto-cost reference-bandwidth 4000 Gbps
+  vrf TenantB
+    router-id 192.0.2.94
+    log-adjacency-changes
+    auto-cost reference-bandwidth 4000 Gbps
+!
+router bgp 65001
+  vrf TenantA
+    address-family ipv4 unicast
+      network 0.0.0.0/0
+  vrf TenantB
+    address-family ipv4 unicast
+      network 0.0.0.0/0
+!
+```
+
+(Tenant-A-SW4 + Tenant-B-SW4) Konfiguracia pristupu na Internet voci poskytovatelovi:
+```
+!
+! Poznamky: - Dve koncove zariadenie maju rovnaku IP adresu, ale patria roznym zakaznikom
+!           - Vdaka konceptu NAT + VRF a BGP EVPN je mozna konektivita pre oboch zakaznikov
+!           - V realnom DC/SP nasadeni sa vsak pocita s dosiahnutelnostou "z vonku", preto
+!             su potrebne v4/v6 verejne adredsy.
+!
+! Tenant-A-SW4 routing config:
+!
+interface Vlan103
+ description uplink-to-provider-AS65001
+ ip address 192.168.3.4 255.255.255.0
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+!
+ip route 0.0.0.0 0.0.0.0 192.168.3.254 name default-to-provider-AS65001
+!
+! Tenant-B-SW4 routing config:
+!
+interface Vlan203
+ description uplink-to-provider-AS65001
+ ip address 192.168.3.4 255.255.255.0
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+!
+ip route 0.0.0.0 0.0.0.0 192.168.3.254 name default-to-provider-AS65001
+!
+! Tenant-X-SW-Y routing config:
+!
+! Konfiguracia dalsich zariadeni zakaznikov je analogicka s "Tenant-A-SW4" / "Tenant-B-SW4"
+!
+```
+
+
+
