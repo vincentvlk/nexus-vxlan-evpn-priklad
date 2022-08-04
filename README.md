@@ -1407,7 +1407,8 @@ evpn
 ---
 ### Konfiguracia jednotlivych testovacich scenarov (poskytovatel aj zakaznik):
 
+#### 1. Zakladna L2 konektivita (bez QinVNI), medzi 2 bodmi 
 ```
-1. Zakladna L2 konektivita (bez QinVNI), medzi 2 bodmi (zakaznik = A:SW1 + A:SW3)
-   - je mozne prepojit aj viac bodov / endpoint-ov
+  - zakaznik vyuziva zariadenia Tenant-A-SW1 a Tenant-A-SW3
+  - je mozne prepojit aj viac bodov / endpoint-ov
 ```
