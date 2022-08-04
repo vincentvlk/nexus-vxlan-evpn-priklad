@@ -36,6 +36,9 @@
       * [Konfiguracia jednotlivych testovacich scenarov (poskytovatel aj zakaznik):](#konfiguracia-jednotlivych-testovacich-scenarov-poskytovatel-aj-zakaznik)
          * [1. Zakladna L2 konektivita (bez QinVNI), medzi 2 bodmi:](#1-zakladna-l2-konektivita-bez-qinvni-medzi-2-bodmi)
          * [2. Unicast L3 routing medzi L2 segmentami v ramci zakaznikovej VRF:](#2-unicast-l3-routing-medzi-l2-segmentami-v-ramci-zakaznikovej-vrf)
+         * [3. Transparentne prepojenie P-to-P cez VXLAN-Xconnect:](#3-transparentne-prepojenie-p-to-p-cez-vxlan-xconnect)
+         * [4. Transparentne QinVNI prepojenie medzi 2 bodmi cez VXLAN dot1q tunnel:](#4-transparentne-qinvni-prepojenie-medzi-2-bodmi-cez-vxlan-dot1q-tunnel)
+         * [5. Externa konektivita do Inetu z VRF TenantA / TenantB (OSPFv2 + Inet-R1 + B:SW4)](#5-externa-konektivita-do-inetu-z-vrf-tenanta--tenantb-ospfv2--inet-r1--bsw4)
 
 ## Pomocne poznamky na mini-projekt "nexus-vxlan-evpn-priklad"
 
