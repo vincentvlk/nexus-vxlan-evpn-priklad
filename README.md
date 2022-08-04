@@ -159,8 +159,12 @@ hostname N91-Leaf1
 !
 nv overlay evpn
 feature ospf
+feature bfd
 feature bgp
 feature interface-vlan
+feature vn-segment-vlan-based
+feature lacp
+feature vpc
 feature nv overlay
 !
 ```
@@ -256,6 +260,7 @@ hostname N92-Leaf2
 !
 nv overlay evpn
 feature ospf
+feature bfd
 feature bgp
 feature interface-vlan
 feature vn-segment-vlan-based
@@ -356,6 +361,7 @@ hostname N93-Leaf3
 !
 nv overlay evpn
 feature ospf
+feature bfd
 feature bgp
 feature interface-vlan
 feature vn-segment-vlan-based
@@ -457,6 +463,7 @@ hostname N94-Leaf4
 !
 nv overlay evpn
 feature ospf
+feature bfd
 feature bgp
 feature interface-vlan
 feature vn-segment-vlan-based
@@ -558,6 +565,7 @@ hostname N95-Spine1
 !
 nv overlay evpn
 feature ospf
+feature bfd
 feature bgp
 feature nv overlay
 !
@@ -633,6 +641,7 @@ hostname N96-Spine2
 !
 nv overlay evpn
 feature ospf
+feature bfd
 feature bgp
 feature nv overlay
 !
@@ -1091,6 +1100,25 @@ interface nve1
   member vni 3100103
     ingress-replication protocol bgp
 !
+```
+
+---
+#### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantA` na `N92-Leaf2`:
+
+
+(N92-Leaf2) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf*
+```
+
+(N92-Leaf2) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway)
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf*
+```
+
+(N92-Leaf2) Konfiguracia VTEP rozhrania `nve1`
+```
+*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf*
 ```
 
 POKRACOVAT: doplnit BFD konfig na features pre Leaf swtiche
