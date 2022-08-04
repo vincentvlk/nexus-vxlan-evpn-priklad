@@ -2381,15 +2381,14 @@ VXLAN   - Virtual eXtensible LAN
 # show mac address-table vlan 101
 # show nve peers detail
 # show nve vni 3100101 detail
-# show bgp vrf TenantA l2vpn evpn 192.168.1.1       ! Vo vypise je vidiet VNI Stack "Received label 3100101 3100"
+# show bgp vrf TenantA l2vpn evpn 192.168.1.1      ! Vo vypise je vidiet VNI Stack "Received label 3100101 3100"
 # show l2route mac all
 # show nve ethernet-segment
 # show bgp l2vpn evpn route-type 4
 # show bgp l2vpn evpn route-type 5
-# show ip route vrf TenantA
+# show ip route vrf TenantA                        ! Vo vypise je vidiet VXLAN signalizaciu
 # show ip route ospf-as65001 vrf TenantB
 # show bgp vrf TenantB ipv4 unicast
 # show vpc
 # show vpc 11
-
 ```
