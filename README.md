@@ -89,7 +89,7 @@ Poznamka z dokumentacie:
 ```
 For proper operation during L3 uplink failure scenarios on vPC VTEPs,
 configure a backup SVI and enter the
-"system nve infra-vlans <backup-svi-vlan" command.
+"system nve infra-vlans <backup-svi-vlan>" command.
 
 On Cisco Nexus 9000-EX platform switches,
 the backup SVI VLAN needs to be the native VLAN on the peer-link.
@@ -111,10 +111,10 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
 ### Testovane scenare:
 
 1. Zakladna L2 konektivita (bez QinVNI), medzi 2 bodmi bez QinVNI (A:SW1 + A:SW3)
-   - funkcne na N9300V, aj multipoint
+   - funkcne na N9300V + IOSv, aj multipoint
  
 2. Unicast L3 routing medzi L2 segmentami v ramci zakaznikovej VRF (A:SW1+2+3+4)
-   - funkcne na N9300V, aj multipoint
+   - funkcne na N9300V + IOSv, aj multipoint
 
 3. Transparentne prepojenie P-to-P cez VXLAN-Xconnect (B:SW1 + B:SW3)
    - NEfunkcne na N9300V, VM toto nepodporuje v kombinacii s vPC na NX-OSv ver. 9.3(10)
@@ -1414,7 +1414,7 @@ evpn
 ```
   - zakaznik vyuziva zariadenia "Tenant-A-SW1" a "Tenant-A-SW3"
   - je mozne prepojit aj viac bodov / endpoint-ov
-  - funckne pri testovani na N9300v
+  - funckne pri testovani na N9300v + IOSv
 ```
 
 (N91-Leaf1 + N92-Leaf2) Konfiguracia vPC voci zakaznikovi:
@@ -1543,7 +1543,7 @@ interface GigabitEthernet3/2
 #### 2. Unicast L3 routing medzi L2 segmentami v ramci zakaznikovej VRF:
 ```
   - zakaznik vyuziva zariadenia "Tenant-A-SW1", "Tenant-A-SW2", "Tenant-A-SW3" a "Tenant-A-SW4"
-  - funckne pri testovani na N9300v
+  - funckne pri testovani na N9300v + IOSv
 ```
 
 (N91-Leaf1 + N92-Leaf2 + N93-Leaf3 + N94-Leaf4) Konfiguracia VXLAN routingu:
@@ -1696,3 +1696,12 @@ end
 !
 ```
 
+#### 3. Transparentne prepojenie P-to-P cez VXLAN-Xconnect 
+```
+   - zakaznik vyuziva zariadania "Tenant-B-SW1" a "Tenant-B-SW3"
+   - NEfunkcne na N9300V, VM toto nepodporuje v kombinacii s vPC na NX-OSv ver. 9.3(10)
+   - cybaju prikazy: "system dot1q-tunnel transit [vlan vlan-range]"
+                   spolu s: "system nve infra-vlans <backup-svi-vlan>"
+
+   - pozriet obmedzenia ohladom HW/SW a vPC (NX-OS 9.X vs. NX-OS 10.X)
+```
