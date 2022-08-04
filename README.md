@@ -1423,6 +1423,7 @@ evpn
 !
 interface port-channel11
   description downlink-to-Tenant-A-SW1-vPC11
+  no cdp enable
   switchport access vlan 101
   spanning-tree port type edge
   spanning-tree bpduguard enable
@@ -1433,6 +1434,7 @@ interface port-channel11
 !
 interface Ethernet1/11
   description downlink-to-Tenant-A-SW1-vPC11
+  no cdp enable
   switchport access vlan 101
   spanning-tree port type edge
   spanning-tree bpduguard enable
@@ -1448,6 +1450,7 @@ interface Ethernet1/11
 !
 interface port-channel13
   description downlink-to-Tenant-A-SW3-vPC13
+  no cdp enable
   switchport access vlan 101
   spanning-tree port type edge
   spanning-tree bpduguard enable
@@ -1458,6 +1461,7 @@ interface port-channel13
 !
 interface Ethernet1/13
   description downlink-to-Tenant-A-SW3-vPC13
+  no cdp enable
   switchport access vlan 101
   spanning-tree port type edge
   spanning-tree bpduguard enable
@@ -1468,17 +1472,17 @@ interface Ethernet1/13
 !
 ```
 
-(Tenant-A-SW1) Konfiguracia L2-switched uplink-u voci poskytovatelovy:
+(Tenant-A-SW1) Konfiguracia L2-switched uplink-u voci poskytovatelovi:
 ```
 !
 interface Port-channel11
- description downlink-to-provider-AS65001
- switchport access vlan 101         ! VLAN ID moze byt u zakaznika odlisne
+ description uplink-to-provider-AS65001
+ switchport access vlan 101                 ! VLAN ID moze byt u zakaznika odlisne
  spanning-tree portfast edge
  spanning-tree bpdufilter enable
 !
 interface GigabitEthernet3/1
- description downlink-to-provider-AS65001
+ description uplink-to-provider-AS65001
  switchport access vlan 101
  negotiation auto
  channel-protocol lacp
@@ -1487,7 +1491,7 @@ interface GigabitEthernet3/1
  spanning-tree bpdufilter enable
 !
 interface GigabitEthernet3/2
- description downlink-to-provider-AS65001
+ description uplink-to-provider-AS65001
  switchport access vlan 101
  negotiation auto
  channel-protocol lacp
@@ -1495,13 +1499,21 @@ interface GigabitEthernet3/2
  spanning-tree portfast edge
  spanning-tree bpdufilter enable
 !
+interface Vlan101
+ description uplink-to-provider-AS65001
+ ip address 192.168.1.1 255.255.255.0
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+!
 ```
 
-(Tenant-A-SW3) Konfiguracia L3-routed uplink-u voci poskytovatelovy:
+(Tenant-A-SW3) Konfiguracia L3-routed uplink-u voci poskytovatelovi:
 ```
 !
 interface Port-channel13
- description downlink-to-provider-AS65001
+ description uplink-to-provider-AS65001
+ no cdp enable
  no switchport
  ip address 192.168.1.3 255.255.255.0
  no ip redirects
@@ -1509,7 +1521,8 @@ interface Port-channel13
  no ip proxy-arp
 !
 interface GigabitEthernet3/1
- description downlink-to-provider-AS65001
+ description uplink-to-provider-AS65001
+ no cdp enable
  no switchport
  no ip address
  negotiation auto
@@ -1517,7 +1530,8 @@ interface GigabitEthernet3/1
  channel-group 13 mode active
 !
 interface GigabitEthernet3/2
- description downlink-to-provider-AS65001
+ description uplink-to-provider-AS65001
+ no cdp enable
  no switchport
  no ip address
  negotiation auto
@@ -1532,16 +1546,21 @@ interface GigabitEthernet3/2
   - funckne pri testovani na N9300v
 ```
 
-(N91-Leaf1 + N92-Leaf2 + N93-Leaf3 + N94-Leaf4) Konfiguracia vPC voci zakaznikovi:
+(N91-Leaf1 + N92-Leaf2 + N93-Leaf3 + N94-Leaf4) Konfiguracia VXLAN routingu:
 ```
-! *Doplnime konfiguraciu pre koncove zariadenie "Tenant-A-SW2"*   
+** Konfiguracia routingu v ramci VXLAN VRF bola vykonana v casti pripravy VXLAN sluzieb **
+```
+
+(N91-Leaf1 + N92-Leaf2) Konfiguracia vPC voci zakaznikovi:
+```
+! *Doplnime konfiguraciu pre koncove zariadenie "Tenant-A-SW2"*
 !
 interface port-channel12
   description downlink-to-Tenant-A-SW2-vPC12
   switchport access vlan 102
   spanning-tree port type edge
   spanning-tree bpduguard enable
-  no logging event port link-status
+  mtu 9216
   storm-control broadcast level 1.00
   storm-control action trap
   vpc 12
@@ -1551,7 +1570,7 @@ interface Ethernet1/12
   switchport access vlan 102
   spanning-tree port type edge
   spanning-tree bpduguard enable
-  no logging event port link-status
+  mtu 9216
   storm-control broadcast level 1.00
   storm-control action trap
   channel-group 12 mode active
@@ -1562,4 +1581,115 @@ interface Ethernet1/12
 ```
 ! *Doplnime konfiguraciu pre koncove zariadenie "Tenant-A-SW4"*
 !
+interface port-channel14
+  description downlink-to-Tenant-A-SW2-vPC12
+  switchport access vlan 103
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  mtu 9216
+  storm-control broadcast level 1.00
+  storm-control action trap
+  vpc 14
+!
+interface Ethernet1/14
+  description downlink-to-Tenant-A-SW2-vPC12
+  switchport access vlan 103
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  mtu 9216
+  storm-control broadcast level 1.00
+  storm-control action trap
+  channel-group 14 mode active
+!
+```
 
+(Tenant-A-SW2) Konfiguracia L3-routed uplink-u voci poskytovatelovi:
+```
+!
+interface Port-channel12
+ description uplink-to-provider-AS65001
+ no cdp enable
+ no switchport
+ ip address 192.168.2.2 255.255.255.0
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+!
+interface GigabitEthernet3/1
+ description uplink-to-provider-AS65001
+ no cdp enable
+ no switchport
+ no ip address
+ negotiation auto
+ channel-group 12 mode active
+!
+interface GigabitEthernet3/2
+ description uplink-to-provider-AS65001
+ no cdp enable
+ no switchport
+ no ip address
+ negotiation auto
+ channel-group 12 mode active
+end
+```
+
+(Tenant-A-SW4) Konfiguracia L2-switched uplink-u voci poskytovatelovi:
+```
+!
+interface Port-channel14
+ description uplink-to-provider-AS65001
+ no cdp enable
+ switchport access vlan 103
+ spanning-tree portfast edge
+ spanning-tree bpdufilter enable
+!
+interface GigabitEthernet3/1
+ description uplink-to-provider-AS65001
+ no cdp enable
+ switchport access vlan 103
+ negotiation auto
+ channel-group 14 mode active
+ spanning-tree portfast edge
+ spanning-tree bpdufilter enable
+!
+interface GigabitEthernet3/2
+ description uplink-to-provider-AS65001
+ no cdp enable
+ switchport access vlan 103
+ negotiation auto
+ channel-group 14 mode active
+ spanning-tree portfast edge
+ spanning-tree bpdufilter enable
+!
+interface Vlan103
+ description uplink-to-provider-AS65001
+ ip address 192.168.3.4 255.255.255.0
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+end
+!
+
+(N91-Leaf1 + N92-Leaf2 + N93-Leaf3 + N94-Leaf4) Konfiguracia routingu u zakaznika:
+```
+! Routing pre zariadenie Tenant-A-SW1
+!
+ip route 0.0.0.0 0.0.0.0 192.168.1.254 name default-route-to-AS65001
+end
+!
+! Routing pre zariadenie Tenant-A-SW2
+!
+ip route 0.0.0.0 0.0.0.0 192.168.2.254 name default-route-to-AS65001
+end
+!
+! Routing pre zariadenie Tenant-A-SW3
+!
+ip route 0.0.0.0 0.0.0.0 192.168.1.254 name default-route-to-AS65001
+end
+!
+! Routing pre zariadenie Tenant-A-SW4
+!
+ip route 0.0.0.0 0.0.0.0 192.168.3.254 name default-route-to-AS65001
+end
+!
+```
