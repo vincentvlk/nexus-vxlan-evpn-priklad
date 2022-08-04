@@ -2371,17 +2371,23 @@ VXLAN   - Virtual eXtensible LAN
 # show startup-config | include feature|overlay
 # show feature | include enabled
 # show boot
+# show running-config ospf
+# show running-config bgp
 # show interface nve1
 # show running-config interface nve1
 # show ip ospf neighbors
 # show ip ospf neighbors vrf TenantA
 # show bgp l2vpn evpn summary
+# show running-config vlan 101
 # show running-config nv overlay
 # show running-config | section evpn
 # show running-config vrf TenantA
 # show bgp l2vpn evpn vrf TenantA
 # show mac address-table vlan 101
+# show ip arp vlan 103 vrf TenantA
 # show nve peers detail
+# show nve vrf
+# show nve vni
 # show nve vni 3100101 detail
 # show bgp vrf TenantA l2vpn evpn 192.168.1.1      ! Vo vypise je vidiet VNI Stack "Received label 3100101 3100"
 # show l2route mac all
