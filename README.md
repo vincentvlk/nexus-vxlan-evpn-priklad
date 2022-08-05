@@ -987,7 +987,7 @@ router bgp 65001
   address-family l2vpn evpn
     maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
     maximum-paths ibgp 4        ! Nie je nutne, ale priprava na skalovanie
-    retain route-target all
+    retain route-target all     ! Potrebne, aby nebolo nutne konfigurovat VNIs/VRFs na SpineX
 !
   template peer VTEP-peers
     remote-as 65001
@@ -1038,7 +1038,7 @@ router bgp 65001
   address-family l2vpn evpn
     maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
     maximum-paths ibgp 4        ! Nie je nutne, ale priprava na skalovanie
-    retain route-target all
+    retain route-target all     ! Potrebne, aby nebolo nutne konfigurovat VNIs/VRFs na SpineX
 !
   template peer VTEP-peers
     remote-as 65001
@@ -1418,6 +1418,7 @@ evpn
 *Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
 ```
 
+---
 #### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantB` na `N95-Spine1`:
 
 (N95-Spine1) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
@@ -1435,6 +1436,7 @@ evpn
 *Na tomto zariadeni nie je potrebna dalsia konfiguracia*
 ```
 
+---
 #### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantB` na `N96-Spine2`:
 
 (N96-Spine2) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
@@ -1759,8 +1761,8 @@ end
 (N91-Leaf1) Experimentalna konfiguracia sluzby VXLAN-Xconnect voci zakaznikovy:
 ```
 !
-! system dot1q-tunnel transit 10        ! Neoverena konfiguracia
-! system nve infra-vlans 912            ! Neoverena konfiguracia
+! system dot1q-tunnel transit 10        ! Neoverena konfiguracia, nie je na N9300v
+! system nve infra-vlans 912            ! Neoverena konfiguracia, nie je na N9300v
 !
 vlan 10
   name vxlan-Xconn-test
@@ -2371,7 +2373,7 @@ BFD     - Bidirectional Forwarding Detection
 BPDU    - Bridge Protocol Data Unit
 BPGv4   - Border Gateway Protocol version 4
 CSR1000 - Cloud Services Router series 1000 (Cisco)
-ESI     - Ethernet Segment Identifier (VXLAN EVPN Multihoming)
+ESI     - Ethernet Segment Identifier (VXLAN EVPN Multihoming, alternativa k vPC)
 EVI     - EVPN Virtual Instance (VXLAN)             
 EVPN    - Ethernet Virtual Private Network (VXLAN)
 GNS3    - Graphical Network Simulator version 3
