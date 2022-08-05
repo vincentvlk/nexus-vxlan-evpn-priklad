@@ -2034,7 +2034,7 @@ interface Ethernet1/24
    - na Inet-R1 potrebny VRF aware NAT config
    - problem ked je roztiahnuta VXLAN, a border-gw do INetu je len na 1 Pod-e
      - bolo potrebne vypnut "Dynamic Anycast GW" na L3 uplinkovych Vlan104 + Vlan204 pre Tenant-A/B
-     - Leaf1+2 (nema Inet GW) VS. Leaf3+4 (ma Inet GW), L3 konetivita sa probaguje cez BGP
+     - `Leaf1+2` (NEmaju pripojenu Inet GW) verzus `Leaf3+4` (maju pripojenu Inet GW)
 
    - zariadenia A:SW4 a B:SW4 maju rovnake IP ale s VRF+NAT sa dostanu v poriadku na Inet
    - priama adresacia zakaznikov vo VRF je mozna ale, problematicka, idealne pouzit unikatne IP adresy
