@@ -7,7 +7,7 @@
       * [Postrehy z konfiguracie a testovania:](#postrehy-z-konfiguracie-a-testovania)
       * [Testovane scenare:](#testovane-scenare)
       * [Konfiguracia VXLAN-EVPN Underlay](#konfiguracia-vxlan-evpn-underlay)
-         * [VXLAN Underlay konfiguracia pre N91-Leaf1:](#vxlan-underlay-konfiguracia-pre-n91-leaf1)
+         * [VXLAN Underlay konfiguracia pre <em>N91-Leaf1</em>:](#vxlan-underlay-konfiguracia-pre-n91-leaf1)
          * [VXLAN Underlay konfiguracia pre N92-Leaf2:](#vxlan-underlay-konfiguracia-pre-n92-leaf2)
          * [VXLAN Underlay konfiguracia pre N93-Leaf3:](#vxlan-underlay-konfiguracia-pre-n93-leaf3)
          * [VXLAN Underlay konfiguracia pre N94-Leaf4:](#vxlan-underlay-konfiguracia-pre-n94-leaf4)
@@ -143,7 +143,7 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
    - do BGP sa da propagovat v ramci VRF default routa s "network 0.0.0.0/0"
    - na Inet-R1 potrebny VRF aware NAT config
    - problem ked je roztiahnuta VXLAN, a border-gw do INetu je len na 1 Pod-e
-     - bolo potrebne vypnut Dynamic AnycastGW na uplinkovych VLAN104+204 pre Tenant-X
+     - bolo potrebne vypnut Dynamic Anycast GW na uplinkovych VLAN104+204 pre Tenant-X
      - Leaf1+2 (nema Inet GW) VS. Leaf3+4 (ma Inet GW)
 
    - zariadenia A:SW4 a B:SW4 maju rovnake IP ale s VRF+NAT sa dostanu v poriadku na Inet
@@ -2033,7 +2033,7 @@ interface Ethernet1/24
    - do BGP sa da propagovat v ramci VRF default routa s "network 0.0.0.0/0"
    - na Inet-R1 potrebny VRF aware NAT config
    - problem ked je roztiahnuta VXLAN, a border-gw do INetu je len na 1 Pod-e
-     - bolo potrebne vypnut "Dynamic AnycastGW" na L3 uplinkovych Vlan104 + Vlan204 pre Tenant-A/B
+     - bolo potrebne vypnut "Dynamic Anycast GW" na L3 uplinkovych Vlan104 + Vlan204 pre Tenant-A/B
      - Leaf1+2 (nema Inet GW) VS. Leaf3+4 (ma Inet GW), L3 konetivita sa probaguje cez BGP
 
    - zariadenia A:SW4 a B:SW4 maju rovnake IP ale s VRF+NAT sa dostanu v poriadku na Inet
@@ -2046,11 +2046,11 @@ interface Ethernet1/24
 ! Poznamky: - VRF Instancie zakanzikov "TenantA" / "TenantB" boli doplnene o
 !             uplinky do Ineternetu cez L3-SVI s oznacenim Vlan104 / Vlan204
 !
+!           - Kvoli jednoduchosti je na VRF-Lite Inet routing pouzity protokol OSPFv2
+!
 !           - Podla diagramu je kvoli prehladnosti "Inet-R1" fyz. pripojeny len
 !             na "N93-Leaf3", ale "Inet-R1" ma Bcast OSPF neighbor-ship aj s "N94-Leaf4"
 !             - v praxi by bol standardne zapojeny ako dual-homed cez Point-to-Point
-!
-!           - Kvoli jednoduchosti je na VRF-Lite Inet routing pouzity protokol OSPFv2
 !
 interface Loopback1023
  description loop-for-Router-ID
