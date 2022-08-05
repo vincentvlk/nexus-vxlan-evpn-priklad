@@ -82,7 +82,7 @@ Inet-R1 - CSR1000-IOS-XEv: `csr1000v-universalk9.16.12.03-serial.qcow2`
 
 - conf. backup s: `copy running-config scp://vlkv@192.168.4.244/ vrf default`
 
-- `Xconnect` a `QinVNI` je pri vPC obmedzene, treba pouzit prikazy:
+- `XConnect` a `QinVNI` je pri vPC obmedzene, treba pouzit prikazy:
 
   `system dot1q-tunnel transit [vlan vlan-range]` 
    
@@ -111,7 +111,7 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
   ma CE zariadenie nastavenu inu L3 gw, ktora je L2 dostupna, ma aj ARP zaznam
   - pozriet ci sa da vypnut/zmenit?
 
-- pozorovanie, fyz. porty, ktore su definovane ako `Xconnect-dot1q-tunn`, technologia
+- pozorovanie, fyz. porty, ktore su definovane ako `XConnect-dot1q-tunn`, technologia
   vPC nepovazuje za `Orphan` porty, vid.: `show vpc orphan-ports`
 
 ---
@@ -123,7 +123,7 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
 2. Unicast L3 routing medzi L2 segmentami v ramci zakaznikovej VRF (A:SW1+2+3+4)
    - funkcne na N9300V + IOSv, aj multipoint
 
-3. Transparentne prepojenie P-to-P cez VXLAN-Xconnect (B:SW1 + B:SW3)
+3. Transparentne prepojenie P-to-P cez VXLAN-XConnect (B:SW1 + B:SW3)
    - NEfunkcne na N9300V, VM toto nepodporuje v kombinacii s vPC na NX-OSv ver. 9.3(10)
    - pozriet obmedzenia ohladom HW/SW a vPC (NX-OS 9.X vs. NX-OS 10.X)
    - otazka, aka je podpora QinVNI s pripojenim zakaznika do FEX-ov
@@ -1761,7 +1761,7 @@ end
    - pozriet obmedzenia ohladom HW/SW a vPC (NX-OS 9.X vs. NX-OS 10.X)
 ```
 
-(N91-Leaf1) Experimentalna konfiguracia sluzby VXLAN-Xconnect voci zakaznikovy:
+(N91-Leaf1) Experimentalna konfiguracia sluzby VXLAN-XConnect voci zakaznikovy:
 ```
 !
 ! system dot1q-tunnel transit 10        ! Neoverena konfiguracia, nie je na N9300v
@@ -1793,7 +1793,7 @@ interface Ethernet1/21
 !
 ```
 
-(N93-Leaf3) Experimentalna konfiguracia sluzby VXLAN-Xconnect voci zakaznikovi:
+(N93-Leaf3) Experimentalna konfiguracia sluzby VXLAN-XConnect voci zakaznikovi:
 ```
 !
 ! system dot1q-tunnel transit 10        ! Neoverena konfiguracia
@@ -1825,7 +1825,7 @@ interface Ethernet1/23
 !
 ```
 
-(Tenant-B-SW1) Experimentalna konfiguracia sluzby VXLAN-Xconnect voci pokytovatelovi:
+(Tenant-B-SW1) Experimentalna konfiguracia sluzby VXLAN-XConnect voci pokytovatelovi:
 
 ```
 !
@@ -1877,7 +1877,7 @@ interface Vlan303
 !
 ```
 
-(Tenant-B-SW3) Experimentalna konfiguracia sluzby VXLAN-Xconnect voci pokytovatelovi:
+(Tenant-B-SW3) Experimentalna konfiguracia sluzby VXLAN-XConnect voci pokytovatelovi:
 ```
 !
 vlan 201
