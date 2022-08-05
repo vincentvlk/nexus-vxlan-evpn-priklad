@@ -1385,7 +1385,7 @@ evpn
 
 (N92-Leaf2) Konfiguracia VTEP rozhrania `nve1`
 ```
-*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+*Na tomto zariadeni je (okrem "interface description") konfiguracia zhodna s N91-Leaf1*
 ```
 
 ---
@@ -1403,7 +1403,7 @@ evpn
 
 (N93-Leaf3) Konfiguracia VTEP rozhrania `nve1`
 ```
-*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+*Na tomto zariadeni je (okrem "interface description") konfiguracia zhodna s N91-Leaf1*
 ```
 
 ---
@@ -1421,7 +1421,7 @@ evpn
 
 (N94-Leaf4) Konfiguracia VTEP rozhrania `nve1`
 ```
-*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+*Na tomto zariadeni je (okrem "interface description") konfiguracia zhodna s N91-Leaf1*
 ```
 
 ---
