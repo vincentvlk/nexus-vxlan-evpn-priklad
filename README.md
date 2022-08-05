@@ -2458,6 +2458,23 @@ VXLAN   - Virtual eXtensible LAN
 ```
 
 ---
+### Pouzite zdroje informacii:
+
+Poznamka: Treba ocakavat, ze uvedene odkazy mozu casom exspirovat.
+
+```
+Cisco Nexus 9000 Series NX-OS Interfaces Configuration Guide, Release 9.3(x):
+
+https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/sw/93x/interfaces/configuration/guide/b-cisco-nexus-9000-nx-os-interfaces-configuration-guide-93x/b-cisco-nexus-9000-nx-os-interfaces-configuration-guide-93x_chapter_01000.html#concept_D825943FF8D243EB94450A9992FB3319
+```
+
+```
+Cisco Nexus 9000 Series NX-OS Fundamentals Configuration Guide, Release 9.3(x):
+
+https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/sw/93x/fundamentals/configuration/guide/b-cisco-nexus-9000-nx-os-fundamentals-configuration-guide-93x/b-cisco-nexus-9000-nx-os-fundamentals-configuration-guide-93x_chapter_01000.html
+```
+
+---
 ### Obsah tejto stranky bol vygenerovany BASH skritpom:
 
 - na odkaze: `https://github.com/ekalinin/github-markdown-toc`
