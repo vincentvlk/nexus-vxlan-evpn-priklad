@@ -2398,6 +2398,7 @@ HW      - Hardware
 IGP     - Interior Gateway Protocol
 IOS     - Internetwork Operating System (Cisco)
 IRB     - Integrated Routing & Bridging (VRF / VXLAN)
+KVM     - Kernenel-based Virtual Machine (Linux)
 L2      - Layer 2
 L3      - Layer 3
 LACP    - Link Aggregation Control Protocol
@@ -2412,6 +2413,7 @@ NX-OS   - Nexus-Operating System (Cisco)
 OSPFv2  - Open Shortest Path First version 2
 OSPFv3  - Open Shortest Path First version 3
 POD/Pod - Point Of Delivery
+QEMU    - Quick EMUlator (Generic and open source machine emulator and virtualizer)
 QinQ    - 802.1Q tag tunneled in 802.1Q tag
 QinVNI  - 802.1Q tag tunneled in VNI (VXLAN)
 R1      - Router c. 1 (Diagram)
