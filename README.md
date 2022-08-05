@@ -115,6 +115,9 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
 - pozorovanie, fyz. porty, ktore su definovane ako `XConnect-dot1q-tunn`, technologia
   vPC nepovazuje za `Orphan` porty, vid.: `show vpc orphan-ports`
 
+- poznamka, tento dokument sa (zatial) nevenuje ochrane pred tzv. BUM traffic-om
+  - ani problematike ARP Supression
+
 ---
 ### Testovane scenare:
 
@@ -1149,12 +1152,12 @@ interface Vlan103
 interface nve1
   no shutdown
   description N91-VTEP-nve1
-  host-reachability protocol bgp
+  host-reachability protocol bgp        ! Na distribuciu VXLAN EVPN informacii sa pouzije BGP
   source-interface loopback1023         ! Pouziju sa IPv4 adresy na routing a tunelovanie + vPC
 !
   member vni 3100 associate-vrf
   member vni 3100101
-    ingress-replication protocol bgp
+    ingress-replication protocol bgp    ! Na distribuciu VXLAN EVPN informacii sa pouzije BGP
   member vni 3100102
     ingress-replication protocol bgp
   member vni 3100103
@@ -1348,7 +1351,7 @@ interface Vlan203
 interface nve1
   member vni 3200 associate-vrf
   member vni 3200201
-    ingress-replication protocol bgp
+    ingress-replication protocol bgp    ! Na distribuciu VXLAN EVPN informacii sa pouzije BGP
   member vni 3200202
     ingress-replication protocol bgp
   member vni 3200203
@@ -2376,11 +2379,14 @@ AF      - Address Family (BGP)
 ARP     - Address Resolution Protocol
 AS      - Autonomous System (BGP)
 BASH    - Bourne-Again SHell (Unix)
+BD      - Bridge Domain (VXLAN)
 BFD     - Bidirectional Forwarding Detection
 BPDU    - Bridge Protocol Data Unit
 BGPv4   - Border Gateway Protocol version 4
+BUM     - Broadcast, Unknown unicast, Multicast
 BW      - BandWidth
 CSR1000 - Cloud Services Router series 1000 (Cisco)
+DAG     - Dynamic Anycast Gateway (VXLAN)
 ESI     - Ethernet Segment Identifier (VXLAN EVPN Multihoming, alternativa k vPC)
 EVI     - EVPN Virtual Instance (VXLAN)             
 EVPN    - Ethernet Virtual Private Network (VXLAN)
@@ -2389,7 +2395,7 @@ GW      - Gateway (Router)
 HW      - Hardware
 IGP     - Interior Gateway Protocol
 IOS     - Internetwork Operating System (Cisco)
-IRB     - Integrated Routing & Bridging (VRF)
+IRB     - Integrated Routing & Bridging (VRF / VXLAN)
 L2      - Layer 2
 L3      - Layer 3
 LACP    - Link Aggregation Control Protocol
@@ -2403,6 +2409,7 @@ NVE     - Network Virtualization Edge / Endpoint (VXLAN)
 NX-OS   - Nexus-Operating System (Cisco)
 OSPFv2  - Open Shortest Path First version 2
 OSPFv3  - Open Shortest Path First version 3
+POD/Pod - Point Of Delivery
 QinQ    - 802.1Q tag tunneled in 802.1Q tag
 QinVNI  - 802.1Q tag tunneled in VNI (VXLAN)
 R1      - Router c. 1 (Diagram)
@@ -2412,9 +2419,9 @@ SVI     - Switch VLAN / Virtual Interface
 SW      - Software
 SW1     - Switch c. 1 (Diagram)
 VLAN    - Virtual Local Area Network
-VNI     - Virtual Network Identifier (VXLAN)
+VNI     - Virtual Network Instance (VXLAN)
 VNID    - Virtual Network IDentifier (VXLAN)
-VPC     - Virtual Port-Channel (Cisco)
+vPC     - Virtual Port-Channel (Cisco)
 VPN     - Virtual Private Network
 VRF     - VPN / Virtual Routing & Forwarding
 VTEP    - Virtual Tunnel End Point (VXLAN)
