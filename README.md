@@ -166,8 +166,9 @@ Kazdy Pod je este v ramci Ethernet MLAG redundancie nakonfigurovany ako vPC dome
 Leaf switche maju symetricku L3-routed (Underlay) konektivitu na 2 Spine switch-e (`N95-Spine1` + `N96-Spine2`).
 
 Snahou dizajnu je zabezpecit nezavislu a redundantnu konektivitu tak, aby
-v pripade vypadku uzlov napr. (`Leaf1`, `Spine1` a `Leaf3`) alebo napr. (`Leaf2`, `Spine2` a `Leaf4`)
-bola stale zachovana konektivita pre zakanzikov, aj ked s degradovanou sirkou pasma.
+v pripade vypadku uzlov, napr. (`Leaf1`, `Spine1` a `Leaf3`) alebo
+napr. (`Leaf2`, `Spine2` a `Leaf4`), bola stale zachovana konektivita pre zakanzikov, aj ked
+s degradovanou sirkou pasma (BW).
 
 Mal som povodny zamer, ze ako underlay pouzijem IPv6 + OSPFv3, tento koncept
 ma vsak stale (Jul 2022) obmedzene moznoti a funkcie.
@@ -1190,7 +1191,7 @@ evpn
 
 (N92-Leaf2) Konfiguracia VTEP rozhrania `nve1`
 ```
-*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+*Na tomto zariadeni je (okrem "interface description") konfiguracia zhodna s N91-Leaf1*
 ```
 
 ---
@@ -1208,7 +1209,7 @@ evpn
 
 (N93-Leaf3) Konfiguracia VTEP rozhrania `nve1`
 ```
-*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+*Na tomto zariadeni je (okrem "interface description") konfiguracia zhodna s N91-Leaf1*
 ```
 
 ---
@@ -1226,7 +1227,7 @@ evpn
 
 (N94-Leaf4) Konfiguracia VTEP rozhrania `nve1`
 ```
-*Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
+*Na tomto zariadeni je (okrem "interface description") konfiguracia zhodna s N91-Leaf1*
 ```
 
 ---
@@ -2377,7 +2378,8 @@ AS      - Autonomous System (BGP)
 BASH    - Bourne-Again SHell (Unix)
 BFD     - Bidirectional Forwarding Detection
 BPDU    - Bridge Protocol Data Unit
-BPGv4   - Border Gateway Protocol version 4
+BGPv4   - Border Gateway Protocol version 4
+BW      - BandWidth
 CSR1000 - Cloud Services Router series 1000 (Cisco)
 ESI     - Ethernet Segment Identifier (VXLAN EVPN Multihoming, alternativa k vPC)
 EVI     - EVPN Virtual Instance (VXLAN)             
