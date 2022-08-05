@@ -75,7 +75,7 @@ Inet-R1 - CSR1000-IOS-XEv: `csr1000v-universalk9.16.12.03-serial.qcow2`
   - pravdepodobne zalezitost `GNS3+Qemu+KVM`
 
 - problem, nebolo mozne kontaktovat VTEP-Anycast-GW SVI, 
-  trebalo vycistit ARP zaznam na zakaznickom switchy (vIOS-L3-Cat)
+  - trebalo vycistit ARP zaznam na zakaznickom switchy (vIOS-L3-Cat)
 
 - problem s HA, ked vypnem jednu stranu VLAN101 na vPC Peer-e, napr. `N91-Leaf1`
   - nestandarny stav, aj tak treba vypinat celu fyz. cestu v pripade maint.
@@ -153,10 +153,10 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
 
 Tento testovaci dizajn pocita s VXLAN Tenant separaciou (pomocou VRF). Je vsak pouzitelny
 aj na zakladne L2 transporty medzi portami/lokalitami v ramci Default VRF.
-Ako je (snad) vidiet na diagrame, na VXLAN fabric je pouzitych 6 Nexus9300v VM instancii.
+Ako je (snad) vidiet na diagrame, na VXLAN fabric je pouzitych 6 Nexus 9300v VM instancii.
 Z toho 2 su pouzite ako Spine box-y, ktore sluzia len ako VXLAN EVPN Route-reflectory a L3 routery.
-Zvysne 4 box-y su pouzite ako Leaf VTEP zariadenia, ktore vykonavanju VXLAN Tunnel encaps/decaps
-a L2/L3 bridging/routing v ramci VXLAN Tenantov (teda v ramci L3 VRF/VNI).
+Zvysne 4 box-y su pouzite ako Leaf VTEP zariadenia, ktore vykonavanju VXLAN Tunnel encaps/decaps a
+L2/L3 bridging/routing v ramci VXLAN Tenantov (teda v ramci L3 VRF/VNI).
 
 Z diagramu je vidiet, ze kazdy DC-Pod (ulicka, sala, poschodie, ...) je tvoreny parom
 Leaf Switchov, teda mame 2 Pod-y, konkretne (`N91-Leaf1` + `N92-Leaf2`) a (`N93-Leaf3` + `N94-Leaf4`).
@@ -173,12 +173,13 @@ nedokaze propagovat IPv4 prefixy, alebo som to zatial nenasiel/nepochopil.
 Konfiguracia routingu je standardna, vyuzivaju sa Loopback rozhrania, ktore su
 dolezite pre funckiu VXLAN fabricu, pretoze sa mapuju na VXLAN VTEP rozhranie `nve1`.
 
-#### VXLAN Underlay konfiguracia pre `N91-Leaf1`:
 ---
+#### VXLAN Underlay konfiguracia pre `N91-Leaf1`:
 
 (N91-Leaf1) Priprava:
 ```
-boot nxos bootflash:/nxos.9.3.10.bin sup-1
+!
+boot nxos bootflash:/nxos.9.3.10.bin sup-1       ! Aby boot nespadol do boot-loader-u
 !
 hostname N91-Leaf1
 !
@@ -196,6 +197,7 @@ feature nv overlay
 
 (N91-Leaf1) Konfiguracia Underlay routingu uplinkov voci Spine-layer:
 ```
+!
 router ospf as65001
   bfd
   router-id 192.0.2.91
@@ -230,6 +232,7 @@ interface Ethernet1/6
 
 (N91-Leaf1) Konfiguracia Pod vPC:
 ```
+!
 vpc domain 912
   peer-switch
   role priority 30
@@ -274,12 +277,13 @@ interface Ethernet1/9
 !
 ```
 
-#### VXLAN Underlay konfiguracia pre `N92-Leaf2`:
 ---
+#### VXLAN Underlay konfiguracia pre `N92-Leaf2`:
 
 (N92-Leaf2) Priprava:
 ```
-boot nxos bootflash:/nxos.9.3.10.bin sup-1
+!
+boot nxos bootflash:/nxos.9.3.10.bin sup-1      ! Aby boot nespadol do boot-loader-u
 !
 hostname N92-Leaf2
 !
@@ -327,10 +331,12 @@ interface Ethernet1/6
   ip router ospf as65001 area 0.0.0.0
   ip ospf bfd
   no shutdown
+!
 ```
 
 (N92-Leaf2) Konfiguracia Pod vPC:
 ```
+!
 vpc domain 912
   peer-switch
   role priority 20
@@ -375,12 +381,13 @@ interface Ethernet1/9
 !
 ```
 
-#### VXLAN Underlay konfiguracia pre `N93-Leaf3`:
 ---
+#### VXLAN Underlay konfiguracia pre `N93-Leaf3`:
 
 (N93-Leaf3) Priprava:
 ```
-boot nxos bootflash:/nxos.9.3.10.bin sup-1
+!
+boot nxos bootflash:/nxos.9.3.10.bin sup-1      ! Aby boot nespadol do boot-loader-u
 !
 hostname N93-Leaf3
 !
@@ -433,6 +440,7 @@ interface Ethernet1/6
 
 (N93-Leaf3) Konfiguracia Pod vPC:
 ```
+!
 vpc domain 934
   peer-switch
   role priority 30
@@ -477,12 +485,13 @@ interface Ethernet1/9
 !
 ```
 
-#### VXLAN Underlay konfiguracia pre `N94-Leaf4`:
 ---
+#### VXLAN Underlay konfiguracia pre `N94-Leaf4`:
 
 (N94-Leaf4) Priprava:
 ```
-boot nxos bootflash:/nxos.9.3.10.bin sup-1
+!
+boot nxos bootflash:/nxos.9.3.10.bin sup-1      ! Aby boot nespadol do boot-loader-u
 !
 hostname N94-Leaf4
 !
@@ -535,6 +544,7 @@ interface Ethernet1/6
 
 (N94-Leaf4) Konfiguracia Pod vPC:
 ```
+!
 vpc domain 934
   peer-switch
   role priority 20
@@ -579,12 +589,13 @@ interface Ethernet1/9
 !
 ```
 
-#### VXLAN Underlay konfiguracia pre `N95-Spine1`:
 ---
+#### VXLAN Underlay konfiguracia pre `N95-Spine1`:
 
 (N95-Spine1) Priprava:
 ```
-boot nxos bootflash:/nxos.9.3.10.bin sup-1
+!
+boot nxos bootflash:/nxos.9.3.10.bin sup-1      ! Aby boot nespadol do boot-loader-u
 !
 hostname N95-Spine1
 !
@@ -655,12 +666,13 @@ interface Ethernet1/4
 !
 ```
 
-#### VXLAN Underlay konfiguracia pre `N96-Spine2`:
 ---
+#### VXLAN Underlay konfiguracia pre `N96-Spine2`:
 
 (N96-Spine2) Priprava:
 ```
-boot nxos bootflash:/nxos.9.3.10.bin sup-1
+!
+boot nxos bootflash:/nxos.9.3.10.bin sup-1      ! Aby boot nespadol do boot-loader-u
 !
 hostname N96-Spine2
 !
@@ -738,14 +750,14 @@ Kazdy Leaf switch ma teda 2 x iBGP peering na Spine1 a Spine2 box-y. Tieto Spine
 sluzia ako BGP Rouer-Reflector-y, aby nebolo nutne konfigurovat full-mesh iBGP peeringy.
 
 #### VXLAN Overlay konfiguracia pre `N91-Leaf1`:
----
 
 (N91-Leaf1) Konfiguracia `Loopback1023` rozhrania:
 ```
+!
 interface loopback1023
   description main-RouterID-VTEP
-  ip address 192.0.2.91/32              ! Sluzi aj ako ID pre VTEP 
-  ip address 192.0.2.12/32 secondary    ! Sluzi ako ID pre spolocny vPC+VTEP
+  ip address 192.0.2.91/32              ! Sluzi aj ako ID/IP pre VTEP 
+  ip address 192.0.2.12/32 secondary    ! Sluzi ako ID/IP pre spolocny vPC+VTEP
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
 !
@@ -753,13 +765,16 @@ interface loopback1023
 
 (N91-Leaf1) Konfiguracia VXLAN EVPN Overlay routingu s BGP:
 ```
+!
 router bgp 65001
   router-id 192.0.2.91
   log-neighbor-changes
   address-family ipv4 unicast
     maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
+    maximum-paths ibgp 4        ! Nie je nutne, ale priprava na skalovanie
   address-family l2vpn evpn
     maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
+    maximum-paths ibgp 4        ! Nie je nutne, ale priprava na skalovanie
 !
   neighbor 192.0.2.95
     remote-as 65001
@@ -787,15 +802,16 @@ router bgp 65001
 !
 ```
 
-#### VXLAN Overlay konfiguracia pre `N92-Leaf2`:
 ---
+#### VXLAN Overlay konfiguracia pre `N92-Leaf2`:
 
 (N92-Leaf2) Konfiguracia `Loopback1023` rozhrania:
 ```
+!
 interface loopback1023
   description main-RouterID-VTEP
-  ip address 192.0.2.92/32              ! Sluzi aj ako ID pre VTEP
-  ip address 192.0.2.12/32 secondary    ! Sluzi ako ID pre spolocny vPC+VTEP
+  ip address 192.0.2.92/32              ! Sluzi aj ako ID/IP pre VTEP
+  ip address 192.0.2.12/32 secondary    ! Sluzi ako ID/IP pre spolocny vPC+VTEP
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
 !
@@ -803,13 +819,16 @@ interface loopback1023
 
 (N92-Leaf2) Konfiguracia VXLAN EVPN Overlay routingu s BGP:
 ```
+!
 router bgp 65001
   router-id 192.0.2.92
   log-neighbor-changes
   address-family ipv4 unicast
     maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
+    maximum-paths ibgp 4        ! Nie je nutne, ale priprava na skalovanie
   address-family l2vpn evpn
     maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
+    maximum-paths ibgp 4        ! Nie je nutne, ale priprava na skalovanie
 !
   neighbor 192.0.2.95
     remote-as 65001
@@ -837,15 +856,15 @@ router bgp 65001
 !
 ```
 
-#### VXLAN Overlay konfiguracia pre `N93-Leaf3`:
 ---
+#### VXLAN Overlay konfiguracia pre `N93-Leaf3`:
 
 (N93-Leaf3) Konfiguracia `Loopback1023` rozhrania:
 ```
 interface loopback1023
   description main-RouterID-VTEP
-  ip address 192.0.2.93/32              ! Sluzi aj ako ID pre VTEP
-  ip address 192.0.2.34/32 secondary    ! Sluzi ako ID pre spolocny vPC+VTEP
+  ip address 192.0.2.93/32              ! Sluzi aj ako ID/IP pre VTEP
+  ip address 192.0.2.34/32 secondary    ! Sluzi ako ID/IP pre spolocny vPC+VTEP
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
 !
@@ -853,13 +872,16 @@ interface loopback1023
 
 (N93-Leaf3) Konfiguracia VXLAN EVPN Overlay routingu s BGP:
 ```
+!
 router bgp 65001
   router-id 192.0.2.93
   log-neighbor-changes
   address-family ipv4 unicast
     maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
+    maximum-paths ibgp 4        ! Nie je nutne, ale priprava na skalovanie
   address-family l2vpn evpn
     maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
+    maximum-paths ibgp 4        ! Nie je nutne, ale priprava na skalovanie
 !
   neighbor 192.0.2.95
     remote-as 65001
@@ -887,15 +909,16 @@ router bgp 65001
 !
 ```
 
-#### VXLAN Overlay konfiguracia pre `N94-Leaf4`:
 ---
+#### VXLAN Overlay konfiguracia pre `N94-Leaf4`:
 
 (N94-Leaf4) Konfiguracia `Loopback1023` rozhrania:
 ```
+!
 interface loopback1023
   description main-RouterID-VTEP
-  ip address 192.0.2.94/32              ! Sluzi aj ako ID pre VTEP
-  ip address 192.0.2.34/32 secondary    ! Sluzi ako ID pre spolocny vPC+VTEP
+  ip address 192.0.2.94/32              ! Sluzi aj ako ID/IP pre VTEP
+  ip address 192.0.2.34/32 secondary    ! Sluzi ako ID/IP pre spolocny vPC+VTEP
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
 !
@@ -908,8 +931,10 @@ router bgp 65001
   log-neighbor-changes
   address-family ipv4 unicast
     maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
+    maximum-paths ibgp 4        ! Nie je nutne, ale priprava na skalovanie
   address-family l2vpn evpn
     maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
+    maximum-paths ibgp 4        ! Nie je nutne, ale priprava na skalovanie
 !
   neighbor 192.0.2.95
     remote-as 65001
@@ -937,14 +962,15 @@ router bgp 65001
 !
 ```
 
-#### VXLAN Overlay konfiguracia pre `N95-Spine1`:
 ---
+#### VXLAN Overlay konfiguracia pre `N95-Spine1`:
 
 (N95-Spine1) Konfiguracia `Loopback1023` rozhrania:
 ```
+!
 interface loopback1023
   description main-RouterID-VTEP
-  ip address 192.0.2.95/32
+  ip address 192.0.2.95/32              ! Sluzi len na OSPF/BGP routing, nie VTEP
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
 !
@@ -957,8 +983,10 @@ router bgp 65001
   log-neighbor-changes
   address-family ipv4 unicast
     maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
+    maximum-paths ibgp 4        ! Nie je nutne, ale priprava na skalovanie
   address-family l2vpn evpn
     maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
+    maximum-paths ibgp 4        ! Nie je nutne, ale priprava na skalovanie
     retain route-target all
 !
   template peer VTEP-peers
@@ -984,15 +1012,15 @@ router bgp 65001
 !
 ```
 
-#### VXLAN Overlay konfiguracia pre `N96-Spine2`:
 ---
+#### VXLAN Overlay konfiguracia pre `N96-Spine2`:
 
 (N96-Spine2) Konfiguracia `Loopback1023` rozhrania:
 ```
 !
 interface loopback1023
   description main-RouterID-VTEP
-  ip address 192.0.2.96/32
+  ip address 192.0.2.96/32              ! Sluzi len na OSPF/BGP routing, nie VTEP
   ip ospf network point-to-point
   ip router ospf as65001 area 0.0.0.0
 !
@@ -1006,8 +1034,10 @@ router bgp 65001
   log-neighbor-changes
   address-family ipv4 unicast
     maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
+    maximum-paths ibgp 4        ! Nie je nutne, ale priprava na skalovanie
   address-family l2vpn evpn
     maximum-paths 4             ! Nie je nutne, ale priprava na skalovanie
+    maximum-paths ibgp 4        ! Nie je nutne, ale priprava na skalovanie
     retain route-target all
 !
   template peer VTEP-peers
@@ -1036,7 +1066,6 @@ router bgp 65001
 ---
 ### Konfiguracia VXLAN-EVPN sluzieb na strane poskytovatela:
 
----
 #### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantA` na `N91-Leaf1`:
 
 (N91-Leaf1) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
@@ -1195,6 +1224,7 @@ evpn
 *Na tomto zariadeni je konfiguracia zhodna s N91-Leaf1*
 ```
 
+---
 #### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantA` na `N95-Spine1`:
 
 (N95-Spine1) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
@@ -1212,6 +1242,7 @@ evpn
 *Na tomto zariadeni nie je potrebna dalsia konfiguracia*
 ```
 
+---
 #### VXLAN-EVPN konfiguracia sluzieb pre zakaznika `TenantA` na `N96-Spine2`:
 
 (N96-Spine2) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
@@ -1234,6 +1265,7 @@ evpn
 
 (N91-Leaf1) Konfiguracia VLAN a VRF segmentov (VXLAN IRB domen)
 ```
+!
 ! *Doplnujeme konfiguraciu o dalsieho zakaznika "TenantB"*
 !
 vlan 201
@@ -1270,6 +1302,7 @@ interface Vlan3200
 
 (N91-Leaf1) Konfiguracia VLAN SVI rozhrani (Dynamic Anycast Gateway):
 ```
+!
 ! *Doplnujeme konfiguraciu o dalsieho zakaznika "TenantB"*
 !
 interface Vlan201
@@ -1303,6 +1336,7 @@ interface Vlan203
 
 (N91-Leaf1) Konfiguracia VTEP rozhrania `nve1` a EVPN databazy:
 ```
+!
 ! *Doplnujeme konfiguraciu o dalsieho zakaznika "TenantB"*
 !
 interface nve1
@@ -1551,6 +1585,7 @@ interface GigabitEthernet3/2
 !
 ```
 
+---
 #### 2. Unicast L3 routing medzi L2 segmentami v ramci zakaznikovej VRF:
 ```
   - zakaznik vyuziva zariadenia "Tenant-A-SW1", "Tenant-A-SW2", "Tenant-A-SW3" a "Tenant-A-SW4"
@@ -1564,6 +1599,7 @@ interface GigabitEthernet3/2
 
 (N91-Leaf1 + N92-Leaf2) Konfiguracia vPC voci zakaznikovi:
 ```
+!
 ! *Doplnime konfiguraciu pre koncove zariadenie "Tenant-A-SW2"*
 !
 interface port-channel12
@@ -1590,6 +1626,7 @@ interface Ethernet1/12
 
 (N93-Leaf3 + N94-Leaf4) Konfiguracia vPC voci zakaznikovi:
 ```
+!
 ! *Doplnime konfiguraciu pre koncove zariadenie "Tenant-A-SW4"*
 !
 interface port-channel14
@@ -1685,28 +1722,29 @@ end
 (N91-Leaf1 + N92-Leaf2 + N93-Leaf3 + N94-Leaf4) Konfiguracia routingu u zakaznika:
 ```
 !
-! Routing pre zariadenie Tenant-A-SW1
+! Routing pre zariadenie Tenant-A-SW1:
 !
 ip route 0.0.0.0 0.0.0.0 192.168.1.254 name default-route-to-AS65001
 end
 !
-! Routing pre zariadenie Tenant-A-SW2
+! Routing pre zariadenie Tenant-A-SW2:
 !
 ip route 0.0.0.0 0.0.0.0 192.168.2.254 name default-route-to-AS65001
 end
 !
-! Routing pre zariadenie Tenant-A-SW3
+! Routing pre zariadenie Tenant-A-SW3:
 !
 ip route 0.0.0.0 0.0.0.0 192.168.1.254 name default-route-to-AS65001
 end
 !
-! Routing pre zariadenie Tenant-A-SW4
+! Routing pre zariadenie Tenant-A-SW4:
 !
 ip route 0.0.0.0 0.0.0.0 192.168.3.254 name default-route-to-AS65001
 end
 !
 ```
 
+---
 #### 3. Transparentne prepojenie P-to-P cez VXLAN-Xconnect:
 ```
    - zakaznik vyuziva zariadania "Tenant-B-SW1" a "Tenant-B-SW3"
@@ -1935,6 +1973,7 @@ interface Ethernet1/22
   mtu 9216
   storm-control action trap
   channel-group 22 mode active
+!
 ```
 
 (N93-Leaf3 + N94-Leaf4) Experimentalna konfiguracia sluzby VXLAN dot1q tunnel voci zakaznikovi:
@@ -2321,6 +2360,7 @@ ip route 0.0.0.0 0.0.0.0 192.168.3.254 name default-to-provider-AS65001
 ! Konfiguracia dalsich zariadeni zakaznikov je analogicka s "Tenant-A-SW4" / "Tenant-B-SW4"
 !
 ```
+
 ---
 ### Pouzivane skratky v dokumente:
 ```
@@ -2331,16 +2371,21 @@ BFD     - Bidirectional Forwarding Detection
 BPDU    - Bridge Protocol Data Unit
 BPGv4   - Border Gateway Protocol version 4
 CSR1000 - Cloud Services Router series 1000 (Cisco)
+ESI     - Ethernet Segment Identifier (VXLAN EVPN Multihoming)
+EVI     - EVPN Virtual Instance (VXLAN)             
 EVPN    - Ethernet Virtual Private Network (VXLAN)
 GNS3    - Graphical Network Simulator version 3
 GW      - Gateway (Router)
 HW      - Hardware
+IGP     - Interior Gateway Protocol
 IOS     - Internetwork Operating System (Cisco)
+IRB     - Integrated Routing & Bridging
 L2      - Layer 2
 L3      - Layer 3
 LACP    - Link Aggregation Control Protocol
 MD5     - Message Digest level 5
 MTU     - Maximum Transmission Unit
+MLAG    - Multi-chasis Link Aggregation
 N91     - Nexus 9300v c. 1 (Diagram) 
 NAT     - Network Address Translation
 NV      - Network Virtualization (VXLAN)
@@ -2399,4 +2444,5 @@ VXLAN   - Virtual eXtensible LAN
 # show bgp vrf TenantB ipv4 unicast
 # show vpc
 # show vpc 11
+# show vpc orphan-ports
 ```
