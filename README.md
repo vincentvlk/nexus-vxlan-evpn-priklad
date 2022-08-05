@@ -2451,3 +2451,9 @@ VXLAN   - Virtual eXtensible LAN
 # show vpc 11
 # show vpc orphan-ports
 ```
+
+---
+### Obsah tejto stranky bol vygenerovany BASH skritpom:
+
+- na odkaze: `https://github.com/ekalinin/github-markdown-toc`
+  - obsah bolo potrebne dodatocne upravit
