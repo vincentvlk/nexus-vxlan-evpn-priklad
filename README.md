@@ -2413,6 +2413,7 @@ SW      - Software
 SW1     - Switch c. 1 (Diagram)
 VLAN    - Virtual Local Area Network
 VNI     - Virtual Network Identifier (VXLAN)
+VNID    - Virtual Network IDentifier (VXLAN)
 VPC     - Virtual Port-Channel (Cisco)
 VPN     - Virtual Private Network
 VRF     - VPN / Virtual Routing & Forwarding
@@ -2463,17 +2464,78 @@ VXLAN   - Virtual eXtensible LAN
 Poznamka: Treba ocakavat, ze uvedene odkazy mozu casom exspirovat.
 
 ```
-Cisco Nexus 9000 Series NX-OS Interfaces Configuration Guide, Release 9.3(x):
-
-https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/sw/93x/interfaces/configuration/guide/b-cisco-nexus-9000-nx-os-interfaces-configuration-guide-93x/b-cisco-nexus-9000-nx-os-interfaces-configuration-guide-93x_chapter_01000.html#concept_D825943FF8D243EB94450A9992FB3319
-```
-
-```
 Cisco Nexus 9000 Series NX-OS Fundamentals Configuration Guide, Release 9.3(x):
 
-https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/sw/93x/fundamentals/configuration/guide/b-cisco-nexus-9000-nx-os-fundamentals-configuration-guide-93x/b-cisco-nexus-9000-nx-os-fundamentals-configuration-guide-93x_chapter_01000.html
+https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/sw/93x/fundamentals/configuration/guide/b-cisco-nexus-9000-nx-os-fundamentals-configuration-guide-93x.html
 ```
 
+```
+Cisco Nexus 9000 Series NX-OS Interfaces Configuration Guide, Release 9.3(x):
+
+https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/sw/93x/interfaces/configuration/guide/b-cisco-nexus-9000-nx-os-interfaces-configuration-guide-93x.html
+```
+
+```
+Cisco Nexus 9000 Series NX-OS Layer 2 Switching Configuration Guide, Release 9.3(x):
+
+https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/sw/93x/layer-2-switching/configuration/guide/b-cisco-nexus-9000-nx-os-layer-2-switching-configuration-guide-93x.html
+```
+
+```
+Cisco Nexus 9000 Series NX-OS Unicast Routing Configuration Guide, Release 9.3(x):
+
+https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/sw/93x/unicast/configuration/guide/b-cisco-nexus-9000-series-nx-os-unicast-routing-configuration-guide-93x.html
+```
+
+```
+Cisco Nexus 9000 Series NX-OS VXLAN Configuration Guide, Release 9.3(x):
+
+https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/sw/93x/vxlan/configuration/guide/b-cisco-nexus-9000-series-nx-os-vxlan-configuration-guide-93x.html
+```
+
+```
+Cisco Nexus 9000 Series NX-OS Verified Scalability Guide, Release 9.3(8):
+
+https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/sw/93x/scalability/guide-938/cisco-nexus-9000-series-nx-os-verified-scalability-guide-938.html
+```
+
+```
+Dalsie odkazy:
+
+https://netcraftsmen.com/designing-cisco-nexus-9k/
+
+https://www.cisco.com/c/dam/m/sl_si/events/2016/cisco_dan_inovativnih_resitev/pdf/cisco_day_slovenia_2016_vxlan_marian_klas_final.pdf
+
+https://www.cisco.com/c/dam/en/us/td/docs/switches/datacenter/nexus9000/sw/vxlan_evpn/VXLAN_EVPN.pdf
+
+https://www.ciscolive.com/c/dam/r/ciscolive/us/docs/2020/pdf/DGTL-BRKDCN-1645.pdf
+
+https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/guide-c07-734107.pdf
+
+https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/white-paper-c11-739942.html
+
+https://www.cisco.com/c/en/us/td/docs/dcn/whitepapers/migrating-fabricpath-environment-vxlan-bgp-evpn.html
+
+https://www.youtube.com/watch?v=Fv0CFxxK1pk
+
+https://www.youtube.com/watch?v=pgKJ0MbrmLo
+
+https://www.youtube.com/watch?v=YNqKDI_bnPM
+
+https://www.youtube.com/watch?v=BMIsZiGCml0
+
+https://www.youtube.com/watch?v=2bRec2en7zQ
+
+https://www.youtube.com/watch?v=bSiriF8kM7E
+
+https://community.cisco.com/t5/data-center-switches/vpc-orphan-port/td-p/4070039
+
+https://community.cisco.com/t5/data-center-switches/evpn-multihoming-esi-lag/m-p/4523061#M7920
+
+https://community.cisco.com/t5/data-center-switches/why-vxlan-evpn-ebgp-needs-to-configure-quot-retain-route-target/td-p/4126609
+
+https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/about-writing-and-formatting-on-github
+```
 ---
 ### Obsah tejto stranky bol vygenerovany BASH skritpom:
 
