@@ -116,7 +116,9 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
   vPC nepovazuje za `Orphan` porty, vid.: `show vpc orphan-ports`
 
 - poznamka, tento dokument sa (zatial) nevenuje ochrane pred tzv. BUM traffic-om
-  - ani problematike ARP Supression
+  - napr. pouzitie konceptu Storm-Control
+  - nevenuje sa ani problematike ARP Suppression
+  - da sa dohladat v pouzitych zdrojoch informacii
 
 ---
 ### Testovane scenare:
