@@ -163,10 +163,11 @@ L2/L3 bridging/routing v ramci VXLAN Tenantov (teda v ramci L3 VRF/VNI).
 Z diagramu je vidiet, ze kazdy DC-Pod (ulicka, sala, poschodie, ...) je tvoreny parom
 Leaf Switchov, teda mame 2 Pod-y, konkretne (`N91-Leaf1` + `N92-Leaf2`) a (`N93-Leaf3` + `N94-Leaf4`).
 Kazdy Pod je este v ramci Ethernet MLAG redundancie nakonfigurovany ako vPC domena.
-Leaf switche maju symetricku L3-routed (Underlay) konektivitu na 2 Spine switche (N95-Spine1 + N96-Spine2).
-Snahou dizajnu je zabezpecit nezavislu a redundantnu konektivitu, tak aby
-v pripade vypadku uzlov napr. (Leaf1, Spine1 a Leaf3) alebo napr. (Leaf2, Spine2 a Leaf4)
-bola stale zachovana konektivita pre zakanzikov.
+Leaf switche maju symetricku L3-routed (Underlay) konektivitu na 2 Spine switch-e (`N95-Spine1` + `N96-Spine2`).
+
+Snahou dizajnu je zabezpecit nezavislu a redundantnu konektivitu tak, aby
+v pripade vypadku uzlov napr. (`Leaf1`, `Spine1` a `Leaf3`) alebo napr. (`Leaf2`, `Spine2` a `Leaf4`)
+bola stale zachovana konektivita pre zakanzikov, aj ked s degradovanou sirkou pasma.
 
 Mal som povodny zamer, ze ako underlay pouzijem IPv6 + OSPFv3, tento koncept
 ma vsak stale (Jul 2022) obmedzene moznoti a funkcie.
@@ -2373,6 +2374,7 @@ ip route 0.0.0.0 0.0.0.0 192.168.3.254 name default-to-provider-AS65001
 AF      - Address Family (BGP)
 ARP     - Address Resolution Protocol
 AS      - Autonomous System (BGP)
+BASH    - Bourne-Again SHell (Unix)
 BFD     - Bidirectional Forwarding Detection
 BPDU    - Bridge Protocol Data Unit
 BPGv4   - Border Gateway Protocol version 4
