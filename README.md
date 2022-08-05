@@ -89,7 +89,7 @@ Inet-R1 - CSR1000-IOS-XEv: `csr1000v-universalk9.16.12.03-serial.qcow2`
   spolu s:
   `system nve infra-vlans <vlan-range>`
 
-  - treba si uvedomit, ze tieto 2 funkcie su *SILNE ZAVISLE* od VTEP-HW (ASICov)
+  - TREBA SI UVEDOMIT, ze tieto 2 funkcie (XConnect/QinVNI) su *SILNE ZAVISLE* od VTEP-HW (ASICov)
 
 Poznamka z dokumentacie:
 ```
@@ -105,6 +105,7 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
 
 - problem, nejde IPv4 BFD s OSPFv2, prikazy su, ale nezdvihne sa session
   - pravdepodobne zalezitost `GNS3+Qemu+KVM`
+  - preto konfigurovane len experimentalne, aby som na to nezabudol
 
 - pozorovanie, VTEP automaticky presmeruva IP traffic na svoju VLAN-gw aj ked
   ma CE zariadenie nastavenu inu L3 gw, ktora je L2 dostupna, ma aj ARP zaznam
@@ -147,8 +148,8 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
 
    - zariadenia A:SW4 a B:SW4 maju rovnake IP ale s VRF+NAT sa dostanu v poriadku na Inet
      - priama adresacia zakaznikov vo VRF je samozrejme problematicka, idealne pouzit unikatne IP adresy
----
 
+---
 ### Konfiguracia VXLAN-EVPN Underlay
 
 Tento testovaci dizajn pocita s VXLAN Tenant separaciou (pomocou VRF). Je vsak pouzitelny
@@ -167,8 +168,8 @@ v pripade vypadku uzlov napr. (Leaf1, Spine1 a Leaf3) alebo napr. (Leaf2, Spine2
 bola stale zachovana konektivita pre zakanzikov.
 
 Mal som povodny zamer, ze ako underlay pouzijem IPv6 + OSPFv3, tento koncept
-ma vsak stale (Jul2022) obmedzene moznoti a funkcie.
-Pre Underlay bol pouzity IGP protokol OSPFv2. Protokol OSPFv3 na NX-OS (na rozdiel od IOSu) 
+ma vsak stale (Jul 2022) obmedzene moznoti a funkcie.
+Pre Underlay bol pouzity IGP protokol OSPFv2. Protokol OSPFv3, na NX-OS na rozdiel od IOSu, 
 nedokaze propagovat IPv4 prefixy, alebo som to zatial nenasiel/nepochopil.
 Konfiguracia routingu je standardna, vyuzivaju sa Loopback rozhrania, ktore su
 dolezite pre funckiu VXLAN fabricu, pretoze sa mapuju na VXLAN VTEP rozhranie `nve1`.
@@ -742,6 +743,7 @@ interface Ethernet1/4
   no shutdown
 !
 ```
+
 ---
 ### Konfiguracia VXLAN-EVPN Overlay:
 
@@ -861,6 +863,7 @@ router bgp 65001
 
 (N93-Leaf3) Konfiguracia `Loopback1023` rozhrania:
 ```
+!
 interface loopback1023
   description main-RouterID-VTEP
   ip address 192.0.2.93/32              ! Sluzi aj ako ID/IP pre VTEP
@@ -2381,7 +2384,7 @@ GW      - Gateway (Router)
 HW      - Hardware
 IGP     - Interior Gateway Protocol
 IOS     - Internetwork Operating System (Cisco)
-IRB     - Integrated Routing & Bridging
+IRB     - Integrated Routing & Bridging (VRF)
 L2      - Layer 2
 L3      - Layer 3
 LACP    - Link Aggregation Control Protocol
@@ -2392,14 +2395,14 @@ N91     - Nexus 9300v c. 1 (Diagram)
 NAT     - Network Address Translation
 NV      - Network Virtualization (VXLAN)
 NVE     - Network Virtualization Edge / Endpoint (VXLAN)
-NX-OS   - Nexus-Operating Sysytem (Cisco)
+NX-OS   - Nexus-Operating System (Cisco)
 OSPFv2  - Open Shortest Path First version 2
 OSPFv3  - Open Shortest Path First version 3
 QinQ    - 802.1Q tag tunneled in 802.1Q tag
 QinVNI  - 802.1Q tag tunneled in VNI (VXLAN)
 R1      - Router c. 1 (Diagram)
 RD      - Route Distinguisher (VRF)
-RT      - Route target (VRF)
+RT      - Route Target (VRF)
 SVI     - Switch VLAN / Virtual Interface
 SW      - Software
 SW1     - Switch c. 1 (Diagram)
