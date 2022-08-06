@@ -2,11 +2,10 @@
 ![GNS3 - testovacia VXLAN-EVPN topologia](https://github.com/vincentvlk/nexus-vxlan-evpn-priklad/blob/main/gh-gns3-vxlan-evpn-topologia.png)
 
 
-* [Cisco Nexus 9300v VXLAN BGP-EVPN - Priklad](#cisco-nexus-9300v-vxlan-bgp-evpn---priklad)
-   * [Pomocne poznamky na mini-projekt "nexus-vxlan-evpn-priklad"](#pomocne-poznamky-na-mini-projekt-nexus-vxlan-evpn-priklad)
-
 # Obsah:
 
+* [Cisco Nexus 9300v VXLAN BGP-EVPN - Priklad](#cisco-nexus-9300v-vxlan-bgp-evpn---priklad)
+   * [Pomocne poznamky na mini-projekt "nexus-vxlan-evpn-priklad"](#pomocne-poznamky-na-mini-projekt-nexus-vxlan-evpn-priklad)
       * [Pouzite GNS3 a VM image:](#pouzite-gns3-a-vm-image)
       * [Postrehy z konfiguracie a testovania:](#postrehy-z-konfiguracie-a-testovania)
       * [Testovane scenare:](#testovane-scenare)
