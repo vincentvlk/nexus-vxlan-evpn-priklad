@@ -195,15 +195,15 @@ boot nxos bootflash:/nxos.9.3.10.bin sup-1       ! Aby boot nespadol do boot-loa
 !
 hostname N91-Leaf1
 !
-nv overlay evpn
+nv overlay evpn                 ! Aktivujeme podporu EVPN pre VXLAN
 feature ospf
 feature bfd
 feature bgp
 feature interface-vlan
-feature vn-segment-vlan-based
+feature vn-segment-vlan-based   ! Aktivujeme podporu mapovania VLAN na VNI
 feature lacp
 feature vpc
-feature nv overlay
+feature nv overlay              ! Aktivujeme funkciu VXLAN
 !
 ```
 
@@ -299,15 +299,15 @@ boot nxos bootflash:/nxos.9.3.10.bin sup-1      ! Aby boot nespadol do boot-load
 !
 hostname N92-Leaf2
 !
-nv overlay evpn
+nv overlay evpn                 ! Aktivujeme podporu EVPN pre VXLAN
 feature ospf
 feature bfd
 feature bgp
 feature interface-vlan
-feature vn-segment-vlan-based
+feature vn-segment-vlan-based   ! Aktivujeme podporu mapovania VLAN na VNI
 feature lacp
 feature vpc
-feature nv overlay
+feature nv overlay              ! Aktivujeme funkciu VXLAN
 !
 ```
 
@@ -403,15 +403,15 @@ boot nxos bootflash:/nxos.9.3.10.bin sup-1      ! Aby boot nespadol do boot-load
 !
 hostname N93-Leaf3
 !
-nv overlay evpn
+nv overlay evpn                 ! Aktivujeme podporu EVPN pre VXLAN
 feature ospf
 feature bfd
 feature bgp
 feature interface-vlan
-feature vn-segment-vlan-based
+feature vn-segment-vlan-based   ! Aktivujeme podporu mapovania VLAN na VNI
 feature lacp
 feature vpc
-feature nv overlay
+feature nv overlay              ! Aktivujeme funkciu VXLAN
 !
 ```
 
@@ -507,15 +507,15 @@ boot nxos bootflash:/nxos.9.3.10.bin sup-1      ! Aby boot nespadol do boot-load
 !
 hostname N94-Leaf4
 !
-nv overlay evpn
+nv overlay evpn                 ! Aktivujeme podporu EVPN pre VXLAN
 feature ospf
 feature bfd
 feature bgp
 feature interface-vlan
-feature vn-segment-vlan-based
+feature vn-segment-vlan-based   ! Aktivujeme podporu mapovania VLAN na VNI
 feature lacp
 feature vpc
-feature nv overlay
+feature nv overlay              ! Aktivujeme funkciu VXLAN
 !
 ```
 
@@ -611,11 +611,11 @@ boot nxos bootflash:/nxos.9.3.10.bin sup-1      ! Aby boot nespadol do boot-load
 !
 hostname N95-Spine1
 !
-nv overlay evpn
+nv overlay evpn                 ! Aktivujeme podporu EVPN pre VXLAN
 feature ospf
 feature bfd
 feature bgp
-feature nv overlay
+feature nv overlay              ! Aktivujeme funkciu VXLAN
 !
 ```
 
@@ -688,11 +688,11 @@ boot nxos bootflash:/nxos.9.3.10.bin sup-1      ! Aby boot nespadol do boot-load
 !
 hostname N96-Spine2
 !
-nv overlay evpn
+nv overlay evpn                 ! Aktivujeme podporu EVPN pre VXLAN
 feature ospf
 feature bfd
 feature bgp
-feature nv overlay
+feature nv overlay              ! Aktivujeme funkciu VXLAN
 !
 ```
 
