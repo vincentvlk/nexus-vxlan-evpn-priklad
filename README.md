@@ -2559,6 +2559,11 @@ https://community.cisco.com/t5/data-center-switches/why-vxlan-evpn-ebgp-needs-to
 https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/about-writing-and-formatting-on-github
 ```
 ---
+### Skript v jazyku Python3 na generovanie zakladnej VXLAN-EVPN konfiguracie:
+
+https://github.com/vincentvlk/nexus-vxlan-evpn-priklad/blob/1967aa0a8d12b72f6b9189c21699a388ecd3f334/vxlan-cis-nex-generator.py
+
+---
 ### Obsah tejto stranky bol vygenerovany BASH skritpom:
 
 - na odkaze: `https://github.com/ekalinin/github-markdown-toc`
