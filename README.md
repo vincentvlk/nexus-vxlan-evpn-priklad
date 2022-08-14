@@ -123,9 +123,13 @@ the backup SVI VLAN needs to be the native VLAN on the peer-link.
   - nevenuje sa ani problematike ARP Suppression
   - da sa dohladat v pouzitych zdrojoch informacii
 
-- na testovanie som vyuzil NX-OS funkciu "Configuration Rollback":
+- poznamka, na testovanie som vyuzil NX-OS funkciu "Configuration Rollback":
 
-`https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/sw/93x/system-management/b-cisco-nexus-9000-series-nx-os-system-management-configuration-guide-93x/b-cisco-nexus-9000-series-nx-os-system-management-configuration-guide-93x_chapter_011001.html`
+```
+Cisco Nexus 9000 Series NX-OS System Management Configuration Guide, Release 9.3(x):
+
+https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/sw/93x/system-management/b-cisco-nexus-9000-series-nx-os-system-management-configuration-guide-93x/b-cisco-nexus-9000-series-nx-os-system-management-configuration-guide-93x_chapter_011001.html
+```
 
 ---
 ### Testovane scenare:
