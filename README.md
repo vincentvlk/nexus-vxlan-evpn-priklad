@@ -44,6 +44,7 @@
          * [5. Externa konektivita do Inetu z VRF `TenantA` / `TenantB`:](#5-externa-konektivita-do-inetu-z-vrf-tenanta--tenantb)
       * [Pouzivane skratky v dokumente:](#pouzivane-skratky-v-dokumente)
       * [Pouzivane diagnosticke prikazy:](#pouzivane-diagnosticke-prikazy)
+      * [Skript v jazyku Python3 na generovanie zakladnej VXLAN-EVPN konfiguracie:](#skript-v-jazyku-python3-na-generovanie-zakladnej-vxlan-evpn-konfiguracie)
       * [Obsah tejto stranky bol vygenerovany BASH skritpom:](#obsah-tejto-stranky-bol-vygenerovany-bash-skritpom)
 
 ## Pomocne poznamky na mini-projekt "nexus-vxlan-evpn-priklad"
