@@ -2561,7 +2561,7 @@ https://docs.github.com/en/get-started/writing-on-github/getting-started-with-wr
 ---
 ### Skript v jazyku Python3 na generovanie zakladnej VXLAN-EVPN konfiguracie:
 
-https://github.com/vincentvlk/nexus-vxlan-evpn-priklad/blob/1967aa0a8d12b72f6b9189c21699a388ecd3f334/vxlan-cis-nex-generator.py
+https://github.com/vincentvlk/nexus-vxlan-evpn-priklad/blob/f56fe86e8977aa5fca36c08fd71faa4113278013/vxlan-cis-nex-generator.py#L1-L238
 
 ---
 ### Obsah tejto stranky bol vygenerovany BASH skritpom:
