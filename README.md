@@ -1,6 +1,9 @@
 # Cisco Nexus 9300v VXLAN BGP-EVPN - Priklad
-![GNS3 - testovacia VXLAN-EVPN topologia](https://github.com/vincentvlk/nexus-vxlan-evpn-priklad/blob/main/gh-gns3-vxlan-evpn-topologia.png)
 
+UPOZORNENIE: Tento dokument NESLUZI ako vzdelavaci material. Toto su moje studijne
+poznamky, ktore postupne menim a doplnam.
+
+![GNS3 - testovacia VXLAN-EVPN topologia](https://github.com/vincentvlk/nexus-vxlan-evpn-priklad/blob/main/gh-gns3-vxlan-evpn-topologia.png)
 
 # Obsah:
 
@@ -42,6 +45,9 @@
          * [3. Transparentne prepojenie P-to-P cez VXLAN-Xconnect:](#3-transparentne-prepojenie-p-to-p-cez-vxlan-xconnect)
          * [4. Transparentne QinVNI prepojenie medzi 2 bodmi cez VXLAN dot1q tunnel:](#4-transparentne-qinvni-prepojenie-medzi-2-bodmi-cez-vxlan-dot1q-tunnel)
          * [5. Externa konektivita do Inetu z VRF `TenantA` / `TenantB`:](#5-externa-konektivita-do-inetu-z-vrf-tenanta--tenantb)
+      * [Testovanie "Failure" scenarov:](#testovanie-failure-scenarov)
+         * [1. Scenar, zlyhanie VXLAN/VTEP/Leaf zariadeni vo VXLAN fabricu:](#1-scenar-zlyhanie-vxlanvtepleaf-zariadeni-vo-vxlan-fabricu)
+         * [2. Scenar, zlyhanie VXLAN/Spine zariadenia vo VXLAN fabricu:](#2-scenar-zlyhanie-vxlanspine-zariadenia-vo-vxlan-fabricu)
       * [Pouzivane skratky v dokumente:](#pouzivane-skratky-v-dokumente)
       * [Pouzivane diagnosticke prikazy:](#pouzivane-diagnosticke-prikazy)
       * [Skript v jazyku Python3 na generovanie zakladnej VXLAN-EVPN konfiguracie:](#skript-v-jazyku-python3-na-generovanie-zakladnej-vxlan-evpn-konfiguracie)
@@ -1775,8 +1781,8 @@ end
    - zakaznik vyuziva zariadania "Tenant-B-SW1" a "Tenant-B-SW3"
    - NEfunkcne na N9300V, VM toto nepodporuje v kombinacii s vPC na NX-OSv ver. 9.3(10)
 
-   - cybaju system. prikazy: "system dot1q-tunnel transit [vlan vlan-range]"
-                    spolu s: "system nve infra-vlans <backup-svi-vlan>"
+   - chybaju system. prikazy: "system dot1q-tunnel transit [vlan vlan-range]"
+                     spolu s: "system nve infra-vlans <backup-svi-vlan>"
 
    - pozriet obmedzenia ohladom HW/SW a vPC (NX-OS 9.X vs. NX-OS 10.X)
 ```
@@ -2470,7 +2476,6 @@ Packet sent with the DF bit set
 !!!!!!!!!!!!!!!!!!!!
 Success rate is 99 percent (992/1000), round-trip min/avg/max = 22/53/341 ms
 ```
-
 - prvy vypadok ICMP odpovede (bodka vo vypise) v momente vypnutia vPC domenay na `N91-Leaf1`
 - nasledne prerusenie SSH pripojenia pred sekveciou 7 stratenych ICMP odpovedi
 - po konvergencii protokolov a vPC bola komunikacia SSH a ICMP paketov obnovena
@@ -2512,11 +2517,10 @@ viacero problemov. V kontexte VM instancii ma napada myslienka, ze virtualizacia
 sietoveho L2 transportu pre DataCenter potreby Hypervizorov by mohla byt riesena
 priamo v Hypervizore. Fyzicke HW servery by mohli byt pripojene L3-routed linkami a
 modul Hypervizora moze sluzit ako switch/router/VTEP, vid. napr. projekty `Open vSwitch`,
-`OpenStack Neutron`, `FRRouting`, `VMWare NSX (VXLAN)`, `MS Hyper-V (NVGRE)`, ...
+`OpenStack Neutron`, `FRRouting`, `VMWare NSX (VXLAN)`, `MS Hyper-V (NVGRE namiesto VXLAN)`, ...
 
 K dispozicii su uz dlhsiu dobu sietove karty, ktore disponuju funkciou VXLAN/VTEP offloading.
-Taketo sietove karty poskytuju vyrobcovia ako su napr. Intel, Nvidia (Mellanox), 
-Emulex a dalsi. 
+Taketo sietove karty poskytuju vyrobcovia ako su napr. Intel, Nvidia (Mellanox), Broadcom a dalsi. 
 
 ---
 #### 2. Scenar, zlyhanie VXLAN/Spine zariadenia vo VXLAN fabricu:
@@ -2547,14 +2551,14 @@ Diagnostika vypadku:
 
 Infrastruktura s VXLAN-EVPN fabricom konvergovala bez problemov na zaklade dizajnovych
 doporuceni, podla filozofie L3-routed/ECMP backbone. Vypadok nezaznamenali ziadne testovane
-workloady, teda v zmysle obmedzenych moznosti tohto testovania. Samozrejme pri vypadku
-VXLAN Spine zariadenia je vhodne sledovat zatazenia aktivnych liniek, aby nedoslo k neziaducim
+workloady, teda v zmysle obmedzenych moznosti tohto testovania. Samozrejme, pri vypadku
+VXLAN Spine zariadenia je vhodne sledovat zatazenie aktivnych liniek, aby nedoslo k neziaducim
 efektom ako su napr.: "Traffic Tromboning", "Traffic Polarization", "Extreme Oversubscription".
 Taketo extremne pripady mozu vznikat pri tzv. "East-West Elephant Flows", kedy sa napr.
-synchronizuje velka Databaza, presuvaju zalohy alebo VM Image pre Hypervizory.
+synchronizuje velka Databaza, presuvaju sa zalohy alebo VM Images pre Hypervizory.
 
-Este si treba uvedomit ze, podla diagramu a konfiguracie, medzi VXLAN Spine zariadeniami
-neexistuje ziadne "prepojenie" na urovni Control-plane. Je mozne len v tomto jednoduchom
+Este si treba uvedomit, podla diagramu a konfiguracie, ze medzi VXLAN Spine zariadeniami
+neexistuje ziadne "prepojenie" na urovni Control-plane. Je to mozne v tomto jednoduchom
 scenare, realne vsak mozeme pracovat s pristupmi, ako su "Collapsed-Spine",
 "Single-box Leaf+Spine", "VXLAN Super-Spine", "Multi-site VXLAN Fabric" a pod.
 Pri tychto dizajnoch je vyssia komplexnost systemu nevyhnutna a treba s nou pocitat
@@ -2576,7 +2580,7 @@ hardware access-list tcam region arp-ether 256 double-wide
 AF      - Address Family (BGP)
 ARP     - Address Resolution Protocol
 AS      - Autonomous System (BGP)
-ASIC    - Application Specific Integrated Circuit
+ASIC    - Application Specific Integrated Circuit (Switch Hardware)
 BASH    - Bourne-Again SHell (Unix)
 BD      - Bridge Domain (VXLAN)
 BFD     - Bidirectional Forwarding Detection
@@ -2602,7 +2606,7 @@ LACP    - Link Aggregation Control Protocol
 MD5     - Message Digest level 5
 MTU     - Maximum Transmission Unit
 MLAG    - Multi-chasis Link Aggregation
-N91     - Nexus 9300v c. 1 (Diagram) 
+N91     - Nexus 9300v c. 1 (vid. Diagram) 
 NAT     - Network Address Translation
 NV      - Network Virtualization (VXLAN)
 NVE     - Network Virtualization Edge / Endpoint (VXLAN)
@@ -2620,6 +2624,7 @@ SVI     - Switch VLAN / Virtual Interface
 SW      - Software
 SW1     - Switch c. 1 (Diagram)
 VLAN    - Virtual Local Area Network
+VM      - Virtual Machine
 VNI     - Virtual Network Instance (VXLAN)
 VNID    - Virtual Network IDentifier (VXLAN)
 vPC     - Virtual Port-Channel (Cisco)
@@ -2743,6 +2748,19 @@ https://community.cisco.com/t5/data-center-switches/evpn-multihoming-esi-lag/m-p
 https://community.cisco.com/t5/data-center-switches/why-vxlan-evpn-ebgp-needs-to-configure-quot-retain-route-target/td-p/4126609
 
 https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/about-writing-and-formatting-on-github
+
+https://frrouting.org/doc/
+
+https://www.openvswitch.org/
+
+https://docs.openstack.org/neutron/latest/
+
+https://www.nvidia.com/en-us/networking/ethernet/connectx-6/
+
+https://www.intel.com/content/www/us/en/developer/articles/technical/the-25-gigabit-ethernet-card-is-here.html
+
+https://www.broadcom.com/products/ethernet-connectivity/network-adapters/n2100g
+
 ```
 ---
 ### Skript v jazyku Python3 na generovanie zakladnej VXLAN-EVPN konfiguracie:
