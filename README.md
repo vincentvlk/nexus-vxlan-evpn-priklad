@@ -2445,6 +2445,8 @@ N91-Leaf1(config-router)# shutdown
 N91-Leaf1(config-router)# end
 ```
 
+Diagnostika vypadku:
+
 Diagnosticke vypisy zo zariadenia `Tenant-A-SW4`:
 ```
 TenantA-SW4#ping 192.168.1.1 size 1500 repeat 1000 df-bit
@@ -2510,7 +2512,7 @@ viacero problemov. V kontexte VM instancii ma napada myslienka, ze virtualizacia
 sietoveho L2 transportu pre DataCenter potreby Hypervizorov by mohla byt riesena
 priamo v Hypervizore. Fyzicke HW servery by mohli byt pripojene L3-routed linkami a
 modul Hypervizora moze sluzit ako switch/router/VTEP, vid. napr. projekty `Open vSwitch`,
-`OpenStack Neutron`, `FRRouting`, `VMWare NSX`, ...
+`OpenStack Neutron`, `FRRouting`, `VMWare NSX (VXLAN)`, `MS Hyper-V (NVGRE)`, ...
 
 K dispozicii su uz dlhsiu dobu sietove karty, ktore disponuju funkciou VXLAN/VTEP offloading.
 Taketo sietove karty poskytuju vyrobcovia ako su napr. Intel, Nvidia (Mellanox), 
@@ -2533,9 +2535,32 @@ Simulovane zlyhanie zariadenia `N95-Spine1`:
 !
 ! VAROVANIE: Prikazy v tejto sekcii su STRIKTNE urcene pre LABORATORNE TESTOVANIE
 !
-
+N95-Spine1# configure
+N95-Spine1(config)# router ospf as65001
+N95-Spine1(config-router)# shutdown
+N95-Spine1(config-router)# router bgp 65001
+N95-Spine1(config-router)# shutdown
+N95-Spine1(config-router)# end
 ```
 
+Diagnostika vypadku:
+
+Infrastruktura s VXLAN-EVPN fabricom konvergovala bez problemov na zaklade dizajnovych
+doporuceni, podla filozofie L3-routed/ECMP backbone. Vypadok nezaznamenali ziadne testovane
+workloady, teda v zmysle obmedzenych moznosti tohto testovania. Samozrejme pri vypadku
+VXLAN Spine zariadenia je vhodne sledovat zatazenia aktivnych liniek, aby nedoslo k neziaducim
+efektom ako su napr.: "Traffic Tromboning", "Traffic Polarization", "Extreme Oversubscription".
+Taketo extremne pripady mozu vznikat pri tzv. "East-West Elephant Flows", kedy sa napr.
+synchronizuje velka Databaza, presuvaju zalohy alebo VM Image pre Hypervizory.
+
+Este si treba uvedomit ze, podla diagramu a konfiguracie, medzi VXLAN Spine zariadeniami
+neexistuje ziadne "prepojenie" na urovni Control-plane. Je mozne len v tomto jednoduchom
+scenare, realne vsak mozeme pracovat s pristupmi, ako su "Collapsed-Spine",
+"Single-box Leaf+Spine", "VXLAN Super-Spine", "Multi-site VXLAN Fabric" a pod.
+Pri tychto dizajnoch je vyssia komplexnost systemu nevyhnutna a treba s nou pocitat
+pri testovani vypadkov.
+
+---
 Poznamka: pri testovani scenarov boli pouzite prikazy na rozdelenie regionov TCAM pamate:
           - pozor, po zmenach TCAM regionov je nutny restart zariadenia
           - pre realny HW zo serie Nexus9300 nie su potrebne upravy TCAM regionov
@@ -2551,6 +2576,7 @@ hardware access-list tcam region arp-ether 256 double-wide
 AF      - Address Family (BGP)
 ARP     - Address Resolution Protocol
 AS      - Autonomous System (BGP)
+ASIC    - Application Specific Integrated Circuit
 BASH    - Bourne-Again SHell (Unix)
 BD      - Bridge Domain (VXLAN)
 BFD     - Bidirectional Forwarding Detection
