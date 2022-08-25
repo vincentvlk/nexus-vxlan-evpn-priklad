@@ -2568,9 +2568,9 @@ pri testovani vypadkov.
 ---
 Poznamka: pri testovani scenarov boli pouzite prikazy na rozdelenie regionov TCAM pamate:
           
-          - pozor, po zmenach TCAM regionov je nutny restart zariadenia
-          - pre realny HW zo serie Nexus9300 nie su potrebne upravy TCAM regionov
-          - v pripade N9300v nemali tieto upravy ziaden vplyv pri vypadkoch a konvergencii
+ - pozor, po zmenach TCAM regionov je nutny restart zariadenia
+ - pre realny HW zo serie Nexus9300 nie su potrebne upravy TCAM regionov
+ - v pripade N9300v nemali tieto upravy ziaden vplyv pri vypadkoch a konvergencii
 
 ```
 hardware access-list tcam region racl 512
