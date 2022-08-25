@@ -1,7 +1,7 @@
 # Cisco Nexus 9300v VXLAN BGP-EVPN - Priklad
 
-UPOZORNENIE: Tento dokument NESLUZI ako vzdelavaci material. Toto su moje studijne
-poznamky, ktore postupne menim a doplnam.
+**UPOZORNENIE: Tento dokument NESLUZI ako vzdelavaci material. Toto su moje studijne
+poznamky, ktore postupne menim a doplnam.**
 
 ![GNS3 - testovacia VXLAN-EVPN topologia](https://github.com/vincentvlk/nexus-vxlan-evpn-priklad/blob/main/gh-gns3-vxlan-evpn-topologia.png)
 
