@@ -2402,7 +2402,7 @@ VAROVANIE: Prikazy v tejto sekcii su STRIKTNE urcene na LABORATORNE TESTOVANIE!
 ```
 Testovanie konvergencie VXLAN fabricu, pri vypadku urciteho uzla, je ciastocne
 obmedzene na virtualnej platforme Nexus9300v. Dalsou vaznou komplikaciou je problem,
-ktory uvadzam na zaciatku, nahodne nabootuje VM instancia N9300v bez pritomnosti VTEP
+ktory uvadzam na zaciatku. Nahodne nabootuje VM instancia N9300v bez pritomnosti VTEP
 rozhrania, napr. nasledovny vypis:
 ````
 N92-Leaf2# show interface nve1
@@ -2411,8 +2411,8 @@ Invalid interface format at '^' marker.
 ````
 Dalsim prikladom je absencia technologie `BFD`, ktora umoznuje rychlejsiu konvergenciu
 smerovacich protokolov. Daju sa ale simulovat ine "katastroficke" scenare. Prikladom
-je umyselne "vypnutie" vPC domeny na jednom z dvoch clenov tejto domeny. Tymto 
-krokom dochadza k zavaznej inkonzistencii vo vPC domene. Tym, ze testovany VXLAN fabric
+je umyselne "vypnutie" `vPC domeny` na jednom z dvoch clenov tejto domeny. Tymto 
+krokom dochadza k *zavaznej inkonzistencii* vo vPC domene. Tym, ze testovany VXLAN fabric
 pracuje aj s konceptom vPC, pri deaktivacii vPC domeny na jednom z clenov domeny, je
 nutne tohto clena "izolovat", aby sa zabranilo nekontrolovanemu sireniu BUM trafficu.
 
@@ -2427,8 +2427,8 @@ DUT zariadeniach.
 Tento scenar je konkretne zamerany na test vypadku VTEP zariadenia tym, ze
 deaktivujeme vPC domenu na zariadeni v role `vPC Primary Peer`. Zaroven vypneme
 smerovacie protokoly `OSPF` a `BGP`. Pocas aktivnej TCP/SSH a ICMP/ping komunikacie
-medzi zariadeniami `Tenant-A-SW1` a `Tenant-A-SW4` bude deaktivovana vPC domena,
-OSPF a BGP na zariadeniach `N91-Leaf1` a `N93-Leaf3`. Vid. diagram topologie.
+medzi zariadeniami `Tenant-A-SW1` a `Tenant-A-SW4` bude deaktivovana `vPC` domena,
+`OSPF` a `BGP` na zariadeniach `N91-Leaf1` a `N93-Leaf3`. Vid. diagram topologie.
 
 Pred vypadkom VTEP zariadeni bude zo zariadenia `Tenant-A-SW1` vytvorene SSH
 pripojenie typu TCP/client/server na zariadenie `Tenant-A-SW4`. Z SSH/CLI rozhrania bude
@@ -2530,7 +2530,7 @@ argumentom, ze je mozne menit casovace smerovacich protokolov, ako su napr. `OSP
 Tento pristup ma vsak svoje nevyhody. Pri tychto sietovych "trikoch" vznika dalsia
 komplexnost, ktora zatazuje unifikovane postupy konfiguracie, monitoringu a dokumentacie.
 Zvysuje sa aj komplexnost pohladu na sietovu infrastrukturu ako jeden celok, pretoze musime
-pocitat s tym, ze ak *nezmenime* casovace v celom autonomnom systeme, je potrebne
+pocitat s tym, ze ak *nezmenime* casovace v *celom* autonomnom systeme, je potrebne
 vediet, v ktorych segmentoch siete mame non-default parametre protokolov. Vplyv
 na troubleshooting procesy je teda evidentny.
 
@@ -2566,6 +2566,7 @@ pri testovani vypadkov.
 
 ---
 Poznamka: pri testovani scenarov boli pouzite prikazy na rozdelenie regionov TCAM pamate:
+          
           - pozor, po zmenach TCAM regionov je nutny restart zariadenia
           - pre realny HW zo serie Nexus9300 nie su potrebne upravy TCAM regionov
           - v pripade N9300v nemali tieto upravy ziaden vplyv pri vypadkoch a konvergencii
