@@ -72,6 +72,7 @@ Inet-R1 - CSR1000-IOS-XEv: `csr1000v-universalk9.16.12.03-serial.qcow2`
 
 - PROBLEM: N9300V nabehne bez funkcneho `nve1`, chyba polozka v conf. mode, v start-conf pritom ale je
   - zatial `reload`, je to menej konfigurovania, ako odstranit `VXLAN features`
+  - pravdepodobne zalezitost `GNS3+Qemu+KVM`, problem, pretoze reboot trva velmi dlho
 
 - PROBLEM: N9300V nabehne s neaktivnymi Ifaces, aj ked su zapnute v start-conf
   - stacil `shutdown` / `no shutdown`, sposobuje hlavne vypadok OSPF a teda *Underlay*
@@ -2496,6 +2497,7 @@ uplinku na `N91-Leaf1`, komunikacia pokracovala cez uplink na `N92-Leaf2`:
 
 - konfiguracia VTEP zariadeni bola rozsirena o tuto sekvenciu prikazov:
 ```
+!
 vpc domain 912              ! Resp. "vpc domain 934"
   auto-recovery
   fast-convergence
