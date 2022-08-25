@@ -2517,11 +2517,12 @@ viacero problemov. V kontexte VM instancii ma napada myslienka, ze virtualizacia
 sietoveho L2 transportu pre DataCenter potreby Hypervizorov by mohla byt riesena
 priamo v Hypervizore. Fyzicke HW servery by mohli byt pripojene L3-routed linkami a
 modul Hypervizora moze sluzit ako switch/router/VTEP, vid. napr. projekty `Open vSwitch`,
-`OpenStack Neutron`, `FRRouting`, `VMWare NSX (VXLAN)`, `MS Hyper-V (NVGRE namiesto VXLAN)`, ...
+`OpenStack Neutron`, `FRRouting`, `VMWare NSX (VXLAN)`, `MS Hyper-V (pouzili NVGRE namiesto VXLAN)`, ...
 
 K dispozicii su uz dlhsiu dobu sietove karty, ktore disponuju funkciou VXLAN/VTEP offloading.
 Taketo sietove karty poskytuju vyrobcovia ako su napr. Intel, Nvidia (Mellanox), Broadcom a dalsi. 
 
+ - treba pozriet sekciu s Inet odkazmi, mohol by to byt predmet dalsieho studia 
 ---
 #### 2. Scenar, zlyhanie VXLAN/Spine zariadenia vo VXLAN fabricu:
 
@@ -2624,6 +2625,7 @@ RT      - Route Target (VRF)
 SVI     - Switch VLAN / Virtual Interface
 SW      - Software
 SW1     - Switch c. 1 (Diagram)
+TCAM    - Ternary Content Addressable Memory (Switch Hardware)
 VLAN    - Virtual Local Area Network
 VM      - Virtual Machine
 VNI     - Virtual Network Instance (VXLAN)
