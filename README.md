@@ -2387,6 +2387,87 @@ ip route 0.0.0.0 0.0.0.0 192.168.3.254 name default-to-provider-AS65001
 ```
 
 ---
+### Testovanie "Failure" scenarov:
+```
+VAROVANIE: Prikazy v tejto sekcii su STRIKTNE urcene pre LABORATORNE TESTOVANIE
+```
+Testovanie konvergencie VXLAN fabricu, pri vypadku urciteho uzla, je ciastocne
+obmedzene na virtualnej platforme Nexus9300v. Prikladom je absencia technologie
+BFD, ktora umoznuje rychlejsiu konvergenciu smerovacich protokolov. Daju sa ale
+simulovat ine "katastroficke" scenare. Prikladom je umyselne "vypnutie" vPC
+domeny na jednom z dvoch clenov tejto domeny. Tymto krokom dochadza k zavaznej
+inkonzistencii vo vPC domene. Tym, ze testovany VXLAN fabric pracuje aj s
+konceptom vPC, pri deaktivacii vPC domeny na jednom z clenov domeny, je nutne
+tohto clena "izolovat", aby sa zabranilo nekontrolovanemu sireniu BUM trafficu.
+
+Poznamka: Plne si uvedomujem, ze taketo synteticke testovanie nema vela
+spolocneho s workload-mi v realnom sveta. Mam vsak obmedzene moznosti testovania,
+preto testujem aspon zakladnu POC konvergenciu na urovni Control-Plane, na jednotlivych
+DUT zariadeniach.
+
+---
+#### 1. Scenar, zlyhanie VTEP/Leaf zariadeni vo VXLAN fabricu:
+
+Tento scenar je konkretne zamerany na test vypadku VTEP zariadenia, tym, ze
+deaktivujeme vPC domenu na zariadeni v role `vPC Primary Peer`. Pocas aktivnej
+TCP/SSH a ICMP/ping komunikacie medzi zariadeniami `Tenant-A-SW1` a `Tenant-A-SW4` bude
+deaktivovana vPC domena na zariadeniach `N91-Leaf1` a `N93-Leaf3`. Vid. diagram topologie.
+
+Pred vypadkom VTEP zariadeni bude zo zariadenia `Tenant-A-SW1` vytvorene SSH
+pripojenie typu TCP/client/server na zariadenie `Tenant-A-SW4`. Z SSH/CLI rozhrania bude
+spusteny prikaz `TenantA-SW4#ping 192.168.1.1 size 1500 repeat 1000 df-bit`.
+Teda zjednodusene, rapidny TCP/echo/reply flow z `Tenant-A-SW4` na `Tenant-A-SW1`.
+Na DUT zariadeniach budeme sledovat diagnosticke vypisy.
+
+Simulovane zlyhanie zariadenia `N91-Leaf1`:
+```
+!
+! VAROVANIE: Prikazy v tejto sekcii su STRIKTNE urcene pre LABORATORNE TESTOVANIE
+!
+N91-Leaf1(config)# vpc domain 912
+N91-Leaf1(config-vpc-domain)# shutdown
+```
+
+Diagnosticke vypisy zo zariadenia `Tenant-A-SW4`:
+```
+TenantA-SW4#ping 192.168.1.1 size 1500 repeat 1000 df-bit
+Type escape sequence to abort.
+Sending 1000, 1500-byte ICMP Echos to 192.168.1.1, timeout is 2 seconds:
+Packet sent with the DF bit set
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!.......!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!
+Success rate is 99 percent (992/1000), round-trip min/avg/max = 22/53/341 ms
+```
+
+- prvy vypadok ICMP odpovede (bodka vo vypise) v momente vypnutia vPC domenay na `N91-Leaf1`
+- nasledne prerusenie SSH pripojenia pred sekveciou 7 stratenych ICMP odpovedi
+- po konvergencii protokolov a vPC bola komunikacia SSH a ICMP paketov obnovena
+  BEZ AKEJKOLVEK rucnej intervencie
+- UX/UI "zazitok" na zariadeni `Tenant-A-SW4` bola strata a obnovenie CLI reakcie
+  a vypisy prikazu `ping` na cca 5 sekund
+
+- podla ocakavania, klientske zariadenie `TenantA-SW1` hlasilo suspendovanie jedneho
+uplinku na `N91-Leaf1`, komunikacia pokracovala cez uplink na `N92-Leaf2`:
+
+```
+*Aug 23 07:30:22.328: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet3/1, changed state to down
+*Aug 23 07:30:29.722: %EC-5-L3DONTBNDL2: Gi3/1 suspended: LACP currently not enabled on the remote port.
+```
+
+---
 ### Pouzivane skratky v dokumente:
 ```
 AF      - Address Family (BGP)
