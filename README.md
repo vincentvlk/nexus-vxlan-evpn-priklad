@@ -2512,8 +2512,8 @@ interface nve 1
 ```
 ale ani tento doplnok nevyriesil problem s nefunkcnym ARP ucenim/obnovovanim.
 
-Predovsetkym pri testovani chybala aj dolezita uprava vPC konfiguracie, ktora definuje
-tzv. zaloznu infrastructure VLAN, pre oboch clenov vPC domeny, napr. pre vPC domenu `912`:
+Predovsetkym pri testovani chybala (N9300v to nema) aj dolezita uprava vPC konfiguracie,
+ktora definuje tzv. zaloznu infrastructure VLAN, pre oboch clenov vPC domeny, napr. pre vPC domenu `912`:
 ```
 N91-Leaf1(config)# sh run vlan 912
 
