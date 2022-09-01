@@ -2512,6 +2512,32 @@ interface nve 1
 ```
 ale ani tento doplnok nevyriesil problem s nefunkcnym ARP ucenim/obnovovanim.
 
+Predovsetkym pri testovani chybala aj dolezita uprava vPC konfiguracie, ktora definuje
+tzv. zaloznu infrastructure VLAN, pre oboch clenov vPC domeny, napr. pre vPC domenu `912`:
+```
+N91-Leaf1(config)# sh run vlan 912
+
+vlan 912
+  name vPC-peer-link-L3-backup
+
+N91-Leaf1(config)# sh run int vlan 912
+
+interface Vlan912
+  description vPC-peer-link-L3-backup
+  no shutdown
+  bfd ipv4 interval 500 min_rx 500 multiplier 3
+  no ip redirects
+  ip address 10.9.9.11/29
+  no ipv6 redirects
+  ip ospf network point-to-point
+  ip router ospf as65001 area 0.0.0.0
+  ip ospf bfd
+
+N91-Leaf1(config)# system nve infra-vlans 912
+                                ^
+                                % Invalid command at '^' marker.
+```
+
 Moj skromny nazor: Takato situacia moze posluzit ako jedna z demonstracii faktu, ze
 zdielanie a synchronizacia Control-plane udajov (CAM/ARP) pre Ethernet/IP Data-plane,
 nie je trivialny problem. Konkretne riesenia typu MLAG a Stacking mozu sposobovat
