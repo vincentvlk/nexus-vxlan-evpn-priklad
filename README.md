@@ -74,6 +74,11 @@ Inet-R1 - CSR1000-IOS-XEv: `csr1000v-universalk9.16.12.03-serial.qcow2`
   - zatial `reload`, je to menej konfigurovania, ako odstranit `VXLAN features`
   - pravdepodobne zalezitost `GNS3+Qemu+KVM`, problem, pretoze reboot trva velmi dlho
 
+- PROBLEM: Instancia N9300v pri boote "spadne" do User-space interpretu BASH pod systemom NX-OS
+  - napr. vypis: `sh-4.3# ...`
+  - zatial som riesil s prikazom `sh-4.3# reboot`
+  - neviem zatial ci sa da z User-space prostredia znova spustit boot-seq celeho NX-OS
+
 - PROBLEM: N9300V nabehne s neaktivnymi Ifaces, aj ked su zapnute v start-conf
   - stacil `shutdown` / `no shutdown`, sposobuje hlavne vypadok OSPF a teda *Underlay*
   - plati aj pre L3-SVI na N9300v, problemy s OSPFv2 voci IOS-XE
@@ -2601,8 +2606,10 @@ Poznamka: pri testovani scenarov boli pouzite prikazy na rozdelenie regionov TCA
  - v pripade N9300v nemali tieto upravy ziaden vplyv pri vypadkoch a konvergencii
 
 ```
+!
 hardware access-list tcam region racl 512
 hardware access-list tcam region arp-ether 256 double-wide
+!
 ```
 
 ---
@@ -2699,7 +2706,8 @@ VXLAN   - Virtual eXtensible LAN
 # show ip route ospf-as65001 vrf TenantB
 # show bgp vrf TenantB ipv4 unicast
 # show vpc
-# show vpc 11
+# show vpc consistency-parameters ...
+# show vpc [VPC_NUM]
 # show vpc orphan-ports
 ```
 
@@ -2746,6 +2754,8 @@ https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/sw/93x/scala
 
 ```
 Dalsie odkazy:
+
+https://youtu.be/59aYt_kMviE
 
 https://netcraftsmen.com/designing-cisco-nexus-9k/
 
