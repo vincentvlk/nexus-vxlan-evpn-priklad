@@ -198,7 +198,7 @@ Snahou dizajnu je zabezpecit nezavislu a redundantnu konektivitu tak, aby
 v pripade vypadku uzlov, napr. (`Leaf1`, `Spine1` a `Leaf3`) alebo
 napr. (`Leaf2`, `Spine2` a `Leaf4`), bola stale zachovana konektivita pre zakanzikov, aj ked
 s degradovanou sirkou pasma (BW). Co sa tyka navysovania kapacity, dizajnova filozofia
-Leaf-Spine umoznuje taky pristu, ze ked chceme pridat viac Hostov, pridame Leaf boxy.
+Leaf-Spine umoznuje taky pristup, ze ak chceme pridat viac Hostov, pridame Leaf boxy.
 Ak chceme navysit BW fabricu, pridame Spine boxy.
 
 Mal som povodny zamer, ze ako underlay pouzijem IPv6 + OSPFv3, tento koncept
@@ -2635,6 +2635,7 @@ EVI     - EVPN Virtual Instance (VXLAN)
 EVPN    - Ethernet Virtual Private Network (VXLAN)
 GNS3    - Graphical Network Simulator version 3
 GW      - Gateway (Router)
+HMM     - Host Mobility Manager (NX-OS local address learning)
 HW      - Hardware
 IGP     - Interior Gateway Protocol
 IOS     - Internetwork Operating System (Cisco)
@@ -2701,6 +2702,7 @@ VXLAN   - Virtual eXtensible LAN
 # show nve vni 3100101 detail
 # show bgp vrf TenantA l2vpn evpn 192.168.1.1      ! Vo vypise je vidiet VNI Stack "Received label 3100101 3100"
 # show l2route mac all
+# show l2route evpn mac-ip all
 # show nve ethernet-segment
 # show bgp l2vpn evpn route-type 4
 # show bgp l2vpn evpn route-type 5
@@ -2711,6 +2713,7 @@ VXLAN   - Virtual eXtensible LAN
 # show vpc consistency-parameters ...
 # show vpc [VPC_NUM]
 # show vpc orphan-ports
+# show vxlan
 ```
 
 ---
