@@ -197,7 +197,9 @@ Leaf switche maju symetricku L3-routed (Underlay) konektivitu na 2 Spine switch-
 Snahou dizajnu je zabezpecit nezavislu a redundantnu konektivitu tak, aby
 v pripade vypadku uzlov, napr. (`Leaf1`, `Spine1` a `Leaf3`) alebo
 napr. (`Leaf2`, `Spine2` a `Leaf4`), bola stale zachovana konektivita pre zakanzikov, aj ked
-s degradovanou sirkou pasma (BW).
+s degradovanou sirkou pasma (BW). Co sa tyka navysovania kapacity, dizajnova filozofia
+Leaf-Spine umoznuje taky pristu, ze ked chceme pridat viac Hostov, pridame Leaf boxy.
+Ak chceme navysit BW fabricu, pridame Spine boxy.
 
 Mal som povodny zamer, ze ako underlay pouzijem IPv6 + OSPFv3, tento koncept
 ma vsak stale (Jul 2022) obmedzene moznoti a funkcie.
@@ -268,7 +270,7 @@ interface Ethernet1/6
 !
 vpc domain 912
   peer-switch
-  role priority 30
+  role priority 20
   peer-keepalive destination 172.16.12.2 source 172.16.12.1
   peer-gateway
   layer3 peer-router
@@ -372,7 +374,7 @@ interface Ethernet1/6
 !
 vpc domain 912
   peer-switch
-  role priority 20
+  role priority 30
   peer-keepalive destination 172.16.12.1 source 172.16.12.2
   peer-gateway
   layer3 peer-router
@@ -476,7 +478,7 @@ interface Ethernet1/6
 !
 vpc domain 934
   peer-switch
-  role priority 30
+  role priority 20
   peer-keepalive destination 172.16.34.4 source 172.16.34.3
   peer-gateway
   layer3 peer-router
@@ -580,7 +582,7 @@ interface Ethernet1/6
 !
 vpc domain 934
   peer-switch
-  role priority 20
+  role priority 30
   peer-keepalive destination 172.16.34.3 source 172.16.34.4
   peer-gateway
   layer3 peer-router
