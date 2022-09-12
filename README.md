@@ -1185,10 +1185,13 @@ interface nve1
 !
   member vni 3100 associate-vrf
   member vni 3100101
+    suppress-arp
     ingress-replication protocol bgp    ! Na distribuciu VXLAN EVPN informacii sa pouzije BGP
   member vni 3100102
+    suppress-arp
     ingress-replication protocol bgp
   member vni 3100103
+    suppress-arp
     ingress-replication protocol bgp
 !
 evpn
@@ -1379,10 +1382,13 @@ interface Vlan203
 interface nve1
   member vni 3200 associate-vrf
   member vni 3200201
+    suppress-arp
     ingress-replication protocol bgp    ! Na distribuciu VXLAN EVPN informacii sa pouzije BGP
   member vni 3200202
+    suppress-arp
     ingress-replication protocol bgp
   member vni 3200203
+    suppress-arp
     ingress-replication protocol bgp
 !
 evpn
@@ -2189,9 +2195,11 @@ vlan 204
 !
 interface nve1
   member vni 3100104
+    suppress-arp
     ingress-replication protocol bgp
 !
   member vni 3200204
+    suppress-arp
     ingress-replication protocol bgp
 !
 evpn
@@ -2225,9 +2233,11 @@ vlan 204
 !
 interface nve1
   member vni 3100104
+    suppress-arp
     ingress-replication protocol bgp
 !
   member vni 3200204
+    suppress-arp
     ingress-replication protocol bgp
 !
 evpn
@@ -2301,9 +2311,11 @@ vlan 204
 !
 interface nve1
   member vni 3100104
+    suppress-arp
     ingress-replication protocol bgp
 !
   member vni 3200204
+    suppress-arp
     ingress-replication protocol bgp
 !
 evpn
